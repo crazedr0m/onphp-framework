@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   Copyright (C) 2008-2009 by Konstantin V. Arkhipov                     *
+ *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Lesser General Public License as        *
@@ -9,13 +9,22 @@
  *                                                                         *
  ***************************************************************************/
 
-	class BaseException extends Exception
+	/**
+	 * @ingroup Patterns
+	**/
+	final class SpookedEnumPattern extends EnumClassPattern
 	{
-		public function __toString()
+		/**
+		 * @return SpookedEnumPattern
+		**/
+		public function build(MetaClass $class)
 		{
-			return
-				"[$this->message] in: \n".
-				$this->getTraceAsString();
+			return $this;
+		}
+		
+		public function daoExists()
+		{
+			return false;
 		}
 	}
 ?>

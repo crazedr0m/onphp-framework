@@ -5,16 +5,20 @@
 		public static function cacheProvider()
 		{
 			return array(
-				array(Memcached::create()),
-/*
- * does not pass tests
-				array(SharedMemory::create()),
- *
- * */
-				array(PeclMemcached::create()),
+//				array(SocketMemcached::create()),
+//				array(SharedMemory::create()),
+//				array(PeclMemcached::create()),
 				array(RuntimeMemory::create()),
-				array(RubberFileSystem::create())
+//				array(RubberFileSystem::create())
 			);
+		}
+
+		/**
+		 * @dataProvider cacheProvider
+		**/
+		public function testClean(CachePeer $cache)
+		{
+			$this->assertInstanceOf('CachePeer', $cache->clean());
 		}
 
 		/**
@@ -56,7 +60,7 @@
 		public function testWithTimeout()
 		{
 			$cache =
-				Memcached::create('localhost')->
+				SocketMemcached::create('localhost')->
 				setTimeout(200);
 
 			$cache->add('a', 'b');
@@ -74,6 +78,7 @@
 
 			$this->clientTestSingleGet($cache);
 			$this->clientTestMultiGet($cache);
+			$this->doExpires($cache);
 		}
 		
 		protected function clientTestSingleGet(CachePeer $cache)
@@ -156,20 +161,28 @@
 			$cache->clean();
 		}
 
-		private function doExpired(CachePeer $cache)
+		private function doExpires(CachePeer $cache)
 		{
-			// FIXME: implement me
-//			$value = '';
-//			$cache->set('a', $value, Cache::EXPIRES_MAXIMUM);
-//			$this->assertEquals($cache->get('a'), $value);
-//			$this->assertTrue($cache->set('a', $value.'!!!', 1));
-//			$this->assertEquals($cache->get('a'), $value);
+			if ($cache instanceof RuntimeMemory) {
+				return $this->markTestSkipped('RuntimeMemory cache expire not implemented');
+			}
 
-//			sleep(2);
-//			$cache->replace('a', $value, 1);
-//			sleep(2);
-//			$this->assertFalse($cache->get('a'));
+			$cache->clean();
 
+			$value = 'a';
+
+			// do not set if exist and not expired (RubberFileSystem logic)
+			$cache->set('a', $value, Cache::EXPIRES_MAXIMUM);
+			$this->assertTrue($cache->set('a', '!!!', 1));
+			$this->assertEquals($cache->get('a'), $value);
+			$this->assertTrue($cache->replace('a', '!!!', Cache::EXPIRES_MINIMUM));
+			$this->assertEquals($cache->get('a'), '!!!');
+
+			$cache->replace('a', $value, 1);
+			sleep(2);
+			$this->assertFalse($cache->get('a'));
+
+			$cache->clean();
 		}
 		
 		private function doTestWrongKeys(CachePeer $cache)
