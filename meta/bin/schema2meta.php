@@ -65,7 +65,6 @@ echo '<?xml version="1.0"?>'
 			&& $tableStarted
 		) {
 			$table['fields'][$matches['fieldName']] = $matches;
-//			var_dump($table['fields'][$matches['fieldName']]);
 		}
 
 		$matches = array();
