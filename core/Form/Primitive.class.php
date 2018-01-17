@@ -27,7 +27,7 @@
 		}
 		
 		/**
-		 * @return Primitive
+		 * @return PrimitiveAlias
 		**/
 		public static function alias($name, BasePrimitive $prm)
 		{

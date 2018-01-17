@@ -186,7 +186,15 @@
 		{
 			return $this->requestTimeout;
 		}
-		
+
+		/**
+		* @return array
+		**/
+		public function getStats()
+		{
+			return $this->instance->getStats();
+		}
+
 		protected function ensureTriedToConnect()
 		{
 			if ($this->triedConnect) 

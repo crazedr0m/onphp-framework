@@ -14,7 +14,7 @@
 	**/
 	final class FileOutputStream extends OutputStream
 	{
-		private $fd		= null;
+		private $fd = null;
 		
 		public function __construct($nameOrFd, $append = false)
 		{
@@ -80,6 +80,10 @@
 		**/
 		public function close()
 		{
+			if (!$this->fd) {
+				return $this;
+			}
+
 			fclose($this->fd);
 			
 			$this->fd = null;

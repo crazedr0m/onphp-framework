@@ -380,28 +380,30 @@
 		{
 			if ($request->hasBody()) {
 				return $request->getBody();
-			} else {
-				if ($this->oldUrlConstructor) {
-					return UrlParamsUtils::toStringOneDeepLvl($request->getPost());
-				} else {
-					$fileList = array_map(
-						array($this, 'fileFilter'),
-						UrlParamsUtils::toParamsList($request->getFiles())
-					);
-					if (empty($fileList)) {
-						return UrlParamsUtils::toString($request->getPost());
-					} else {
-						$postList = UrlParamsUtils::toParamsList($request->getPost());
-						if (!is_null($atParam = $this->findAtParamInPost($postList)))
-							throw new NetworkException(
-								'Security excepion: not allowed send post param '.$atParam
-									. ' which begins from @ in request which contains files'
-							);
-							
-						return array_merge($postList, $fileList);
-					}
-				}
 			}
+
+			if ($this->oldUrlConstructor) {
+				return UrlParamsUtils::toStringOneDeepLvl($request->getPost());
+			}
+
+			$fileList = array_map(
+				array($this, 'fileFilter'),
+				UrlParamsUtils::toParamsList($request->getFiles())
+			);
+
+			if (empty($fileList)) {
+				return UrlParamsUtils::toString($request->getPost());
+			}
+
+			$postList = UrlParamsUtils::toParamsList($request->getPost());
+			if (!is_null($atParam = $this->findAtParamInPost($postList))) {
+				throw new NetworkException(
+					'Security excepion: not allowed send post param '.$atParam
+						. ' which begins from @ in request which contains files'
+				);
+			}
+
+			return array_merge($postList, $fileList);
 		}
 		
 		/**

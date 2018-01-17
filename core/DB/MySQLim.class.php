@@ -190,6 +190,7 @@
 
 				'bigint'		=> DataType::BIGINT,
 				
+				'float'			=> DataType::REAL,
 				'double'		=> DataType::DOUBLE,
 				'decimal'		=> DataType::NUMERIC,
 
