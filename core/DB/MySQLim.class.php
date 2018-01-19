@@ -17,7 +17,7 @@
 	 * 
 	 * @ingroup DB
 	**/
-	final class MySQLim extends Sequenceless
+	class MySQLim extends Sequenceless
 	{
 		private $needAutoCommit = false;
 		private $defaultEngine;
@@ -165,7 +165,7 @@
 			if (!$result = mysqli_query($this->link, $queryString)) {
 				
 				$code = mysqli_errno($this->link);
-				
+
 				if ($code == 1062)
 					$e = 'DuplicateObjectException';
 				else
@@ -297,14 +297,14 @@
 			return $result;
 		}
 
-		private function setupAutoCommit()
+		protected  function setupAutoCommit()
 		{
 			if ($this->isConnected()) {
 				mysqli_autocommit($this->link, $this->needAutoCommit);
 			}
 		}
 
-		private function setupDefaultEngine()
+		protected  function setupDefaultEngine()
 		{
 			if ($this->defaultEngine && $this->isConnected()) {
 				mysqli_query($this->link, 'SET storage_engine='.$this->defaultEngine);
