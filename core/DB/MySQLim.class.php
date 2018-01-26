@@ -22,6 +22,18 @@
 		private $needAutoCommit = false;
 		private $defaultEngine;
 
+
+		/**
+		 * @param bool $really
+		 * @return MySQLim
+		 */
+		public function setPersistent($really = false)
+		{
+			$this->persistent = ($really === true);
+
+			return $this;
+		}
+
 		/**
 		 * @return MySQLim
 		**/
@@ -61,15 +73,12 @@
 		 */
 		public function connect()
 		{
-			if ($this->persistent)
-				throw new UnsupportedMethodException();
-			
 			$this->link = mysqli_init();
 			
 			try {
 				mysqli_real_connect(
 					$this->link,
-					$this->hostname,
+					($this->persistent ? 'p:': '').$this->hostname,
 					$this->username,
 					$this->password,
 					$this->basename,
