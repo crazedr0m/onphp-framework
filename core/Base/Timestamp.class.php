@@ -28,6 +28,9 @@
 			return new static($timestamp, $zone);
 		}
 		
+		/**
+		 * @return Timestamp
+		**/
 		public static function now()
 		{
 			return date(static::getFormat());
