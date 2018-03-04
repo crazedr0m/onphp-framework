@@ -93,21 +93,20 @@
 		{
 			$path = $this->makePath($key);
 			
-			if (is_readable($path)) {
-				
-				if (filemtime($path) <= time()) {
-					try {
-						unlink($path);
-					} catch (BaseException $e) {
-						// we're in race with unexpected clean()
-					}
-					return null;
-				}
-				
-				return $this->operate($path);
+			if (!is_readable($path)) {
+				return null;
 			}
-			
-			return null;
+
+			if (filemtime($path) <= time()) {
+				try {
+					unlink($path);
+				} catch (BaseException $e) {
+					// we're in race with unexpected clean()
+				}
+				return null;
+			}
+
+			return $this->operate($path);
 		}
 		
 		public function delete($key)
