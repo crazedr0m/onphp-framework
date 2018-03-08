@@ -97,7 +97,17 @@
 				return null;
 			}
 
-			if (filemtime($path) <= time()) {
+			try {
+				$fileTime = filemtime($path);
+			} catch (BaseException $e) {
+				$fileTime = null;
+			}
+
+			if ($fileTime === null) {
+				return null;
+			}
+
+			if ($fileTime <= time()) {
 				try {
 					unlink($path);
 				} catch (BaseException $e) {
