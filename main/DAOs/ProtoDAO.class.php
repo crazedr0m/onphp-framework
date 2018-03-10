@@ -55,16 +55,16 @@
 				$query->andWhere(
 					Expression::in($mainId, $ids)
 				);
-				
+
+				/**@var PropertyPath $propertyPath **/
 				$propertyPath = $info['propertyPath'];
-				
+
 				$property	= $propertyPath->getFinalProperty();
 				$proto		= $propertyPath->getFinalProto();
 				$dao		= $propertyPath->getFinalDao();
-				
 				$selfName = $this->getObjectName();
 				$self = new $selfName;
-				$getter = 'get'.ucfirst($property->getName());
+				$getter = $property->getGetter();
 				
 				Assert::isTrue(
 					$property->getRelationId() == MetaRelation::ONE_TO_MANY
@@ -72,7 +72,6 @@
 				);
 				
 				$table = $dao->getJoinName($property->getColumnName());
-				
 				$id = $this->getIdName();
 				$collection = array();
 				
@@ -87,14 +86,15 @@
 					
 					$field = DBField::create(
 						$childId,
-						$self->$getter()->getHelperTable()
+						$table
+//						$self->$getter()->getHelperTable()
 					);
 					
 					$query->get($field, $alias);
 					
 					if (!$property->isRequired())
 						$query->andWhere(Expression::notNull($field));
-					
+
 					try {
 						$rows = $dao->getCustomList($query);
 						
