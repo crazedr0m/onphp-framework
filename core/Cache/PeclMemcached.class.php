@@ -25,6 +25,10 @@
 		
 		protected $host			= null;
 		protected $port			= null;
+
+		/**
+		 * @var Memcache
+		**/
 		private $instance		= null;
 		private $requestTimeout = null;
 		private $connectTimeout = null;

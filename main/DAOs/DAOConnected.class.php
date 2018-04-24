@@ -17,6 +17,9 @@
 	**/
 	interface DAOConnected extends Identifiable
 	{
+		/**
+		 * @return StorableDAO
+		**/
 		public static function dao();
 	}
 ?>

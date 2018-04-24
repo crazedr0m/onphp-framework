@@ -115,7 +115,10 @@
 		{
 			return ($this->toDateTime() === $timestamp->toDateTime());
 		}
-		
+
+		/**
+		 * @return int
+		**/
 		public function getDayStartStamp()
 		{
 			if (!$this->getHour() && !$this->getMinute() && !$this->getSecond())

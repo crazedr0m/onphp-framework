@@ -226,7 +226,9 @@
 					);
 				}
 			}
-			
+			/**
+			 * @var LightMetaProperty $property
+			 **/
 			foreach ($this->getPropertyList() as $property) {
 				$property->fillQuery($query, $object, $old);
 			}

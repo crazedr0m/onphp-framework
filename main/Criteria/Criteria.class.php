@@ -16,6 +16,9 @@
 	**/
 	final class Criteria extends QueryIdentification
 	{
+		/**
+		 * @var ProtoDAO $dao
+		**/
 		private $dao		= null;
 		private $daoClass	= null;
 		private $logic		= null;
@@ -96,7 +99,8 @@
 			
 			return $this;
 		}
-		
+
+		/***/
 		public function checkAndGetDao()
 		{
 			if (!$this->dao)

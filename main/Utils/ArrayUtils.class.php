@@ -55,7 +55,8 @@
 				current($objectsList), 'Identifiable',
 				'only identifiable lists accepted'
 			);
-			
+
+			/**@var Identifiable $object**/
 			foreach ($objectsList as $object)
 				$out[] = $object->getId();
 			
