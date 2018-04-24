@@ -351,6 +351,11 @@
 
 		public function dropObjectIdentityMapById($id)
 		{
+			if (($id instanceof Identifier)) {
+				unset($this->identityMap[$id->getId()]);
+				return $this;
+			}
+
 			unset($this->identityMap[$id]);
 
 			return $this;
