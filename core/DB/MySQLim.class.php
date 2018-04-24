@@ -208,6 +208,7 @@
 				'text'			=> DataType::TEXT,
 				'tinytext'		=> DataType::TEXT,
 				'mediumtext'	=> DataType::TEXT,
+				'longtext'		=> DataType::TEXT,
 				
 				'date'			=> DataType::DATE,
 				'time'			=> DataType::TIME,
