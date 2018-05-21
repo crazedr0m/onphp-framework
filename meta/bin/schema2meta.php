@@ -99,9 +99,13 @@ echo '<?xml version="1.0"?>'
 			'mediumint'	=> 'Integer',
 			'int'		=> 'Integer',
 			'year'		=> 'Integer',
+
 			'datetime'	=> 'Timestamp',
 			'timestamp'	=> 'Timestamp',
 			'date'		=> 'Date',
+
+			'float'		=> 'Float',
+			'double'	=> 'Double',
 			'decimal'	=> 'Numeric'
 		);
 
