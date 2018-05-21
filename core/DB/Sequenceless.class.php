@@ -44,30 +44,26 @@
 		
 		final public function query(Query $query)
 		{
-			$result = $this->queryRaw(
-				$query->toDialectString($this->getDialect())
-			);
-			
+			$id = null;
 			if (
 				($query instanceof InsertQuery)
 				&& !empty($this->sequencePool[$name = $query->getTable().'_id'])
 			) {
 				$id = current($this->sequencePool[$name]);
-				
+				unset($this->sequencePool[$name][key($this->sequencePool[$name])]);
+			}
+
+			$result = $this->queryRaw(
+				$query->toDialectString($this->getDialect())
+			);
+			
+			if ($id) {
 				Assert::isTrue(
 					$id instanceof Identifier,
 					'identifier was lost in the way'
 				);
 				
 				$id->setId($this->getInsertId())->finalize();
-				
-				unset(
-					$this->sequencePool[
-						$name
-					][
-						key($this->sequencePool[$name])
-					]
-				);
 			}
 			
 			return $result;
