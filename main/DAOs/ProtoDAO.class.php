@@ -47,7 +47,7 @@
 				$proto = reset($list)->proto();
 				
 				$this->processPath($proto, $path, $query, $this->getTable());
-				
+
 				if ($criteria = $info['criteria']) {
 					$query = $criteria->setDao($this)->fillSelectQuery($query);
 				}
@@ -74,15 +74,16 @@
 				$table = $dao->getJoinName($property->getColumnName());
 				$id = $this->getIdName();
 				$collection = array();
-				
+
 				if ($lazy) {
 					if ($property->getRelationId() == MetaRelation::MANY_TO_MANY) {
 						$childId = $self->$getter()->getChildIdField();
 					} else {
 						$childId = $dao->getIdName();
 					}
-					
-					$alias = 'cid'; // childId, collectionId, whatever
+
+					//FIXME: make unique alias name
+					$alias = 'collectionId'; // childId, collectionId, whatever
 					
 					$field = DBField::create(
 						$childId,
@@ -98,10 +99,11 @@
 					try {
 						$rows = $dao->getCustomList($query);
 						
-						foreach ($rows as $row)
+						foreach ($rows as $row) {
 							if (!empty($row[$alias]))
 								$collection[$row[$id]][] = $row[$alias];
-						
+						}
+
 					} catch (ObjectNotFoundException $e) {/*_*/}
 				} else {
 					$prefix = $table.'_';
