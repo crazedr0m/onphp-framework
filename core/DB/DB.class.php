@@ -108,7 +108,10 @@
 			
 			return $db;
 		}
-		
+
+		/**
+		 * @return DB
+		**/
 		public function getLink()
 		{
 			return $this->link;

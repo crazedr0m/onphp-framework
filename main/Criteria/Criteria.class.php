@@ -574,7 +574,8 @@
 						$proto = call_user_func(
 							array($property->getClassName(), 'proto')
 						);
-						
+
+						/**@var LightMetaProperty $innerProperty**/
 						foreach ($proto->getPropertyList() as $innerProperty)
 							$query->get(
 								new DBField(
