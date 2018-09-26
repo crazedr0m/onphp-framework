@@ -19,9 +19,10 @@
 		public function get($key)
 		{
 			try {
-				if (!isset($this->pool[$key]))
-					$this->pool[$key] = sem_get($key, 1, ONPHP_IPC_PERMS, false);
-				
+				if (!isset($this->pool[$key])) {
+					$this->pool[$key] = sem_get($key, 1, ONPHP_IPC_PERMS, 0);
+				}
+
 				return sem_acquire($this->pool[$key]);
 			} catch (BaseException $e) {
 				return null;
@@ -48,7 +49,12 @@
 		{
 			if (isset($this->pool[$key])) {
 				try {
-					return sem_remove($this->pool[$key]);
+					$result = sem_remove($this->pool[$key]);
+					if ($result) {
+						unset($this->pool[$key]);
+					}
+
+					return $result;
 				} catch (BaseException $e) {
 					unset($this->pool[$key]); // already race-removed
 					return false;

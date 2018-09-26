@@ -210,6 +210,16 @@
 				return null;
 			}
 
+			$result = $this->doOperate($path, $value, $expires);
+			$free = $pool->drop($key);
+			if ($value !== null) {
+				$result = $free;
+			}
+			return $result;
+		}
+
+		private function doOperate($path, $value = null, $expires = null)
+		{
 			$tmp = null;
 			try {
 				if ($value === null) {
@@ -225,7 +235,6 @@
 				if ($tmp) {
 					unlink($tmp);
 				}
-				$pool->drop($key);
 				return null;
 			}
 
@@ -239,11 +248,9 @@
 
 				fclose($fp);
 
-				$pool->drop($key);
-
 				return $data ? $this->restoreData($data) : null;
 			}
-			
+
 			fwrite($fp, $this->prepareData($value));
 			fflush($fp);
 			fclose($fp);
@@ -258,9 +265,9 @@
 				// race-removed
 			}
 
-			return $pool->drop($key);
+			return;
 		}
-		
+
 		private function makePath($key)
 		{
 			return
