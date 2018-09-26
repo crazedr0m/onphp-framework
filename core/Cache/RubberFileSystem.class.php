@@ -207,42 +207,54 @@
 			
 			if (!$pool->get($key))
 				return null;
-			
+
+			$tmp = null;
 			try {
 				$old = umask(0077);
-				$fp = fopen($path, $value !== null ? 'wb' : 'rb');
+				if ($value === null) {
+					$fp = fopen($path, 'rb');
+				} else {
+					$tmp = FileUtils::makeTempFile($this->directory);
+					$fp = fopen($tmp, 'wb');
+				}
 				umask($old);
 			} catch (BaseException $e) {
+				fclose($fp);
+				if ($tmp) {
+					unlink($tmp);
+				}
 				$pool->drop($key);
 				return null;
 			}
-			
-			if ($value !== null) {
-				fwrite($fp, $this->prepareData($value));
-				fclose($fp);
-				
-				if ($expires < parent::TIME_SWITCH)
-					$expires += time();
-				
-				try {
-					touch($path, $expires);
-				} catch (BaseException $e) {
-					// race-removed
-				}
-				
-				return $pool->drop($key);
-			} else {
+
+			if ($value === null) {
 				if (($size = filesize($path)) > 0)
 					$data = fread($fp, $size);
 				else
 					$data = null;
-				
+
 				fclose($fp);
-				
+
 				$pool->drop($key);
-				
+
 				return $data ? $this->restoreData($data) : null;
 			}
+			
+			$tmp = FileUtils::makeTempFile($this->directory);
+			fwrite($fp, $this->prepareData($value));
+			fclose($fp);
+			rename($tmp, $path);
+
+			if ($expires < parent::TIME_SWITCH)
+				$expires += time();
+
+			try {
+				touch($path, $expires);
+			} catch (BaseException $e) {
+				// race-removed
+			}
+
+			return $pool->drop($key);
 			
 			Assert::isUnreachable();
 		}
