@@ -103,6 +103,7 @@
 				$fileTime = null;
 			}
 
+
 			if ($fileTime === null) {
 				return null;
 			}
@@ -204,20 +205,21 @@
 			$key = hexdec(substr(md5($path), 3, 2)) + 1;
 
 			$pool = SemaphorePool::me();
-			
-			if (!$pool->get($key))
+
+			if (!$pool->get($key)) {
 				return null;
+			}
 
 			$tmp = null;
 			try {
-				$old = umask(0077);
 				if ($value === null) {
 					$fp = fopen($path, 'rb');
 				} else {
+					$old = umask(0077);
 					$tmp = FileUtils::makeTempFile($this->directory);
 					$fp = fopen($tmp, 'wb');
+					umask($old);
 				}
-				umask($old);
 			} catch (BaseException $e) {
 				fclose($fp);
 				if ($tmp) {
@@ -228,7 +230,9 @@
 			}
 
 			if ($value === null) {
-				if (($size = filesize($path)) > 0)
+				$size = filesize($path);
+
+				if ($size > 0)
 					$data = fread($fp, $size);
 				else
 					$data = null;
@@ -240,8 +244,8 @@
 				return $data ? $this->restoreData($data) : null;
 			}
 			
-			$tmp = FileUtils::makeTempFile($this->directory);
 			fwrite($fp, $this->prepareData($value));
+			fflush($fp);
 			fclose($fp);
 			rename($tmp, $path);
 
@@ -255,8 +259,6 @@
 			}
 
 			return $pool->drop($key);
-			
-			Assert::isUnreachable();
 		}
 		
 		private function makePath($key)
