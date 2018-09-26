@@ -226,7 +226,7 @@
 					$fp = fopen($path, 'rb');
 				} else {
 					$old = umask(0077);
-					$tmp = FileUtils::makeTempFile($this->directory);
+					$tmp = FileUtils::makeTempFile();
 					$fp = fopen($tmp, 'wb');
 					umask($old);
 				}
