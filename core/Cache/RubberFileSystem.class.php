@@ -211,7 +211,7 @@
 			}
 
 			$result = $this->doOperate($path, $value, $expires);
-			$free = $pool->drop($key);
+			$free = $pool->free($key);
 			if ($value !== null) {
 				$result = $free;
 			}
