@@ -27,12 +27,13 @@
 		protected $port			= null;
 
 		/**
-		 * @var Memcache
+		 * @var Memcached
 		**/
 		private $instance		= null;
 		private $requestTimeout = null;
 		private $connectTimeout = null;
 		private $triedConnect	= false;
+		private $persistentId   = 'persist';
 		
 		/**
 		 * @return PeclMemcached
@@ -59,15 +60,22 @@
 		
 		public function __destruct()
 		{
-			if ($this->alive) {
-				try {
-					$this->instance->close();
-				} catch (BaseException $e) {
-					// shhhh.
-				}
+			if (!$this->alive) {
+				return;
+			}
+
+			try {
+				$this->instance->quit();
+			} catch (Exception $e) {
+				// shhhh.
 			}
 		}
-		
+
+		public function setPersistentId($id)
+		{
+			$this->persistentId = $id;
+		}
+
 		public function isAlive()
 		{
 			$this->ensureTriedToConnect();
@@ -84,7 +92,7 @@
 			
 			try {
 				$this->instance->flush();
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				$this->alive = false;
 			}
 			
@@ -97,7 +105,7 @@
 			
 			try {
 				return $this->instance->increment($key, $value);
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				return null;
 			}
 		}
@@ -108,7 +116,7 @@
 			
 			try {
 				return $this->instance->decrement($key, $value);
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				return null;
 			}
 		}
@@ -129,7 +137,7 @@
 			
 			try {
 				return $this->instance->get($index);
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				if(strpos($e->getMessage(), 'Invalid key') !== false)
 					return null;
 				
@@ -150,7 +158,7 @@
 				// delete key 0 (see process_delete_command in the memcached.c)
 				// Warning: it is workaround!
 				return $this->instance->delete($index, 0);
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				return $this->alive = false;
 			}
 			
@@ -163,7 +171,7 @@
 			
 			try {
 				return $this->instance->append($key, $data);
-			} catch (BaseException $e) {
+			} catch (Exception $e) {
 				return $this->alive = false;
 			}
 			
@@ -176,10 +184,8 @@
 		 */
 		public function setTimeout($requestTimeout)
 		{
-			$this->ensureTriedToConnect();
 			$this->requestTimeout = $requestTimeout;
-			$this->instance->setServerParams($this->host, $this->port, $requestTimeout);
-			
+
 			return $this;
 		}
 		
@@ -216,17 +222,9 @@
 		)
 		{
 			$this->ensureTriedToConnect();
-			
 			try {
 				return
-					$this->instance->$action(
-						$key,
-						$value,
-						$this->compress
-							? MEMCACHE_COMPRESSED
-							: false,
-						$expires
-					);
+					$this->instance->$action($key, $value, $expires);
 			} catch (BaseException $e) {
 				return $this->alive = false;
 			}
@@ -236,21 +234,25 @@
 		
 		protected function connect()
 		{
-			$this->instance = new Memcache();
-			
 			try {
-				
-				try {
-					$this->instance->pconnect($this->host, $this->port, $this->connectTimeout);
-				} catch (BaseException $e) {
-					$this->instance->connect($this->host, $this->port, $this->connectTimeout);
+				if ($this->persistentId) {
+					$this->instance = new Memcached($this->persistentId);
+				} else {
+					$this->instance = new Memcached();
 				}
-				
+
+				if ($this->compress) {
+					$this->instance->setOption(Memcached::OPT_COMPRESSION, true);
+				}
+
+				$this->instance->setOption(Memcached::OPT_TCP_NODELAY, true);
+				$this->instance->setOption(Memcached::OPT_TCP_KEEPALIVE, true);
+//				$this->instance->setOption(Memcached::OPT_NO_BLOCK, true);
+				$this->instance->setOption(Memcached::OPT_CONNECT_TIMEOUT, $this->connectTimeout);
+
+				$this->instance->addServer($this->host, $this->port);
 				$this->alive = true;
-				
-			} catch (BaseException $e) {
-				// bad luck.
-			}
+			} catch (Exception $e) {}
 		}
 	}
 ?>
