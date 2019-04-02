@@ -177,7 +177,7 @@
 		)
 		{
 			$path = explode('.', $probablyPath);
-			
+
 			try {
 				$property = $proto->getPropertyByName($path[0]);
 			} catch (MissingElementException $e) {
@@ -358,7 +358,6 @@
 		{
 			if ($table === null)
 				$table = $this->getTable();
-
 			if (is_string($atom)) {
 				if (strpos($atom, '.') !== false) {
 					return
@@ -385,8 +384,9 @@
 				) {
 					return new DBField($atom);
 				}
-			} elseif ($atom instanceof MappableObject)
+			} elseif ($atom instanceof MappableObject) {
 				return $atom->toMapped($this, $query);
+			}
 			elseif (
 				($atom instanceof DBValue)
 				|| ($atom instanceof DBField)

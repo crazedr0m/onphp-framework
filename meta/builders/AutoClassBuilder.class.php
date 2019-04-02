@@ -14,8 +14,12 @@
 	**/
 	final class AutoClassBuilder extends BaseBuilder
 	{
+
 		public static function build(MetaClass $class)
 		{
+			$unsetInSleep = array();
+			$cloneNull = array();
+
 			$out = self::getHead();
 			
 			$out .= "abstract class Auto{$class->getName()}";
@@ -47,9 +51,20 @@
 					."{$property->getType()->getDeclaration()};\n";
 				
 				if ($property->getFetchStrategyId() == FetchStrategy::LAZY) {
+					$unsetInSleep[] = $property->getName();
+
 					$out .=
 						"protected \${$property->getName()}Id = null;\n";
 				}
+
+				if (
+					$property->getRelationId() == MetaRelation::ONE_TO_MANY
+					|| $property->getRelationId() == MetaRelation::MANY_TO_MANY
+				) {
+					$unsetInSleep[] = $property->getName();
+					$cloneNull[] = $property->getName();
+				}
+
 			}
 			
 			$valueObjects = array();
@@ -79,7 +94,36 @@ EOT;
 				
 				$out .= "}\n";
 			}
-			
+
+			if (!empty($unsetInSleep)) {
+				$out .= <<<EOT
+
+public function __sleep()
+{
+			\$vars = get_object_vars(\$this);
+
+EOT;
+				foreach ($unsetInSleep as $propertyName) {
+					$out .= "unset(\$vars['{$propertyName}']);\n";
+				}
+
+				$out .= "\n\treturn array_keys(\$vars);\n";
+				$out .= "}\n";
+			}
+
+			if (!empty($cloneNull)) {
+				$out .= <<<EOT
+
+public function __clone()
+{
+
+EOT;
+				foreach ($cloneNull as $propertyName) {
+					$out .= "\$this->{$propertyName} = null;\n";
+				}
+				$out .= "}\n";
+			}
+
 			foreach ($class->getProperties() as $property) {
 				if (!self::doPropertyBuild($class, $property, $isNamed))
 					continue;

@@ -29,7 +29,7 @@
 		}
 		
 		/**
-		 * @return Timestamp
+		 * @return string
 		**/
 		public static function now()
 		{
@@ -75,6 +75,9 @@
 			}
 		}
 		
+		/**
+		 * @return string
+		**/
 		public function toTime($timeDelimiter = ':', $secondDelimiter = '.')
 		{
 			return
@@ -85,6 +88,9 @@
 				.$this->getSecond();
 		}
 		
+		/**
+		 * @return string
+		**/
 		public function toDateTime(
 			$dateDelimiter = '-',
 			$timeDelimiter = ':',
@@ -127,6 +133,9 @@
 				return parent::getDayStartStamp();
 		}
 
+		/**
+		 * @return int
+		**/
 		public function getHourStartStamp()
 		{
 			if (!$this->getMinute() && !$this->getSecond())

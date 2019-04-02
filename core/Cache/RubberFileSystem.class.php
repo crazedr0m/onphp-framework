@@ -231,7 +231,9 @@
 					umask($old);
 				}
 			} catch (BaseException $e) {
-				fclose($fp);
+				if ($fp) {
+					fclose($fp);
+				}
 				if ($tmp) {
 					unlink($tmp);
 				}
