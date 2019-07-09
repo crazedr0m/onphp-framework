@@ -16,16 +16,19 @@
 	{
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveEnum '{$this->name}'"
 				);
-			
+			}
+
+			Assert::isInstance($this->className, Enum::class);
+
 			if (isset($scope[$this->name])) {
 				$scopedValue = urldecode($scope[$this->name]);
-				
+				$this->raw = $scopedValue;
+
 				$names = ClassUtils::callStaticMethod($this->className.'::getNameList');
-				
 				foreach ($names as $key => $value) {
 
 					if ($value == $scopedValue) {
