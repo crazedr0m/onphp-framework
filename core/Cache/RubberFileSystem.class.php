@@ -231,7 +231,7 @@
 					umask($old);
 				}
 			} catch (BaseException $e) {
-				if ($fp) {
+				if (isset($fp) && $fp) {
 					fclose($fp);
 				}
 				if ($tmp) {
