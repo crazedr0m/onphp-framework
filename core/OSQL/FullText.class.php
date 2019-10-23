@@ -24,9 +24,6 @@
 		
 		public function __construct($field, $words, $logic)
 		{
-			if (is_string($field))
-				$field = new DBField($field);
-			
 			Assert::isArray($words);
 			
 			$this->field = $field;
@@ -39,8 +36,17 @@
 		**/
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
+			if (is_array($this->field)) {
+				$mappedField = array();
+				foreach ($this->field as $item) {
+					$mappedField[] = $dao->guessAtom($item, $query, $dao->getTable());
+				}
+			} else {
+				$mappedField = $dao->guessAtom($this->field, $query, $dao->getTable());
+			}
+
 			return new $this(
-				$dao->guessAtom($this->field, $query, $dao->getTable()),
+				$mappedField,
 				$this->words,
 				$this->logic
 			);
