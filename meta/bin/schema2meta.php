@@ -138,7 +138,6 @@ echo '<?xml version="1.0"?>'
 					},
 					$fieldName
 				);
-
 			$isPrimaryKey = ($table['pk'] == $column);
 
 			$tag = 'property';
@@ -146,6 +145,10 @@ echo '<?xml version="1.0"?>'
 				$tag = 'identifier';
 
 			$type = $props['fieldType'];
+			// skip foreign key constraint yet
+			if (mb_strtolower($type) == 'foreign') {
+				continue;
+			}
 
 			if (isset($typeMap[$type]))
 				$type = $typeMap[$type];
