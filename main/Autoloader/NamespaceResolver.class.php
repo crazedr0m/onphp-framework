@@ -15,13 +15,13 @@
 		
 		/**
 		 * @param string $path
-		 * @return NamespaceResolverOnPHP
+		 * @return NamespaceResolver
 		 */
 		public function addPath($path, $namespace = null);
 		
 		/**
 		 * @param array $path
-		 * @return NamespaceResolverOnPHP
+		 * @return NamespaceResolver
 		 */
 		public function addPaths(array $pathList, $namespace = null);
 		
@@ -32,7 +32,7 @@
 		
 		/**
 		 * @param string $classExtension
-		 * @return NamespaceResolverOnPHP
+		 * @return NamespaceResolver
 		 */
 		public function setClassExtension($classExtension);
 		
