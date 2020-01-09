@@ -21,6 +21,7 @@
 	{
 		private $needAutoCommit = false;
 		private $defaultEngine;
+		private $compressed = false;
 
 
 		/**
@@ -30,6 +31,17 @@
 		public function setPersistent($really = false)
 		{
 			$this->persistent = ($really === true);
+
+			return $this;
+		}
+
+		/**
+		 * @param bool $really
+		 * @return MySQLim
+		 */
+		public function setCompressed($really = false)
+		{
+			$this->compressed = ($really === true);
 
 			return $this;
 		}
@@ -50,7 +62,7 @@
 		**/
 		public function setNeedAutoCommit($flag)
 		{
-			$this->needAutoCommit = $flag == true;
+			$this->needAutoCommit = ($flag == true);
 			$this->setupAutoCommit();
 			return $this;
 		}
@@ -74,7 +86,10 @@
 		public function connect()
 		{
 			$this->link = mysqli_init();
-			
+			$flags = MYSQLI_CLIENT_FOUND_ROWS;
+			if ($this->compressed) {
+				$flags = $flags | MYSQLI_CLIENT_COMPRESS;
+			}
 			try {
 				mysqli_real_connect(
 					$this->link,
@@ -84,7 +99,7 @@
 					$this->basename,
 					$this->port,
 					null,
-					MYSQLI_CLIENT_FOUND_ROWS
+					$flags
 				);
 			} catch (BaseException $e) {
 				throw new DatabaseException(
@@ -114,8 +129,28 @@
 		
 		public function isConnected()
 		{
-			return (parent::isConnected() || $this->link instanceof \mysqli)
-				&& mysqli_ping($this->link);
+			$connected = (parent::isConnected() || $this->link instanceof \mysqli);
+			if (!$connected) {
+				return false;
+			}
+
+			$alive = false;
+			try {
+				$alive = mysqli_ping($this->link);
+			} catch (BaseException $e) {}
+
+			if ($alive) {
+				return true;
+			}
+
+			if ($connected) {
+				try {
+					$this->disconnect();
+				} catch (BaseException $e) {}
+			}
+			$this->link = null;
+
+			return false;
 		}
 		
 		/**
