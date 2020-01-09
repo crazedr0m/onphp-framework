@@ -22,7 +22,7 @@
 		private $needAutoCommit = false;
 		private $defaultEngine;
 		private $compressed = false;
-
+		private $initCommands = array();
 
 		/**
 		 * @param bool $really
@@ -42,6 +42,17 @@
 		public function setCompressed($really = false)
 		{
 			$this->compressed = ($really === true);
+
+			return $this;
+		}
+
+		/**
+		 * @param string $query
+		 * @return MySQLim
+		 */
+		public function addInitCommand($query)
+		{
+			$this->initCommands[] = $query;
 
 			return $this;
 		}
@@ -90,6 +101,11 @@
 			if ($this->compressed) {
 				$flags = $flags | MYSQLI_CLIENT_COMPRESS;
 			}
+
+			if (!empty($this->initCommands)) {
+				$this->link->options(MYSQLI_INIT_COMMAND, implode(';', $this->initCommands));
+			}
+
 			try {
 				mysqli_real_connect(
 					$this->link,
