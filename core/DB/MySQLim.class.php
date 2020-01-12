@@ -161,7 +161,7 @@
 
 			if ($connected) {
 				try {
-					$this->disconnect();
+					mysqli_close($this->link);
 				} catch (BaseException $e) {}
 			}
 			$this->link = null;
@@ -230,7 +230,7 @@
 					$e = 'DuplicateObjectException';
 				else
 					$e = 'DatabaseException';
-				
+
 				throw new $e(
 					mysqli_error($this->link).' - '.$queryString,
 					$code
