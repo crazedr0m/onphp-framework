@@ -104,7 +104,8 @@
 				$match = $this->fieldToString($fields);
 			}
 
-			return ' (MATCH ('.$match.') AGAINST ('.$this->prepareFullText($words, $logic).'))';
+			return ' (MATCH ('.$match.') AGAINST ('
+				.$this->prepareFullText($words, $logic).'))';
 		}
 		
 		private function prepareFullText($words, $logic)

@@ -35,7 +35,7 @@
 			}
 			
 			$this->paths[$namespace][] = rtrim($path, self::DS).self::DS;
-			
+
 			return $this;
 		}
 		
@@ -45,9 +45,10 @@
 		 */
 		public function addPaths(array $pathList, $namespace = null)
 		{
-			foreach ($pathList as $path)
+			foreach ($pathList as $path) {
 				$this->addPath($path, $namespace);
-			
+			}
+
 			return $this;
 		}
 		
@@ -98,8 +99,8 @@
 		 */
 		public function getClassPathList()
 		{
-			$dirScaner = $this->getDirScaner()
-				->setClassExtension($this->getClassExtension());
+			$dirScaner = $this->getDirScaner()->
+				setClassExtension($this->getClassExtension());
 			
 			foreach ($this->paths as $namespace => $namespacePaths) {
 				foreach ($namespacePaths as $directory) {
