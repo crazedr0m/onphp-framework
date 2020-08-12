@@ -104,17 +104,24 @@
 			
 			$cacheFile = $this->classCachePath.$this->checksum.'.occ';
 			
-			if (!$recache && $this->cache && ($this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] <> $this->checksum))
+			if (
+				!$recache
+				&& $this->cache
+				&& ($this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] <> $this->checksum)
+			) {
 				$this->cache = null;
-			
+			}
+
 			if (!$recache && !$this->cache) {
 				try {
 					$this->cache = unserialize(@file_get_contents($cacheFile, false));
 				} catch (BaseException $e) {
 					/* ignore */
 				}
-				
-				if ($fileName = $this->getFileName($className)) {
+
+				$fileName = $this->getFileName($className);
+
+				if ($fileName) {
 					try {
 						return $this->includeFile($fileName);
 					} catch (ClassNotFoundException $e) {
@@ -124,9 +131,10 @@
 					}
 				}
 			}
-			
+
 			if ($recache || !$this->cache) {
 				$this->cache = $this->namespaceResolver->getClassPathList();
+
 				$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = $this->checksum;
 				
 				if (
@@ -138,22 +146,24 @@
 				)
 					file_put_contents($cacheFile, serialize($this->cache));
 			}
-			
-			if ($fileName = $this->getFileName($className)) {
-				try {
-					return $this->includeFile($fileName);
-				} catch (BaseException $e) {
-					if (is_readable($fileName) || $recache)
-						// class compiling failed
-						throw $e;
-					else {
-						// cache is not actual
-						$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = null;
-						$this->autoload($className, true);
-					}
-				}
-			} else {
+
+			$fileName = $this->getFileName($className);
+			if (!$fileName) {
 				/* try another auto loader */
+				return;
+			}
+
+			try {
+				return $this->includeFile($fileName);
+			} catch (BaseException $e) {
+				if (is_readable($fileName) || $recache)
+					// class compiling failed
+					throw $e;
+				else {
+					// cache is not actual
+					$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = null;
+					$this->autoload($className, true);
+				}
 			}
 		}
 		
@@ -183,13 +193,12 @@
 		private function getFileName($className)
 		{
 			$className = '\\'.ltrim($className, '\\');
-			
 			if (!isset($this->cache[$className]))
 				return;
 			
 			$classParts = explode('\\', $className);
 			$onlyClassName = $classParts[count($classParts) - 1];
-			
+
 			return $this->cache[$this->cache[$className]].$onlyClassName
 				.$this->namespaceResolver->getClassExtension();
 		}
