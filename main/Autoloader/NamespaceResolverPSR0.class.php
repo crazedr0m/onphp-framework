@@ -52,7 +52,7 @@
 				
 				$checkPath = ($subPath ? ($subPath . self::DS) : '').$onlyClassName
 					.$this->getClassExtension();
-				
+
 				foreach ($paths as $directory) {
 					if ($paths = glob($directory.$checkPath)) {
 						return $paths[0];

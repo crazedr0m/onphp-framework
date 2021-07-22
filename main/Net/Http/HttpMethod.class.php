@@ -29,6 +29,7 @@
 		const MOVE		= 13;
 		const LOCK		= 14;
 		const UNLOCK	= 15;
+		const PATCH		= 16;
 		
 		protected $names = array(
 			self::OPTIONS 	=> 'OPTIONS',
@@ -46,6 +47,7 @@
 			self::MOVE		=> 'MOVE',
 			self::LOCK		=> 'LOCK',
 			self::UNLOCK 	=> 'UNLOCK',
+			self::PATCH 	=> 'PATCH',
 		);
 		
 		public static function get()
