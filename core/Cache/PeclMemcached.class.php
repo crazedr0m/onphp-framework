@@ -124,11 +124,8 @@
 		public function getList($indexes)
 		{
 			$this->ensureTriedToConnect();
-			
-			return
-				($return = $this->get($indexes))
-					? $return
-					: array();
+			$result = $this->instance->getMulti($indexes);
+			return $result;
 		}
 		
 		public function get($index)
