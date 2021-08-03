@@ -95,21 +95,31 @@
 		{
 			$path = $this->makePath($key);
 			
-			if (is_readable($path)) {
-				
-				if (filemtime($path) <= time()) {
-					try {
-						unlink($path);
-					} catch (BaseException $e) {
-						// we're in race with unexpected clean()
-					}
-					return null;
-				}
-				
-				return $this->operate($path);
+			if (!is_readable($path)) {
+				return null;
 			}
-			
-			return null;
+
+			try {
+				$fileTime = filemtime($path);
+			} catch (BaseException $e) {
+				$fileTime = null;
+			}
+
+
+			if ($fileTime === null) {
+				return null;
+			}
+
+			if ($fileTime <= time()) {
+				try {
+					unlink($path);
+				} catch (BaseException $e) {
+					// we're in race with unexpected clean()
+				}
+				return null;
+			}
+
+			return $this->operate($path);
 		}
 		
 		public function delete($key)
@@ -197,49 +207,71 @@
 			$key = hexdec(substr(md5($path), 3, 2)) + 1;
 
 			$pool = SemaphorePool::me();
-			
-			if (!$pool->get($key))
-				return null;
-			
-			try {
-				$old = umask(0077);
-				$fp = fopen($path, $value !== null ? 'wb' : 'rb');
-				umask($old);
-			} catch (BaseException $e) {
-				$pool->drop($key);
+
+			if (!$pool->get($key)) {
 				return null;
 			}
-			
+
+			$result = $this->doOperate($path, $value, $expires);
+			$free = $pool->free($key);
 			if ($value !== null) {
-				fwrite($fp, $this->prepareData($value));
-				fclose($fp);
-				
-				if ($expires < parent::TIME_SWITCH)
-					$expires += time();
-				
-				try {
-					touch($path, $expires);
-				} catch (BaseException $e) {
-					// race-removed
+				$result = $free;
+			}
+			return $result;
+		}
+
+		private function doOperate($path, $value = null, $expires = null)
+		{
+			$tmp = null;
+			try {
+				if ($value === null) {
+					$fp = fopen($path, 'rb');
+				} else {
+					$old = umask(0077);
+					$tmp = FileUtils::makeTempFile();
+					$fp = fopen($tmp, 'wb');
+					umask($old);
 				}
-				
-				return $pool->drop($key);
-			} else {
-				if (($size = filesize($path)) > 0)
+			} catch (BaseException $e) {
+				if (isset($fp) && $fp) {
+					fclose($fp);
+				}
+				if ($tmp) {
+					unlink($tmp);
+				}
+				return null;
+			}
+
+			if ($value === null) {
+				$size = filesize($path);
+
+				if ($size > 0)
 					$data = fread($fp, $size);
 				else
 					$data = null;
-				
+
 				fclose($fp);
-				
-				$pool->drop($key);
-				
+
 				return $data ? $this->restoreData($data) : null;
 			}
-			
-			Assert::isUnreachable();
+
+			fwrite($fp, $this->prepareData($value));
+			fflush($fp);
+			fclose($fp);
+			rename($tmp, $path);
+
+			if ($expires < parent::TIME_SWITCH)
+				$expires += time();
+
+			try {
+				touch($path, $expires);
+			} catch (BaseException $e) {
+				// race-removed
+			}
+
+			return;
 		}
-		
+
 		private function makePath($key)
 		{
 			return

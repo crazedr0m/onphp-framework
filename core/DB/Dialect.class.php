@@ -178,7 +178,19 @@
 		{
 			throw new UnimplementedFeatureException();
 		}
-		
+
+		public function toLimitOffsetString($limit, $offset)
+		{
+			$result = '';
+			if ($limit)
+				$result .= ' LIMIT '.$limit;
+
+			if ($offset)
+				$result .= ' OFFSET '.$offset;
+
+			return $result;
+		}
+
 		protected function getLink()
 		{
 			if (!$this->db)

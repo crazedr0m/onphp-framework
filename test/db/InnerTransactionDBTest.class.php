@@ -1,8 +1,18 @@
 <?php
 	namespace Onphp\Test;
 
+	use Onphp\DBPool;
+
 	class InnerTransactionDBTest extends TestCaseDAO
 	{
+		public function setUp()
+		{
+			if (empty(DBTestPool::me()->getPool())) {
+				$this->fail('this test requires db in config');
+			}
+			parent::setUp();
+		}
+
 		public function testSavepoint()
 		{
 			foreach (DBTestPool::me()->iterator() as $connector => $db) {
@@ -27,6 +37,8 @@
 		public function testSavepointRollback()
 		{
 			foreach (DBTestPool::me()->iterator() as $connector => $db) {
+				/* @var $db DB */
+				DBPool::me()->setDefault($db);
 				$this->getDBCreator()->fillDB();
 
 				/* @var $moscow TestCity */

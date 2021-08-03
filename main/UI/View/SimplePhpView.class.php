@@ -45,7 +45,11 @@
 			
 			return $this;
 		}
-		
+
+		/**
+		 * @return string
+		 * @throw Exception
+		**/
 		public function toString($model = null)
 		{
 			try {

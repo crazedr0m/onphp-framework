@@ -79,9 +79,8 @@
 			Identifiable $object, Identifiable $old
 		)
 		{
-			$query = $this->getProtoClass()
-				->fillQuery(OSQL::update($this->getTable()), $object, $old);
-			
+			$query = $this->getProtoClass()->
+				fillQuery(OSQL::update($this->getTable()), $object, $old);
 			if (!$query->getFieldsCount())
 				return $object;
 			

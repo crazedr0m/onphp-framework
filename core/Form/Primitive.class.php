@@ -29,7 +29,7 @@
 		}
 		
 		/**
-		 * @return \Onphp\Primitive
+		 * @return \Onphp\PrimitiveAlias
 		**/
 		public static function alias($name, BasePrimitive $prm)
 		{

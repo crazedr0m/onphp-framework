@@ -10,7 +10,9 @@
  ***************************************************************************/
 
 	namespace Onphp;
-	/**
+	use ArrayIterator;
+
+/**
 	 * @ingroup Http
 	**/
 	class HttpHeaderCollection implements \IteratorAggregate
@@ -103,7 +105,7 @@
 				}
 			}
 
-			return new \ArrayIterator($headerList);
+			return new ArrayIterator($headerList);
 		}
 
 		private function normalizeName($name)

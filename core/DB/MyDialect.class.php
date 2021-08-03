@@ -100,25 +100,21 @@
 		
 		public function fullTextSearch($fields, $words, $logic)
 		{
-			return
-				' MATCH ('
-					.implode(
-						', ',
-						array_map(
-							array($this, 'fieldToString'),
-							$fields
-						)
-					)
-					.') AGAINST ('
-					.self::prepareFullText($words, $logic)
-				.')';
+			if (is_array($fields)) {
+				$match = implode(', ', array_map(array($this, 'fieldToString'), $fields));
+			} else {
+				$match = $this->fieldToString($fields);
+			}
+
+			return ' (MATCH ('.$match.') AGAINST ('
+				.$this->prepareFullText($words, $logic).'))';
 		}
 		
-		private static function prepareFullText($words, $logic)
+		private function prepareFullText($words, $logic)
 		{
 			Assert::isArray($words);
 			
-			$retval = self::quoteValue(implode(' ', $words));
+			$retval = $this->quoteValue(implode(' ', $words));
 			
 			if (self::IN_BOOLEAN_MODE === $logic) {
 				return addcslashes($retval, '+-<>()~*"').' '.'IN BOOLEAN MODE';

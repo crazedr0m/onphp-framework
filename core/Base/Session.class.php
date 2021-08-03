@@ -61,9 +61,19 @@
 			setcookie(session_name(), null, 0, '/');
 		}
 		
+		public static function commit()
+		{
+			if (!self::$isStarted)
+				throw new SessionNotStartedException();
+
+			self::$isStarted = false;
+
+			session_write_close();
+		}
+
 		public static function flush()
 		{
-			return session_unset();
+			session_unset();
 		}
 		
 		/**
@@ -73,7 +83,6 @@
 		{
 			if (!self::isStarted())
 				throw new SessionNotStartedException();
-			
 			$_SESSION[$var] = $val;
 		}
 		

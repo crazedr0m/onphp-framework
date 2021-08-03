@@ -30,6 +30,9 @@
 			return new static($timestamp, $zone);
 		}
 		
+		/**
+		 * @return string
+		**/
 		public static function now()
 		{
 			return date(static::getFormat());
@@ -74,6 +77,9 @@
 			}
 		}
 		
+		/**
+		 * @return string
+		**/
 		public function toTime($timeDelimiter = ':', $secondDelimiter = '.')
 		{
 			return
@@ -84,6 +90,9 @@
 				.$this->getSecond();
 		}
 		
+		/**
+		 * @return string
+		**/
 		public function toDateTime(
 			$dateDelimiter = '-',
 			$timeDelimiter = ':',
@@ -114,7 +123,10 @@
 		{
 			return ($this->toDateTime() === $timestamp->toDateTime());
 		}
-		
+
+		/**
+		 * @return int
+		**/
 		public function getDayStartStamp()
 		{
 			if (!$this->getHour() && !$this->getMinute() && !$this->getSecond())
@@ -123,6 +135,9 @@
 				return parent::getDayStartStamp();
 		}
 
+		/**
+		 * @return int
+		**/
 		public function getHourStartStamp()
 		{
 			if (!$this->getMinute() && !$this->getSecond())

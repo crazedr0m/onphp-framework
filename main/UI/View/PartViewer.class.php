@@ -58,7 +58,10 @@
 			
 			return $this;
 		}
-		
+
+		/**
+		 * @return string
+		**/
 		public function toString($partName, $model = null)
 		{
 			try {

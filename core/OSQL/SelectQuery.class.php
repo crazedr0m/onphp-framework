@@ -428,13 +428,9 @@
 			if ($this->order->getCount()) {
 				$query .= ' ORDER BY '.$this->order->toDialectString($dialect);
 			}
-			
-			if ($this->limit)
-				$query .= ' LIMIT '.$this->limit;
-			
-			if ($this->offset)
-				$query .= ' OFFSET '.$this->offset;
-			
+
+			$query .= $dialect->toLimitOffsetString($this->limit, $this->offset);
+
 			return $query;
 		}
 		

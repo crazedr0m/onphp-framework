@@ -19,10 +19,45 @@
 	**/
 	namespace Onphp;
 
-	final class MySQLim extends Sequenceless
+	class MySQLim extends Sequenceless
 	{
 		private $needAutoCommit = false;
 		private $defaultEngine;
+		private $compressed = false;
+		private $initCommands = array();
+
+		/**
+		 * @param bool $really
+		 * @return MySQLim
+		 */
+		public function setPersistent($really = false)
+		{
+			$this->persistent = ($really === true);
+
+			return $this;
+		}
+
+		/**
+		 * @param bool $really
+		 * @return MySQLim
+		 */
+		public function setCompressed($really = false)
+		{
+			$this->compressed = ($really === true);
+
+			return $this;
+		}
+
+		/**
+		 * @param string $query
+		 * @return MySQLim
+		 */
+		public function addInitCommand($query)
+		{
+			$this->initCommands[] = $query;
+
+			return $this;
+		}
 
 		/**
 		 * @return \Onphp\MySQLim
@@ -40,7 +75,7 @@
 		**/
 		public function setNeedAutoCommit($flag)
 		{
-			$this->needAutoCommit = $flag == true;
+			$this->needAutoCommit = ($flag == true);
 			$this->setupAutoCommit();
 			return $this;
 		}
@@ -63,21 +98,26 @@
 		 */
 		public function connect()
 		{
-			if ($this->persistent)
-				throw new UnsupportedMethodException();
-			
 			$this->link = mysqli_init();
-			
+			$flags = MYSQLI_CLIENT_FOUND_ROWS;
+			if ($this->compressed) {
+				$flags = $flags | MYSQLI_CLIENT_COMPRESS;
+			}
+
+			if (!empty($this->initCommands)) {
+				$this->link->options(MYSQLI_INIT_COMMAND, implode(';', $this->initCommands));
+			}
+
 			try {
 				mysqli_real_connect(
 					$this->link,
-					$this->hostname,
+					($this->persistent ? 'p:': '').$this->hostname,
 					$this->username,
 					$this->password,
 					$this->basename,
 					$this->port,
 					null,
-					MYSQLI_CLIENT_FOUND_ROWS
+					$flags
 				);
 			} catch (BaseException $e) {
 				throw new DatabaseException(
@@ -107,8 +147,28 @@
 		
 		public function isConnected()
 		{
-			return (parent::isConnected() || $this->link instanceof \mysqli)
-				&& mysqli_ping($this->link);
+			$connected = (parent::isConnected() || $this->link instanceof \mysqli);
+			if (!$connected) {
+				return false;
+			}
+
+			$alive = false;
+			try {
+				$alive = mysqli_ping($this->link);
+			} catch (BaseException $e) {}
+
+			if ($alive) {
+				return true;
+			}
+
+			if ($connected) {
+				try {
+					mysqli_close($this->link);
+				} catch (BaseException $e) {}
+			}
+			$this->link = null;
+
+			return false;
 		}
 		
 		/**
@@ -167,12 +227,12 @@
 			if (!$result = mysqli_query($this->link, $queryString)) {
 				
 				$code = mysqli_errno($this->link);
-				
-				if ($code == 1062)
+				if ($code == 1062) {
 					$e = '\Onphp\DuplicateObjectException';
-				else
+				} else {
 					$e = '\Onphp\DatabaseException';
-				
+				}
+
 				throw new $e(
 					mysqli_error($this->link).' - '.$queryString,
 					$code
@@ -184,7 +244,92 @@
 		
 		public function getTableInfo($table)
 		{
-			throw new UnimplementedFeatureException();
+			static $types = array(
+				'tinyint'		=> DataType::SMALLINT,
+				'smallint'		=> DataType::SMALLINT,
+				'int'			=> DataType::INTEGER,
+				'mediumint'		=> DataType::INTEGER,
+
+				'bigint'		=> DataType::BIGINT,
+				
+				'float'			=> DataType::REAL,
+				'double'		=> DataType::DOUBLE,
+				'decimal'		=> DataType::NUMERIC,
+
+				'char'			=> DataType::CHAR,
+				'varchar'		=> DataType::VARCHAR,
+				'text'			=> DataType::TEXT,
+				'tinytext'		=> DataType::TEXT,
+				'mediumtext'	=> DataType::TEXT,
+				'longtext'		=> DataType::TEXT,
+				
+				'date'			=> DataType::DATE,
+				'time'			=> DataType::TIME,
+				'timestamp'		=> DataType::TIMESTAMP,
+				'datetime'		=> DataType::TIMESTAMP,
+
+				// unhandled types
+				'set'			=> null,
+				'enum'			=> null,
+				'year'			=> null
+			);
+			
+			try {
+				$result = $this->queryRaw('SHOW COLUMNS FROM '.$table);
+			} catch (BaseException $e) {
+				throw new ObjectNotFoundException(
+					"unknown table '{$table}'"
+				);
+			}
+			
+			$table = new DBTable($table);
+			
+			while ($row = mysqli_fetch_array($result)) {
+				$name = strtolower($row['Field']);
+				$matches = array();
+				$info = array('type' => null, 'extra' => null);
+				if (
+					preg_match(
+						'~(\w+)(\((\d+?)\)){0,1}\s*(\w*)~',
+						strtolower($row['Type']),
+						$matches
+					)
+				) {
+					$info['type'] = $matches[1];
+					$info['size'] = $matches[3];
+					$info['extra'] = $matches[4];
+				}
+				
+				Assert::isTrue(
+					array_key_exists($info['type'], $types),
+					
+					'unknown type "'
+					.$types[$info['type']]
+					.'" found in column "'.$name.'"'
+				);
+				
+				if (empty($types[$info['type']]))
+					continue;
+				
+				$column = DBColumn::create(
+					DataType::create($types[$info['type']])->
+						setUnsigned(
+							strtolower($info['extra']) == 'unsigned'
+						)->
+						setNull(strtolower($row['Null']) == 'yes'),
+					
+					$name
+				)->
+				setAutoincrement(strtolower($row['Extra']) == 'auto_increment')->
+				setPrimaryKey(strtolower($row['Key']) == 'pri');
+				
+				if ($row['Default'])
+					$column->setDefault($row['Default']);
+				
+				$table->addColumn($column);
+			}
+			
+			return $table;
 		}
 		
 		public function hasQueue()
@@ -215,14 +360,14 @@
 			return $result;
 		}
 
-		private function setupAutoCommit()
+		protected  function setupAutoCommit()
 		{
 			if ($this->isConnected()) {
 				mysqli_autocommit($this->link, $this->needAutoCommit);
 			}
 		}
 
-		private function setupDefaultEngine()
+		protected  function setupDefaultEngine()
 		{
 			if ($this->defaultEngine && $this->isConnected()) {
 				mysqli_query($this->link, 'SET storage_engine='.$this->defaultEngine);

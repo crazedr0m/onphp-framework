@@ -16,7 +16,8 @@
 		public static function getShort(Form $form)
 		{
 			$short = null;
-			
+
+			/**@var BasePrimitive $primitive**/
 			foreach ($form->getPrimitiveList() as $primitive)
 				if (strlen($primitive->getName()) == 1)
 					$short .=
@@ -30,6 +31,7 @@
 		{
 			$long = array();
 			
+			/**@var BasePrimitive $primitive**/
 			foreach ($form->getPrimitiveList() as $primitive)
 				if (strlen($primitive->getName()) > 1)
 					$long[] =

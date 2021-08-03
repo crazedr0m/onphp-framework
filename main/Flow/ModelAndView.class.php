@@ -50,7 +50,10 @@
 			
 			return $this;
 		}
-		
+
+		/**
+		 * @return View
+		**/
 		public function getView()
 		{
 			return $this->view;

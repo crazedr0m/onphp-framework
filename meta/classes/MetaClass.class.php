@@ -22,7 +22,10 @@
 		private $type		= null;
 		
 		private $parent		= null;
-		
+
+		/**
+		 * MetaClassProperty[] $properties
+		**/
 		private $properties	= array();
 		private $interfaces	= array();
 		private $references	= array();
@@ -148,7 +151,10 @@
 				)
 			);
 		}
-		
+
+		/**
+		 * @return MetaClassProperty[]
+		**/
 		public function getProperties()
 		{
 			return $this->properties;

@@ -16,8 +16,13 @@
 
 	final class AutoClassBuilder extends BaseBuilder
 	{
+
 		public static function build(MetaClass $class)
 		{
+			$unsetInSleep = [];
+			$cloneNull = [];
+			$cloneValueObject = [];
+
 			$out = self::getHead();
 			
 			if ($namespace = trim($class->getNamespace(), '\\'))
@@ -53,9 +58,29 @@
 					."{$property->getType()->getDeclaration()};\n";
 				
 				if ($property->getFetchStrategyId() == FetchStrategy::LAZY) {
+					$unsetInSleep[] = $property->getName();
+
 					$out .=
 						"protected \${$property->getName()}Id = null;\n";
 				}
+
+				$propertyRelationId = $property->getRelationId();
+				if (
+					$propertyRelationId == MetaRelation::ONE_TO_MANY
+					|| $propertyRelationId == MetaRelation::MANY_TO_MANY
+				) {
+					$unsetInSleep[] = $property->getName();
+					$cloneNull[] = $property->getName();
+				}
+
+				if ($propertyRelationId == MetaRelation::ONE_TO_ONE) {
+					$propertyPattern = $property->getType()->getClass()->getPattern();
+
+					if ($propertyPattern instanceof ValueObjectPattern) {
+						$cloneValueObject[]  = $property->getName();
+					}
+				}
+
 			}
 			
 			$valueObjects = array();
@@ -88,6 +113,42 @@ EOT;
 			}
 
 			$out .= self::staticCallsBuild($class);
+
+			if (!empty($unsetInSleep)) {
+				$out .= <<<EOT
+
+public function __sleep()
+{
+			\$vars = get_object_vars(\$this);
+
+EOT;
+				foreach ($unsetInSleep as $propertyName) {
+					$out .= "unset(\$vars['{$propertyName}']);\n";
+				}
+
+				$out .= "\n\treturn array_keys(\$vars);\n";
+				$out .= "}\n";
+			}
+
+			if (!empty($cloneNull) || !empty($cloneValueObject)) {
+				$out .= <<<EOT
+
+public function __clone()
+{
+
+EOT;
+				foreach ($cloneNull as $propertyName) {
+					$out .= "\$this->{$propertyName} = null;\n";
+				}
+				if (!empty($cloneNull) && !empty($cloneValueObject)) {
+					$out.= "\n";
+				}
+				foreach ($cloneValueObject as $propertyName) {
+					$out .= "\$this->{$propertyName} = clone \$this->{$propertyName};\n";
+				}
+				$out .= "}\n";
+			}
+
 
 			foreach ($class->getProperties() as $property) {
 				/* @var $property \Onphp\MetaClassProperty */

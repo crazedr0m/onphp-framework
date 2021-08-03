@@ -20,9 +20,15 @@
 	final class MemcachedLocker extends BaseLocker implements Instantiatable
 	{
 		const VALUE = 0x1;
-		
+
+		/**
+		 * @var CachePeer $memcachedClient
+		**/
 		private $memcachedClient = null;
 
+		/**
+		 * @return MemcachedLocker
+		**/
 		public static function me()
 		{
 			return Singleton::getInstance(__CLASS__);

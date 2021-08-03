@@ -234,7 +234,15 @@
 		{
 			return $this->strategyId;
 		}
-		
+
+		public function getFetchStrategy()
+		{
+			if (!$this->strategyId) {
+				return null;
+			}
+			return new FetchStrategy($this->strategyId);
+		}
+
 		/**
 		 * @return \Onphp\LightMetaProperty
 		**/

@@ -1,4 +1,9 @@
 <?php
+
+use Onphp\Form;
+use Onphp\Primitive;
+use Onphp\Test\TestCase;
+
 /***************************************************************************
  *   Copyright (C) 2013 by Vyacheslav Yu. Tsyrulnik                        *
 *                                                                         *
@@ -9,7 +14,7 @@
 *                                                                         *
 ***************************************************************************/
 	
-	final class PrimitiveHttpUrlTest extends \Onphp\Test\TestCase
+	final class PrimitiveHttpUrlTest extends TestCase
 	{
 		private $urlWithPrivilegedPort = "https://path.to.some.com:444/hey.html";
 		
@@ -18,7 +23,7 @@
 		 */
 		public function privilegedPortIsOkByDefault()
 		{
-			$form = \Onphp\Form::create()->add(\Onphp\Primitive::httpUrl("url"));
+			$form = Form::create()->add(Primitive::httpUrl("url"));
 			
 			$form->import(array('url' => $this->urlWithPrivilegedPort));
 			$errors = $form->getErrors();
@@ -31,13 +36,13 @@
 		 */
 		public function privilegedPortInvalid()
 		{
-			$form = \Onphp\Form::create()->add(\Onphp\Primitive::httpUrl("url")->setCheckPrivilegedPorts());
+			$form = Form::create()->add(Primitive::httpUrl("url")->setCheckPrivilegedPorts());
 			
 			$form->import(array('url' => $this->urlWithPrivilegedPort));
 			$errors = $form->getErrors();
 			
 			$this->assertTrue(isset($errors["url"]));
-			$this->assertEquals(\Onphp\Form::WRONG, $errors["url"]);
+			$this->assertEquals(Form::WRONG, $errors["url"]);
 		}
 		
 	}

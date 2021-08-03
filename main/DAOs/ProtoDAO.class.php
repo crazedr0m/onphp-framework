@@ -49,7 +49,7 @@
 				$proto = reset($list)->proto();
 				
 				$this->processPath($proto, $path, $query, $this->getTable());
-				
+
 				if ($criteria = $info['criteria']) {
 					$query = $criteria->setDao($this)->fillSelectQuery($query);
 				}
@@ -57,16 +57,16 @@
 				$query->andWhere(
 					Expression::in($mainId, $ids)
 				);
-				
+
+				/**@var PropertyPath $propertyPath **/
 				$propertyPath = $info['propertyPath'];
-				
+
 				$property	= $propertyPath->getFinalProperty();
 				$proto		= $propertyPath->getFinalProto();
 				$dao		= $propertyPath->getFinalDao();
-				
 				$selfName = $this->getObjectName();
 				$self = new $selfName;
-				$getter = 'get'.ucfirst($property->getName());
+				$getter = $property->getGetter();
 				
 				Assert::isTrue(
 					$property->getRelationId() == MetaRelation::ONE_TO_MANY
@@ -74,36 +74,38 @@
 				);
 				
 				$table = $dao->getJoinName($property->getColumnName());
-				
 				$id = $this->getIdName();
 				$collection = array();
-				
+
 				if ($lazy) {
 					if ($property->getRelationId() == MetaRelation::MANY_TO_MANY) {
 						$childId = $self->$getter()->getChildIdField();
 					} else {
 						$childId = $dao->getIdName();
 					}
-					
-					$alias = 'cid'; // childId, collectionId, whatever
+
+					//FIXME: make unique alias name
+					$alias = 'collectionId'; // childId, collectionId, whatever
 					
 					$field = DBField::create(
 						$childId,
-						$self->$getter()->getHelperTable()
+						$table
+//						$self->$getter()->getHelperTable()
 					);
 					
 					$query->get($field, $alias);
 					
 					if (!$property->isRequired())
 						$query->andWhere(Expression::notNull($field));
-					
+
 					try {
 						$rows = $dao->getCustomList($query);
 						
-						foreach ($rows as $row)
+						foreach ($rows as $row) {
 							if (!empty($row[$alias]))
 								$collection[$row[$id]][] = $row[$alias];
-						
+						}
+
 					} catch (ObjectNotFoundException $e) {/*_*/}
 				} else {
 					$prefix = $table.'_';
@@ -177,7 +179,7 @@
 		)
 		{
 			$path = explode('.', $probablyPath);
-			
+
 			try {
 				$property = $proto->getPropertyByName($path[0]);
 			} catch (MissingElementException $e) {
@@ -358,7 +360,6 @@
 		{
 			if ($table === null)
 				$table = $this->getTable();
-
 			if (is_string($atom)) {
 				if (strpos($atom, '.') !== false) {
 					return
@@ -385,8 +386,9 @@
 				) {
 					return new DBField($atom);
 				}
-			} elseif ($atom instanceof MappableObject)
+			} elseif ($atom instanceof MappableObject) {
 				return $atom->toMapped($this, $query);
+			}
 			elseif (
 				($atom instanceof DBValue)
 				|| ($atom instanceof DBField)

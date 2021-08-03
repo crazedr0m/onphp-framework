@@ -89,12 +89,13 @@
 		{
 			$objectDao = $object->dao();
 
+
 			if ($query)
 				$updateQuery = $query;
 			else
 				$updateQuery =
 					OSQL::update()->setTable($objectDao->getTable())->
-					where(Expression::eqId('id', $object));
+					where(Expression::eqId($objectDao->getIdName(), $object));
 
 			$mapping = $objectDao->getProtoClass()->getMapping();
 

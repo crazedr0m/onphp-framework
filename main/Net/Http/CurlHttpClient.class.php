@@ -280,14 +280,17 @@
 		{
 			$handle = curl_init();
 			Assert::isNotNull($request->getMethod());
-			
+
 			$options = array(
 				CURLOPT_WRITEFUNCTION => array($response, 'writeBody'),
 				CURLOPT_HEADERFUNCTION => array($response, 'writeHeader'),
 				CURLOPT_URL => $request->getUrl()->toString(),
 				CURLOPT_USERAGENT => 'onPHP::'.__CLASS__
 			);
-			
+
+			if ($this->isPhp55())
+				$options[CURLOPT_SAFE_UPLOAD] = true;
+
 			if ($this->noBody !== null)
 				$options[CURLOPT_NOBODY] = $this->noBody;
 			
@@ -379,28 +382,30 @@
 		{
 			if ($request->hasBody()) {
 				return $request->getBody();
-			} else {
-				if ($this->oldUrlConstructor) {
-					return UrlParamsUtils::toStringOneDeepLvl($request->getPost());
-				} else {
-					$fileList = array_map(
-						array($this, 'fileFilter'),
-						UrlParamsUtils::toParamsList($request->getFiles())
-					);
-					if (empty($fileList)) {
-						return UrlParamsUtils::toString($request->getPost());
-					} else {
-						$postList = UrlParamsUtils::toParamsList($request->getPost());
-						if (!is_null($atParam = $this->findAtParamInPost($postList)))
-							throw new NetworkException(
-								'Security excepion: not allowed send post param '.$atParam
-									. ' which begins from @ in request which contains files'
-							);
-							
-						return array_merge($postList, $fileList);
-					}
-				}
 			}
+
+			if ($this->oldUrlConstructor) {
+				return UrlParamsUtils::toStringOneDeepLvl($request->getPost());
+			}
+
+			$fileList = array_map(
+				array($this, 'fileFilter'),
+				UrlParamsUtils::toParamsList($request->getFiles())
+			);
+
+			if (empty($fileList)) {
+				return UrlParamsUtils::toString($request->getPost());
+			}
+
+			$postList = UrlParamsUtils::toParamsList($request->getPost());
+			if (!is_null($atParam = $this->findAtParamInPost($postList))) {
+				throw new NetworkException(
+					'Security excepion: not allowed send post param '.$atParam
+						. ' which begins from @ in request which contains files'
+				);
+			}
+
+			return array_merge($postList, $fileList);
 		}
 		
 		/**
@@ -410,11 +415,11 @@
 		 */
 		private function findAtParamInPost($postList)
 		{
-			foreach ($postList as $param)
-				if (mb_stripos($param, '@') === 0)
-					return $param;
-				
-			return null;
+			if (!$this->isPhp55()) {
+				foreach ($postList as $param)
+					if (mb_stripos($param, '@') === 0)
+						return $param;
+			}
 		}
 		
 		/**
@@ -431,7 +436,16 @@
 				is_readable($value) && is_file($value),
 				'couldn\'t access to file with path: '.$value
 			);
-			return '@'.$value;
+			return $this->isPhp55() ? new \CURLFile($value) : '@'.$value;
+		}
+
+		private function isPhp55()
+		{
+			static $result = null;
+			if ($result === null) {
+				$result = version_compare(PHP_VERSION, '5.5.0', '>=') ? true : false;
+			}
+			return $result;
 		}
 	}
 ?>
