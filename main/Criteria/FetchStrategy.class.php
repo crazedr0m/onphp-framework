@@ -70,5 +70,10 @@
 			
 			return $instances[$id];
 		}
+
+		public function isJoin()
+		{
+			return ($this->id == self::JOIN);
+		}
 	}
 ?>

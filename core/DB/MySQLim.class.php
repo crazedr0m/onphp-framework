@@ -226,10 +226,11 @@
 				
 				$code = mysqli_errno($this->link);
 
-				if ($code == 1062)
-					$e = 'DuplicateObjectException';
-				else
-					$e = 'DatabaseException';
+				if ($code == 1062) {
+					$e = DuplicateObjectException::class;
+				} else {
+					$e = DatabaseException::class;
+				}
 
 				throw new $e(
 					mysqli_error($this->link).' - '.$queryString,

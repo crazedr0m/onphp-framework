@@ -212,7 +212,6 @@
 				)
 			) {
 				$this->raw = $scope[$this->name];
-				
 				return $this->imported = true;
 			}
 			
