@@ -143,6 +143,13 @@
 			return $this;
 		}
 		
+		public function deleteList($indexes)
+		{
+			foreach ($indexes as $key) {
+				$this->delete($key);
+			}
+		}
+
 		public function getList($indexes)
 		{
 			// intentially not array

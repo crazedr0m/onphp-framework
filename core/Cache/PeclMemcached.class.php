@@ -120,7 +120,13 @@
 				return null;
 			}
 		}
-		
+
+		public function deleteList($indexes)
+		{
+			$this->ensureTriedToConnect();
+			$this->instance->deleteMulti($indexes);
+		}
+
 		public function getList($indexes)
 		{
 			$this->ensureTriedToConnect();
