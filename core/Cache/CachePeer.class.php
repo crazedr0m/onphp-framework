@@ -227,7 +227,7 @@
 		protected function restoreData($value)
 		{
 			if (!$value) {
-				return null;
+				return $value;
 			}
 			if ($this->compress) {
 				$value = gzuncompress($value);
