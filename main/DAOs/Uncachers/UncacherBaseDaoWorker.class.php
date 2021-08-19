@@ -54,8 +54,9 @@
 		}
 		
 		protected function uncacheClassName($className, $idKeys) {
-			foreach ($idKeys as $key)
+			foreach ($idKeys as $key) {
 				Cache::me()->mark($className)->delete($key);
+			}
 		}
 		
 		/**
