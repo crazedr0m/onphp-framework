@@ -226,10 +226,13 @@
 		
 		protected function restoreData($value)
 		{
-			if ($this->compress)
-				return unserialize(gzuncompress($value));
-			else
-				return unserialize($value);
+			if (!$value) {
+				return null;
+			}
+			if ($this->compress) {
+				$value = gzuncompress($value);
+			}
+			return unserialize($value);
 		}
 	}
 ?>
