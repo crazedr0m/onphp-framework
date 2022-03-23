@@ -110,6 +110,16 @@
 			);
 		}
 		
+		public function deleteList($indexes)
+		{
+			$peerIndexMap = array();
+			foreach ($indexes as $index) {
+				$peerIndexMap[] = $this->getActualWatermark().$index;
+			}
+
+			$this->peer->deleteList($peerIndexMap);
+		}
+
 		public function getList($indexes)
 		{
 			$peerIndexMap = array();
