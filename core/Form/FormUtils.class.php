@@ -60,7 +60,6 @@
 		)
 		{
 			Assert::isTrue(is_object($object));
-			
 			if ($object instanceof Prototyped) {
 				$proto = $object->proto();
 				$list = $proto->getExpandedPropertyList();

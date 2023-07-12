@@ -72,7 +72,6 @@
 		{
 			Assert::isTrue($this->brackets, 'brackets must be enabled');
 			$subject = $form->toFormValue($this->subject);
-				
 			switch ($this->logic) {
 				case self::IS_NULL:
 					return null === $subject;
