@@ -252,7 +252,12 @@
 				'+'.((13 - $this->getWeekDay() + $weekStart) % 7).' days'
 			);
 		}
-		
+
+		public function __toString()
+		{
+			$this->toString();
+		}
+
 		public function toString()
 		{
 			return $this->dateTime->format(static::getFormat());

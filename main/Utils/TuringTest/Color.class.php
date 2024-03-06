@@ -110,6 +110,11 @@
 			return $this;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		public function toString()
 		{
 			return sprintf('%02X%02X%02X', $this->red, $this->green, $this->blue);

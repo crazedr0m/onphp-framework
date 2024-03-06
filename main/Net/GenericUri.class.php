@@ -368,6 +368,11 @@
 			return $result;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		public function toString()
 		{
 			$result = null;

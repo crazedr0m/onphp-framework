@@ -43,6 +43,11 @@
 			return $this;
 		}
 		
+		public function __toString()
+		{
+			$this->toString();
+		}
+
 		public function toString()
 		{
 			return "[{$this->id}] {$this->name}";

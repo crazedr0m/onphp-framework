@@ -57,6 +57,11 @@
 			return ($this->value !== array());
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		public function toString()
 		{
 			if ($this->value) {

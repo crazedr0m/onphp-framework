@@ -38,6 +38,11 @@
 			$this->fillers = GoogleChartSolidFillCollection::create();
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+		
 		/**
 		 * @return GoogleChart
 		**/
