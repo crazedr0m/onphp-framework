@@ -91,6 +91,11 @@
 			}
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		public function getHour()
 		{
 			return $this->hour;
