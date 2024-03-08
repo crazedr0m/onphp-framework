@@ -461,7 +461,7 @@
 		
 		private function checkSavepointExist($savepointName)
 		{
-			return isset($this->savepointList[$savepointName]);
+			return array_key_exists($savepointName, $this->savepointList);
 		}
 		
 		private function assertSavePointName($savepointName)

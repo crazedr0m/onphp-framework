@@ -479,7 +479,12 @@
 		{
 			return $this->identifier;
 		}
-		
+
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		final public function toString()
 		{
 			return

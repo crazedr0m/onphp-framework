@@ -16,6 +16,10 @@
 	{
 		protected $properties = array();
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
 		/**
 		 * Create Hstore by raw string.
 		 *

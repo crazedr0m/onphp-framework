@@ -51,6 +51,11 @@
 				$this->end = clone $this->end;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return DateRange

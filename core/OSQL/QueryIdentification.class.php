@@ -15,6 +15,11 @@
 	**/
 	abstract class QueryIdentification implements Query
 	{
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		public function getId()
 		{
 			return sha1($this->toString());

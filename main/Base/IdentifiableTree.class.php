@@ -20,6 +20,11 @@
 	{
 		private $parent	= null;
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+		
 		/**
 		 * @return IdentifiableTree
 		**/

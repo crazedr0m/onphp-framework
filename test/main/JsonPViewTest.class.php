@@ -88,6 +88,11 @@
 			return $this;
 		}
 
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		/**
 		 * @return str
 		 */

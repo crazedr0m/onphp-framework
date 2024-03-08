@@ -25,6 +25,11 @@
 			$this->max = $max;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+
 		/**
 		 * @return BaseRange
 		**/

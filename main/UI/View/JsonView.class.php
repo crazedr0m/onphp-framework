@@ -158,6 +158,11 @@
 			return $this;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+		
 		/**
 		 * @param Model $model
 		 * @return string

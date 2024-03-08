@@ -57,6 +57,12 @@
 			return $this->longIp;
 		}
 		
+		public function __toString()
+		{
+			return $this->toString();
+		}
+		
+		
 		public function toString()
 		{
 			return long2ip($this->longIp);
