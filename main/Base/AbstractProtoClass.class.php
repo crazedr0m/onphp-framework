@@ -17,7 +17,9 @@
 		private $depth = 0;
 		private $storage = array();
 		private $skipList = array();
-		
+		protected $byClassLists = [];
+		protected $byClassExpandedLists = [];
+
 		abstract protected function makePropertyList();
 		
 		/**
@@ -136,45 +138,37 @@
 		**/
 		final public function getPropertyList()
 		{
-			static $lists = array();
-			
 			$className = get_class($this);
 			
-			if (!isset($lists[$className])) {
-				$lists[$className] = $this->makePropertyList();
+			if (!isset($this->byClassLists[$className])) {
+				$this->byClassLists[$className] = $this->makePropertyList();
 			}
 			
-			return $lists[$className];
+			return $this->byClassLists[$className];
 		}
 		
 		final public function getExpandedPropertyList($prefix = null)
 		{
-			static $lists = array();
-			
 			$className = get_class($this);
-			
-			if (!isset($lists[$className])) {
+
+			if (!isset($this->byClassExpandedLists[$className])) {
 				foreach ($this->makePropertyList() as $property) {
 					if ($property instanceof InnerMetaProperty) {
-						$lists[$className] =
+						$this->byClassExpandedLists[$className] =
 							array_merge(
-								$lists[$className],
+								$this->byClassExpandedLists[$className],
 								$property->getProto()->getExpandedPropertyList(
 									$property->getName().':'
 								)
 							);
 					} else {
-						$lists[
-							$className
-						][
-							$prefix.$property->getName()
-						]
-							= $property;
+						$key = $prefix.$property->getName();
+						$this->byClassExpandedLists[$className][$key] = $property;
 					}
 				}
 			}
 			
-			return $lists[$className];
+			return $this->byClassExpandedLists[$className];
 		}
 		
 		/**
