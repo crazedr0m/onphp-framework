@@ -15,8 +15,8 @@
 	abstract class AbstractProtoClass extends Singleton
 	{
 		private $depth = 0;
-		private $storage = array();
-		private $skipList = array();
+		private $storage = [];
+		private $skipList = [];
 		protected $byClassLists = [];
 		protected $byClassExpandedLists = [];
 
@@ -27,8 +27,8 @@
 		**/
 		public function beginPrefetch()
 		{
-			$this->storage[++$this->depth] = array();
-			$this->skipList[$this->depth] = array();
+			$this->storage[++$this->depth] = [];
+			$this->skipList[$this->depth] = [];
 			
 			return $this;
 		}
