@@ -18,6 +18,7 @@
 	
 	// file extensions
 	define('EXT_CLASS', '.class.php');
+	define('ONPHP_V1_EXT_CLASS', '.class.php');
 	define('EXT_TPL', '.tpl.html');
 	define('EXT_MOD', '.inc.php');
 	define('EXT_HTML', '.html');
