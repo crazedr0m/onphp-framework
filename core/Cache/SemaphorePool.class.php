@@ -44,7 +44,15 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
+		/**
+		 * @var BaseLocker $locker
+		**/
+		public function setLocker($locker)
+		{
+			self::$locker = $locker;
+		}
+
 		public function get($key)
 		{
 			return self::$locker->get($key);
