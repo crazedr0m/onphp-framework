@@ -67,8 +67,8 @@
 		{
 			/*
 			$genericUriClass = realpath(
-				ONPHP_MAIN_PATH.'Utils'.DIRECTORY_SEPARATOR
-				.'GenericUri'.EXT_CLASS
+				ONPHP_V1_MAIN_PATH.'Utils'.DIRECTORY_SEPARATOR
+				.'GenericUri'.ONPHP_V1_EXT_CLASS
 			);
 			
 			Assert::isTrue(is_readable($genericUriClass));

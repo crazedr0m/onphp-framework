@@ -30,7 +30,7 @@
 			&& defined('PATH_MODULES_DIR')
 			&& is_readable(
 				// PATH_MODULES_DIR.'admin'.DIRECTORY_SEPARATOR.
-				$_GET['area'].EXT_CLASS
+				$_GET['area'].ONPHP_V1_EXT_CLASS
 			)
 		) {
 			$controllerName = $_GET['area'];

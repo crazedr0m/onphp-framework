@@ -42,14 +42,14 @@
 			$request->hasGetVar('area')
 			&& ClassUtils::isClassName($_GET['area'])
 			&& defined('PATH_CONTROLLERS')
-			&& is_readable(PATH_CONTROLLERS.$request->getGetVar('area').EXT_CLASS)
+			&& is_readable(PATH_CONTROLLERS.$request->getGetVar('area').ONPHP_V1_EXT_CLASS)
 		) {
 			$controllerName = $request->getGetVar('area');
 		} elseif (
 			$request->hasAttachedVar('area')
 			&& ClassUtils::isClassName($request->getAttachedVar('area'))
 			&& defined('PATH_CONTROLLERS')
-			&& is_readable(PATH_CONTROLLERS.$request->getAttachedVar('area').EXT_CLASS)
+			&& is_readable(PATH_CONTROLLERS.$request->getAttachedVar('area').ONPHP_V1_EXT_CLASS)
 		) {
 			$controllerName = $request->getAttachedVar('area');
 		}

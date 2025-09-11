@@ -13,7 +13,7 @@
 	class NamespaceResolverOnPHP implements NamespaceResolver
 	{
 		private $paths = array();
-		private $classExtension = EXT_CLASS;
+		private $classExtension = ONPHP_V1_EXT_CLASS;
 		
 		/**
 		 * @return NamespaceResolverOnPHP

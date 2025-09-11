@@ -68,7 +68,7 @@
 				// build stuff from meta
 				
 				$metaDir = ONPHP_TEST_PATH.'meta'.DIRECTORY_SEPARATOR;
-				$path = ONPHP_META_PATH.'bin'.DIRECTORY_SEPARATOR.'build.php';
+				$path = ONPHP_V1_META_PATH.'bin'.DIRECTORY_SEPARATOR.'build.php';
 				
 				$_SERVER['argv'] = array();
 				
@@ -122,7 +122,7 @@
 			}
 			
 			foreach (self::$paths as $testPath)
-				foreach (glob($testPath.'*Test'.EXT_CLASS, GLOB_BRACE) as $file)
+				foreach (glob($testPath.'*Test'.ONPHP_V1_EXT_CLASS, GLOB_BRACE) as $file)
 					$suite->addTestFile($file);
 			
 			return $suite;

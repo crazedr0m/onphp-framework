@@ -29,7 +29,7 @@
 		**/
 		public function build(MetaClass $class)
 		{
-			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().EXT_CLASS;
+			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().ONPHP_V1_EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()

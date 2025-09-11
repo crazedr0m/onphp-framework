@@ -391,7 +391,7 @@
 							ONPHP_META_DAO_DIR
 							.$class->getName().ucfirst($property->getName())
 							.'DAO'
-							.EXT_CLASS;
+							.ONPHP_V1_EXT_CLASS;
 						
 						if ($force || !file_exists($userFile)) {
 							BasePattern::dumpFile(
@@ -412,7 +412,7 @@
 							.'To'
 							.$property->getType()->getClassName()
 							.'DAO'
-							.EXT_CLASS;
+							.ONPHP_V1_EXT_CLASS;
 						
 						if (is_readable($oldStlye)) {
 							$out->
@@ -735,7 +735,7 @@
 			) {
 				$name =
 					substr(
-						basename($filename, $postStrip.EXT_CLASS),
+						basename($filename, $postStrip.ONPHP_V1_EXT_CLASS),
 						strlen($preStrip)
 					);
 				
@@ -810,7 +810,7 @@
 					'strange name or type given: "'.$name.'" - "'.$type.'"'
 				);
 			
-			if (is_readable(ONPHP_META_TYPES.$type.'Type'.EXT_CLASS))
+			if (is_readable(ONPHP_META_TYPES.$type.'Type'.ONPHP_V1_EXT_CLASS))
 				$typeClass = $type.'Type';
 			else
 				$typeClass = 'ObjectType';
@@ -847,7 +847,7 @@
 		{
 			$class = $name.'Pattern';
 			
-			if (is_readable(ONPHP_META_PATTERNS.$class.EXT_CLASS))
+			if (is_readable(ONPHP_META_PATTERNS.$class.ONPHP_V1_EXT_CLASS))
 				return Singleton::getInstance($class);
 			
 			throw new MissingElementException(
@@ -1106,7 +1106,7 @@
 				
 				if ($class->getPattern() instanceof InternalClassPattern) {
 					Assert::isTrue(
-						$metafile === ONPHP_META_PATH.'internal.xml',
+						$metafile === ONPHP_V1_META_PATH.'internal.xml',
 						'internal classes can be defined only in onPHP, sorry'
 					);
 				} elseif (
@@ -1257,7 +1257,7 @@
 			
 			$contents = str_replace(
 				'"meta.dtd"',
-				'"'.ONPHP_META_PATH.'dtd/meta.dtd"',
+				'"'.ONPHP_V1_META_PATH.'dtd/meta.dtd"',
 				$contents
 			);
 			

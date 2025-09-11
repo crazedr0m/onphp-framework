@@ -97,7 +97,7 @@
 				'getPaths' => array('' => array('path1', 'path2')),
 				'getPathsCount' => 1,
 				
-				'getClassExtension' => EXT_CLASS,
+				'getClassExtension' => ONPHP_V1_EXT_CLASS,
 				
 				'getClassPathList' => array(
 					0 => 'path1/',
@@ -126,7 +126,7 @@
 		
 		private function spawnCacheDir()
 		{
-			$cachePath = ONPHP_CLASS_CACHE.'testCache/';
+			$cachePath = ONPHP_V1_CLASS_CACHE.'testCache/';
 			if (file_exists($cachePath)) {
 				if (is_file($cachePath))
 					unlink($cachePath);

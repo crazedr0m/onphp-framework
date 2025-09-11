@@ -15,7 +15,7 @@
 	 */
 	abstract class NamespaceDirScaner
 	{
-		protected $classExtension = EXT_CLASS;
+		protected $classExtension = ONPHP_V1_EXT_CLASS;
 		protected $list = array();
 		protected $dirCount = 0;
 		

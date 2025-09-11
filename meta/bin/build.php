@@ -44,9 +44,9 @@ Possible options:
 	
 	function init()
 	{
-		define('ONPHP_META_BUILDERS', ONPHP_META_PATH.'builders'.DIRECTORY_SEPARATOR);
-		define('ONPHP_META_PATTERNS', ONPHP_META_PATH.'patterns'.DIRECTORY_SEPARATOR);
-		define('ONPHP_META_TYPES', ONPHP_META_PATH.'types'.DIRECTORY_SEPARATOR);
+		define('ONPHP_META_BUILDERS', ONPHP_V1_META_PATH.'builders'.DIRECTORY_SEPARATOR);
+		define('ONPHP_META_PATTERNS', ONPHP_V1_META_PATH.'patterns'.DIRECTORY_SEPARATOR);
+		define('ONPHP_META_TYPES', ONPHP_V1_META_PATH.'types'.DIRECTORY_SEPARATOR);
 		
 		AutoloaderPool::get('onPHP')->
 			addPaths(array(
@@ -293,7 +293,7 @@ Possible options:
 			$meta =
 				MetaConfiguration::me()->
 				setOutput($out)->
-				load(ONPHP_META_PATH.'internal.xml', false);
+				load(ONPHP_V1_META_PATH.'internal.xml', false);
 			
 			$out->info('Known internal classes: ');
 			foreach ($meta->getClassList() as $class) {

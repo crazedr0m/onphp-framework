@@ -43,7 +43,7 @@
 			}
 			
 			$out = MetaConfiguration::out();
-			$className = basename($path, EXT_CLASS);
+			$className = basename($path, ONPHP_V1_EXT_CLASS);
 			
 			if ($old !== $new) {
 				$out->
@@ -89,11 +89,11 @@
 		protected function buildProto(MetaClass $class)
 		{
 			$this->dumpFile(
-				ONPHP_META_AUTO_PROTO_DIR.'AutoProto'.$class->getName().EXT_CLASS,
+				ONPHP_META_AUTO_PROTO_DIR.'AutoProto'.$class->getName().ONPHP_V1_EXT_CLASS,
 				Format::indentize(AutoProtoClassBuilder::build($class))
 			);
 			
-			$userFile = ONPHP_META_PROTO_DIR.'Proto'.$class->getName().EXT_CLASS;
+			$userFile = ONPHP_META_PROTO_DIR.'Proto'.$class->getName().ONPHP_V1_EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
@@ -113,11 +113,11 @@
 		protected function buildBusiness(MetaClass $class)
 		{
 			$this->dumpFile(
-				ONPHP_META_AUTO_BUSINESS_DIR.'Auto'.$class->getName().EXT_CLASS,
+				ONPHP_META_AUTO_BUSINESS_DIR.'Auto'.$class->getName().ONPHP_V1_EXT_CLASS,
 				Format::indentize(AutoClassBuilder::build($class))
 			);
 			
-			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().EXT_CLASS;
+			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().ONPHP_V1_EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
@@ -137,11 +137,11 @@
 		protected function buildDao(MetaClass $class)
 		{
 			$this->dumpFile(
-				ONPHP_META_AUTO_DAO_DIR.'Auto'.$class->getName().'DAO'.EXT_CLASS,
+				ONPHP_META_AUTO_DAO_DIR.'Auto'.$class->getName().'DAO'.ONPHP_V1_EXT_CLASS,
 				Format::indentize(AutoDaoBuilder::build($class))
 			);
 			
-			$userFile = ONPHP_META_DAO_DIR.$class->getName().'DAO'.EXT_CLASS;
+			$userFile = ONPHP_META_DAO_DIR.$class->getName().'DAO'.ONPHP_V1_EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()

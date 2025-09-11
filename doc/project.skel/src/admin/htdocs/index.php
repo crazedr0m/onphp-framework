@@ -21,7 +21,7 @@
 	
 		if (
 			isset($_GET['area'])
-			&& is_readable(PATH_CONTROLLERS.$_GET['area'].EXT_CLASS)
+			&& is_readable(PATH_CONTROLLERS.$_GET['area'].ONPHP_V1_EXT_CLASS)
 		) {
 			$controllerName = $_GET['area'];
 		}

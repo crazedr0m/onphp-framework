@@ -12,8 +12,9 @@
 	
 	class AutoloaderClassPathCache implements AutoloaderRecachable, AutoloaderWithNamespace
 	{
+		const ONPHP_V1_CLASS_CACHE_CHECKSUM = '__occc';
 		const ONPHP_CLASS_CACHE_CHECKSUM = '__occc';
-		
+
 		/**
 		 * @var NamespaceResolver
 		 */
@@ -23,7 +24,7 @@
 		private $cache = null;
 		private $pathHash = null;
 		private $checksum = null;
-		private $classCachePath = ONPHP_CLASS_CACHE;
+		private $classCachePath = ONPHP_V1_CLASS_CACHE;
 		
 		/**
 		 * @return AutoloaderClassPathCache
@@ -107,7 +108,7 @@
 			if (
 				!$recache
 				&& $this->cache
-				&& ($this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] <> $this->checksum)
+				&& ($this->cache[self::ONPHP_V1_CLASS_CACHE_CHECKSUM] <> $this->checksum)
 			) {
 				$this->cache = null;
 			}
@@ -135,7 +136,7 @@
 			if ($recache || !$this->cache) {
 				$this->cache = $this->namespaceResolver->getClassPathList();
 
-				$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = $this->checksum;
+				$this->cache[self::ONPHP_V1_CLASS_CACHE_CHECKSUM] = $this->checksum;
 				
 				if (
 					is_writable(dirname($cacheFile))
@@ -161,7 +162,7 @@
 					throw $e;
 				else {
 					// cache is not actual
-					$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = null;
+					$this->cache[self::ONPHP_V1_CLASS_CACHE_CHECKSUM] = null;
 					$this->autoload($className, true);
 				}
 			}
