@@ -52,7 +52,7 @@ public function getTable()
 
 public function getObjectName()
 {
-	return '{$class->getName()}';
+	return {$class->getName()}:class;
 }
 
 public function getSequence()
@@ -131,7 +131,7 @@ EOT;
 		
 		protected static function getHeel()
 		{
-			return '?>';
+			return "\n";
 		}
 	}
 ?>

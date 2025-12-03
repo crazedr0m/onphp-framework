@@ -17,9 +17,9 @@
 
 		public static function build(MetaClass $class)
 		{
-			$unsetInSleep = array();
-			$cloneNull = array();
-			$cloneValueObject = array();
+			$unsetInSleep = [];
+			$cloneNull = [];
+			$cloneValueObject = [];
 
 			$out = self::getHead();
 			

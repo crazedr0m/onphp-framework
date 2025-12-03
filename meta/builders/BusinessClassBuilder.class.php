@@ -38,7 +38,7 @@
 	**/
 	public static function dao()
 	{
-		return Singleton::getInstance('{$daoName}');
+		return Singleton::getInstance({$daoName}:class);
 	}
 
 EOT;
@@ -126,7 +126,7 @@ EOT;
 	**/
 	public static function proto()
 	{
-		return Singleton::getInstance('{$protoName}');
+		return Singleton::getInstance({$protoName}:class);
 	}
 
 EOT;
