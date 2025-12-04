@@ -77,7 +77,7 @@
 
 			}
 			
-			$valueObjects = array();
+			$valueObjects = [];
 			
 			foreach ($class->getProperties() as $property) {
 				if (

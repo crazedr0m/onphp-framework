@@ -52,7 +52,7 @@ public function getTable()
 
 public function getObjectName()
 {
-	return {$class->getName()}:class;
+	return {$class->getName()}::class;
 }
 
 public function getSequence()

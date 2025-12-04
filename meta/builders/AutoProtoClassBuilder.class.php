@@ -70,7 +70,7 @@ EOT;
 EOT;
 			}
 			
-			$list = array();
+			$list = [];
 			
 			foreach ($propertyList as $property) {
 				$list[] =
