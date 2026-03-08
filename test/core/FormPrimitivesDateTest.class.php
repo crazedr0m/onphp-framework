@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 	
 	final class FormPrimitivesDateTest extends TestCase
 	{

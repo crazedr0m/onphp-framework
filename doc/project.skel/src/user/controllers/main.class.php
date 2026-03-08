@@ -3,7 +3,6 @@
  *   Copyright (C) 2006 by Unknown Hero                                    *
  *   non.existent.login@forgotten.host                                     *
  ***************************************************************************/
-/* $Id$ */
 
 	class main implements Controller
 	{

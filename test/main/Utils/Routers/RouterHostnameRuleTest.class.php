@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 	
 	class RouterHostnameRuleTest extends TestCase
 	{

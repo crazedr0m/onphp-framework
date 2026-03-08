@@ -1,4 +1,3 @@
--- $Id$
 
 create table administrator(
 	id			bigint not null primary key,

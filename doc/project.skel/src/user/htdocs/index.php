@@ -1,6 +1,5 @@
 <?php
 	/**
-	 * $Id$
 	**/
 	
 	require '../../../config.inc.php';

@@ -1,5 +1,4 @@
 <?php
-	/** $Id$ **/
 	
 	class RouterBaseRuleStub extends RouterBaseRule
 	{

@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 	
 	final class PrimitiveClassTest extends TestCase
 	{

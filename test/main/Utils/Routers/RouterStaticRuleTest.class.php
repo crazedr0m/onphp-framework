@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 	
 	class RouterStaticRuleTest extends TestCase
 	{

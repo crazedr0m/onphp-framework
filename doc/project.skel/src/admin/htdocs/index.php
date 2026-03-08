@@ -1,6 +1,5 @@
 <?php
 	/**
-	 * $Id$
 	**/
 	
 	define('PATH_SOURCE_DIR', 'admin'.DIRECTORY_SEPARATOR);

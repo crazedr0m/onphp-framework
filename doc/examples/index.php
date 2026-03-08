@@ -1,6 +1,5 @@
 <?php
 	/**
-	 * $Id$
 	**/
 	
 	define('DEFAULT_MODULE', 'main');

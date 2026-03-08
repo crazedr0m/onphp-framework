@@ -1,5 +1,4 @@
 <?php
-	// $Id$
 
 	require dirname(__FILE__).'/../../global.inc.php.tpl';
 

@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 
 	final class MessagesTest extends TestCase
 	{

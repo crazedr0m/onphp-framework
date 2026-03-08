@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 
 	require_once dirname(__FILE__) . '/../misc/TestCase.class.php';
 

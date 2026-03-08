@@ -1,6 +1,5 @@
 <?php
 	/*
-	 * $Id$
 	 *
 	 * Doxygen's helper file
 	 */
