@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class IOTimedOutException extends IOException {/*_*/}
-?>
+	class IOTimedOutException extends IOException
+    {
+/*_*/
+    }

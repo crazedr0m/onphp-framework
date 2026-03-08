@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -14,4 +15,3 @@
 		abstract public function extractPath(&$scope);
 		abstract public function getScope($path);
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Replaces multiple adjacent whitespace by one
-	 * 
+	 *
 	 * @see RegulatedPrimitive::addImportFilter()
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class CompressWhitespaceFilter extends BaseFilter
@@ -25,10 +26,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return preg_replace('/[ \t]+/', ' ', $value);
 		}
 	}
-?>

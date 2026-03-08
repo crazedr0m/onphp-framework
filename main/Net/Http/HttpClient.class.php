@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -19,19 +20,19 @@
 		**/
 		public function setTimeout($timeout);
 		public function getTimeout();
-		
+
 		/**
 		 * whether to follow header Location or not
 		**/
 		public function setFollowLocation(/* boolean */ $really);
 		public function isFollowLocation();
-		
+
 		/**
 		 * maximum number of header Location followed
 		**/
 		public function setMaxRedirects($maxRedirects);
 		public function getMaxRedirects();
-		
+
 		/**
 		 * @param $request HttpRequest
 		 * @return HttpResponse
@@ -69,4 +70,3 @@
 
 		public function getMaxFileSize();
 	}
-?>

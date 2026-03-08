@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -13,15 +14,14 @@
 	{
 		protected $proto = null;
 		protected $object = null;
-		
-		protected $mapping = array();
-		
+
+		protected $mapping = [];
+
 		public function __construct(EntityProto $proto, &$object)
 		{
 			$this->proto = $proto;
 			$this->object = &$object;
-			
+
 			$this->mapping = $proto->getFormMapping();
 		}
 	}
-?>

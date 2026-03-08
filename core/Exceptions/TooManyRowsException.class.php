@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Anton E. Lebedevich                         *
  *                                                                          *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class TooManyRowsException extends DatabaseException {/*_*/}
-?>
+	class TooManyRowsException extends DatabaseException
+    {
+/*_*/
+    }

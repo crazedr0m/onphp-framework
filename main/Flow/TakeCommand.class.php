@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -15,14 +16,14 @@
 	abstract class TakeCommand implements EditorCommand
 	{
 		abstract protected function daoMethod();
-		
+
 		/**
 		 * @return ModelAndView
 		**/
 		public function run(Prototyped $subject, Form $form, HttpRequest $request)
 		{
 			$subject = $subject->dao()->{$this->daoMethod()}($subject);
-			
+
 			return
 				ModelAndView::create()->
 				setView(
@@ -34,4 +35,3 @@
 				);
 		}
 	}
-?>

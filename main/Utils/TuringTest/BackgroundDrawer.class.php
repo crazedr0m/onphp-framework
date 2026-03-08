@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Dmitry E. Demidov                          *
  *                                                                         *
@@ -15,18 +16,17 @@
 	abstract class BackgroundDrawer extends Drawer
 	{
 		abstract public function draw();
-		
+
 		/**
 		 * @return Color
 		**/
 		public function makeColor()
 		{
 			$color = $this->getTuringImage()->getTextColors()->getRandomTextColor();
-			
+
 			$invertColor = clone $color;
 			$invertColor->invertColor();
-			
+
 			return $invertColor;
 		}
 	}
-?>

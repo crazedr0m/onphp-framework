@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Dmitriy V. Snezhinskiy                          *
  *                                                                         *
@@ -11,12 +12,12 @@
 
 	final class JsonViewTest extends TestCase
 	{
-		protected $array = array('<foo>',"'bar'",'"baz"','&blong&');
-		
+		protected $array = ['<foo>',"'bar'",'"baz"','&blong&'];
+
 		public function testOptions()
 		{
 			$model = Model::create()->set('array', $this->array);
-			$data = array('array' => $this->array);
+			$data = ['array' => $this->array];
 
 			$this->assertEquals(
 				json_encode($data, JSON_HEX_QUOT),
@@ -92,12 +93,12 @@
 					toString($model)
 			);
 		}
-		
+
 		public function testRender()
 		{
 			$model = Model::create()->set('array', $this->array);
-			$data = array('array' => $this->array);
-			
+			$data = ['array' => $this->array];
+
 			ob_start();
 			JsonView::create()->
 				setHexQuot(true)->
@@ -109,7 +110,7 @@
 				setHexQuot(false)->	//double set(false), right
 				render($model);
 			$result = ob_get_clean();
-			
+
 			//with all flags
 			$this->assertEquals(
 				json_encode(
@@ -122,19 +123,19 @@
 				$result
 			);
 		}
-		
-		public function testNoModel() {
+
+		public function testNoModel()
+        {
 			//setup
 			$view = JsonView::create()->setHexQuot(true)->setHexApos(true);
-			
+
 			//execution and check
 			$this->assertEquals(
 				json_encode(
-					array(),
+					[],
 					JSON_HEX_QUOT | JSON_HEX_APOS
 				),
 				$view->toString()
 			);
 		}
 	}
-?>

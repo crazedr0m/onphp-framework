@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -15,10 +16,9 @@
 		 * @return MessageQueueReceiver
 		**/
 		public function send(Message $message);
-		
+
 		/**
 		 * @return MessageQueue
 		**/
 		public function getQueue();
 	}
-?>

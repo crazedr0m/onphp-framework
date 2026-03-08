@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -15,9 +16,8 @@
 	interface SynchronizableObject
 	{
 		public static function createFromMasterObject($masterObject);
-		
+
 		public function isEqualTo($anotherObject);
-		
+
 		public function __toString();
 	}
-?>

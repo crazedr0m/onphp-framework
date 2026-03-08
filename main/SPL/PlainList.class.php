@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Ordered unindexed list of Identifiable objects.
-	 * 
+	 *
 	 * @ingroup onSPL
 	**/
 	final class PlainList extends AbstractList
@@ -21,19 +22,18 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return PlainList
 		**/
 		public function offsetSet($offset, $value)
 		{
 			Assert::isTrue($value instanceof Identifiable);
-			
+
 			$this->list[] = $value;
-			
+
 			return $this;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -15,7 +16,7 @@
 	class ClassProjection implements ObjectProjection
 	{
 		protected $className	= null;
-		
+
 		/**
 		 * @return ClassProjection
 		**/
@@ -23,40 +24,41 @@
 		{
 			return new self($class);
 		}
-		
+
 		public function __construct($class)
 		{
 			Assert::isTrue(
 				ClassUtils::isInstanceOf($class, 'Prototyped')
 			);
-			
-			if (is_object($class))
+
+			if (is_object($class)) {
 				$this->className = get_class($class);
-			else
-				$this->className = $class;
+			} else {
+$this->className = $class;
+            }
 		}
-		
+
 		/**
 		 * @return JoinCapableQuery
 		**/
 		public function process(Criteria $criteria, JoinCapableQuery $query)
 		{
-			$dao = call_user_func(array($this->className, 'dao'));
-			
-			foreach ($dao->getFields() as $field)
+			$dao = call_user_func([$this->className, 'dao']);
+
+			foreach ($dao->getFields() as $field) {
 				$this->subProcess(
 					$query,
 					DBField::create($field, $dao->getTable())
 				);
-			
+            }
+
 			return $query;
 		}
-		
+
 		/* void */ protected function subProcess(
-			JoinCapableQuery $query, DBField $field
-		)
-		{
+			JoinCapableQuery $query,
+            DBField $field
+		) {
 			$query->get($field);
 		}
 	}
-?>

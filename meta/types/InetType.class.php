@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,12 +19,12 @@
 		{
 			return 'inet';
 		}
-		
+
 		public function getSize()
 		{
 			return null;
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return InetType
@@ -34,8 +35,7 @@
 				long2ip(ip2long($default)) == $default,
 				"strange default value given - '{$default}'"
 			);
-			
+
 			return parent::setDefault($default);
 		}
 	}
-?>

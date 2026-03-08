@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html#querycriteria-projection
-	 * 
+	 *
 	 * @ingroup Criteria
 	**/
 	final class Projection extends StaticFactory
@@ -23,7 +24,7 @@
 		{
 			return new SumProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return AverageNumberProjection
 		**/
@@ -31,7 +32,7 @@
 		{
 			return new AverageNumberProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return MappableObjectProjection
 		**/
@@ -39,7 +40,7 @@
 		{
 			return new MappableObjectProjection($object, $alias);
 		}
-		
+
 		/**
 		 * @return MinimalNumberProjection
 		**/
@@ -47,7 +48,7 @@
 		{
 			return new MinimalNumberProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return MaximalNumberProjection
 		**/
@@ -55,7 +56,7 @@
 		{
 			return new MaximalNumberProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return PropertyProjection
 		**/
@@ -63,7 +64,7 @@
 		{
 			return new PropertyProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return RowCountProjection
 		**/
@@ -71,7 +72,7 @@
 		{
 			return new RowCountProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return DistinctCountProjection
 		**/
@@ -79,7 +80,7 @@
 		{
 			return new DistinctCountProjection($property, $alias);
 		}
-		
+
 		/**
 		 * @return ProjectionChain
 		**/
@@ -87,7 +88,7 @@
 		{
 			return new ProjectionChain();
 		}
-		
+
 		/**
 		 * @return GroupByPropertyProjection
 		**/
@@ -95,7 +96,7 @@
 		{
 			return new GroupByPropertyProjection($property);
 		}
-		
+
 		/**
 		 * @return GroupByClassProjection
 		**/
@@ -103,7 +104,7 @@
 		{
 			return new GroupByClassProjection($class);
 		}
-		
+
 		/**
 		 * @return HavingProjection
 		**/
@@ -111,7 +112,7 @@
 		{
 			return new HavingProjection($logic);
 		}
-		
+
 		/**
 		 * @return ClassProjection
 		**/
@@ -120,4 +121,3 @@
 			return new ClassProjection($className);
 		}
 	}
-?>

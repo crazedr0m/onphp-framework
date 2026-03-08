@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,15 +22,15 @@
 		{
 			return $this->targetize($this->makeSelectQuery());
 		}
-		
+
 		/**
 		 * @return OneToManyLinkedFull
 		**/
-		public function sync($insert, $update = array(), $delete)
+		public function sync($insert, $update = [], $delete)
 		{
 			$uc = $this->container;
 			$dao = $uc->getDao();
-			
+
 			if ($delete) {
 				DBPool::getByDao($dao)->queryNull(
 					OSQL::delete()->from($dao->getTable())->
@@ -46,19 +47,22 @@
 						)
 					)
 				);
-				
+
 				$dao->uncacheByIds(ArrayUtils::getIdsArray($delete));
 			}
-			
-			if ($insert)
-				for ($i = 0, $size = count($insert); $i < $size; ++$i)
+
+			if ($insert) {
+				for ($i = 0, $size = count($insert); $i < $size; ++$i) {
 					$dao->add($insert[$i]);
-			
-			if ($update)
-				for ($i = 0, $size = count($update); $i < $size; ++$i)
+                }
+            }
+
+			if ($update) {
+				for ($i = 0, $size = count($update); $i < $size; ++$i) {
 					$dao->save($update[$i]);
-			
+                }
+            }
+
 			return $this;
 		}
 	}
-?>

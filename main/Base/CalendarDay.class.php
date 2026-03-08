@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,14 +12,14 @@
 
 	/**
 	 * Calendar day representation.
-	 * 
+	 *
 	 * @ingroup Calendar
 	**/
 	final class CalendarDay extends Date
 	{
 		private $selected	= null;
 		private $outside	= null;
-		
+
 		/**
 		 * @return CalendarDay
 		**/
@@ -27,42 +28,41 @@
 			return new self($timestamp);
 		}
 
-		public function  __sleep()
+		public function __sleep()
 		{
 			$sleep = parent::__sleep();
 			$sleep[] = 'selected';
 			$sleep[] = 'outside';
 			return $sleep;
 		}
-		
+
 		public function isSelected()
 		{
 			return $this->selected === true;
 		}
-		
+
 		/**
 		 * @return CalendarDay
 		**/
 		public function setSelected($selected)
 		{
 			$this->selected = $selected === true;
-			
+
 			return $this;
 		}
-		
+
 		public function isOutside()
 		{
 			return $this->outside;
 		}
-		
+
 		/**
 		 * @return CalendarDay
 		**/
 		public function setOutside($outside)
 		{
 			$this->outside = $outside === true;
-			
+
 			return $this;
 		}
 	}
-?>

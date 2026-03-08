@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Vladlen Y. Koshelev                        *
  *                                                                         *
@@ -21,7 +22,7 @@
 		{
 			return OqlSelectParser::create()->parse($query);
 		}
-		
+
 		/**
 		 * @return OqlSelectPropertiesClause
 		**/
@@ -29,7 +30,7 @@
 		{
 			return OqlSelectPropertiesParser::create()->parse($clause);
 		}
-		
+
 		/**
 		 * @return OqlWhereClause
 		**/
@@ -37,7 +38,7 @@
 		{
 			return OqlWhereParser::create()->parse($clause);
 		}
-		
+
 		/**
 		 * @return OqlProjectionClause
 		**/
@@ -45,7 +46,7 @@
 		{
 			return OqlGroupByParser::create()->parse($clause);
 		}
-		
+
 		/**
 		 * @return OqlOrderByClause
 		**/
@@ -53,7 +54,7 @@
 		{
 			return OqlOrderByParser::create()->parse($clause);
 		}
-		
+
 		/**
 		 * @return OqlHavingClause
 		**/
@@ -62,4 +63,3 @@
 			return OqlHavingParser::create()->parse($clause);
 		}
 	}
-?>

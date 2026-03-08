@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -15,7 +16,7 @@
 		protected $durable = false;
 		protected $autodelete = false;
 		protected $nowait = false;
-		protected $arguments = array();
+		protected $arguments = [];
 
 		public function getPassive()
 		{
@@ -86,4 +87,3 @@
 			return $this->arguments;
 		}
 	}
-?>

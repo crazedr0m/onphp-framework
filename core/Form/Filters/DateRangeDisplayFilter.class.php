@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Igor V. Gulyaev                                 *
  *                                                                         *
@@ -21,24 +22,25 @@
 		{
 			return Singleton::getInstance('DateRangeDisplayFilter');
 		}
-		
+
 		public function apply($value)
 		{
 			$result = null;
-			
+
 			if ($value instanceof DateRange) {
-				if ($value->getStart())
+				if ($value->getStart()) {
 					$result = $value->getStart()->toDate('.');
-				
+                }
+
 				$result .= ' - ';
-				
-				if ($value->getEnd())
+
+				if ($value->getEnd()) {
 					$result .= $value->getEnd()->toDate('.');
-				
+                }
+
 				return $result;
 			} else {
 				return $value;
 			}
 		}
 	}
-?>

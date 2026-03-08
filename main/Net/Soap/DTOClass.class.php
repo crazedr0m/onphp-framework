@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -17,7 +18,7 @@
 				FormToObjectConverter::create($this->entityProto())->
 					make($form);
 		}
-		
+
 		/**
 		 * @return Form
 		**/
@@ -30,4 +31,3 @@
 					make($this);
 		}
 	}
-?>

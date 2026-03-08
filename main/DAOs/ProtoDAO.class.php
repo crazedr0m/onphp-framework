@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -16,42 +17,42 @@
 	{
 		public function getJoinPrefix($field, $prefix = null)
 		{
-			return $this->getJoinName($field, $prefix).'__';
+			return $this->getJoinName($field, $prefix) . '__';
 		}
-		
+
 		public function getJoinName($field, $prefix = null)
 		{
-			return dechex(crc32($prefix.$this->getTable())).'_'.$field;
+			return dechex(crc32($prefix . $this->getTable())) . '_' . $field;
 		}
-		
+
 		public function fetchCollections(
-			array $collections, array $list
-		)
-		{
+			array $collections,
+            array $list
+		) {
 			Assert::isNotEmptyArray($list);
-			
+
 			$ids = ArrayUtils::getIdsArray($list);
-			
+
 			$mainId = DBField::create(
 				$this->getIdName(),
 				$this->getTable()
 			);
-			
+
 			foreach ($collections as $path => $info) {
 				$lazy = $info['lazy'];
-				
+
 				$query =
 					OSQL::select()->get($mainId)->
 					from($this->getTable());
-				
+
 				$proto = reset($list)->proto();
-				
+
 				$this->processPath($proto, $path, $query, $this->getTable());
 
 				if ($criteria = $info['criteria']) {
 					$query = $criteria->setDao($this)->fillSelectQuery($query);
 				}
-				
+
 				$query->andWhere(
 					Expression::in($mainId, $ids)
 				);
@@ -63,17 +64,17 @@
 				$proto		= $propertyPath->getFinalProto();
 				$dao		= $propertyPath->getFinalDao();
 				$selfName = $this->getObjectName();
-				$self = new $selfName;
+				$self = new $selfName();
 				$getter = $property->getGetter();
-				
+
 				Assert::isTrue(
 					$property->getRelationId() == MetaRelation::ONE_TO_MANY
 					|| $property->getRelationId() == MetaRelation::MANY_TO_MANY
 				);
-				
+
 				$table = $dao->getJoinName($property->getColumnName());
 				$id = $this->getIdName();
-				$collection = array();
+				$collection = [];
 
 				if ($lazy) {
 					if ($property->getRelationId() == MetaRelation::MANY_TO_MANY) {
@@ -84,37 +85,40 @@
 
 					//FIXME: make unique alias name
 					$alias = 'collectionId'; // childId, collectionId, whatever
-					
+
 					$field = DBField::create(
 						$childId,
 						$table
-//						$self->$getter()->getHelperTable()
+                        //						$self->$getter()->getHelperTable()
 					);
-					
+
 					$query->get($field, $alias);
-					
-					if (!$property->isRequired())
+
+					if (!$property->isRequired()) {
 						$query->andWhere(Expression::notNull($field));
+                    }
 
 					try {
 						$rows = $dao->getCustomList($query);
-						
-						foreach ($rows as $row) {
-							if (!empty($row[$alias]))
-								$collection[$row[$id]][] = $row[$alias];
-						}
 
-					} catch (ObjectNotFoundException $e) {/*_*/}
+						foreach ($rows as $row) {
+							if (!empty($row[$alias])) {
+								$collection[$row[$id]][] = $row[$alias];
+                            }
+						}
+					} catch (ObjectNotFoundException $e) {
+/*_*/
+                    }
 				} else {
-					$prefix = $table.'_';
-					
+					$prefix = $table . '_';
+
 					foreach ($dao->getFields() as $field) {
 						$query->get(
 							DBField::create($field, $table),
-							$prefix.$field
+							$prefix . $field
 						);
 					}
-					
+
 					if (!$property->isRequired()) {
 						$query->andWhere(
 							Expression::notNull(
@@ -122,51 +126,54 @@
 							)
 						);
 					}
-					
+
 					try {
 						// otherwise we don't know which object
 						// belongs to which collection
 						$rows = $dao->getCustomList($query);
-						
+
 						foreach ($rows as $row) {
 							$collection[$row[$id]][] =
 								$dao->makeObject($row, $prefix);
 						}
-					} catch (ObjectNotFoundException $e) {/*_*/}
+					} catch (ObjectNotFoundException $e) {
+/*_*/
+                    }
 				}
-				
+
 				$suffix = ucfirst($property->getName());
-				$fillMethod = 'fill'.$suffix;
-				$getMethod = 'get'.$suffix;
-				
+				$fillMethod = 'fill' . $suffix;
+				$getMethod = 'get' . $suffix;
+
 				Assert::isTrue(
 					method_exists(reset($list), $fillMethod),
 					'can not find filler'
 				);
-				
+
 				Assert::isTrue(
 					method_exists(reset($list), $getMethod),
 					'can not find getter'
 				);
-				
+
 				foreach ($list as $object) {
-					if (!empty($collection[$object->getId()]))
+					if (!empty($collection[$object->getId()])) {
 						$object->$fillMethod($collection[$object->getId()], $lazy);
-					else
-						$object->$getMethod()->mergeList(array());
+					} else {
+$object->$getMethod()->mergeList([]);
+                    }
 				}
 			}
-			
+
 			return $list;
 		}
-		
+
 		protected function setQueryFields(InsertOrUpdateQuery $query, $object)
 		{
 			$this->checkObjectType($object);
-			
+
 			return $this->getProtoClass()->fillQuery($query, $object);
 		}
-		
+
 		private function processPath(
 			AbstractProtoClass $proto,
 			$probablyPath,
@@ -174,8 +181,7 @@
 			$table,
 			$parentRequired = true,
 			$prefix = null
-		)
-		{
+		) {
 			$path = explode('.', $probablyPath);
 
 			try {
@@ -184,16 +190,16 @@
 				// oh, it's a value, not a property
 				return new DBValue($probablyPath);
 			}
-			
+
 			unset($path[0]);
-			
+
 			Assert::isTrue(
 				$property->getRelationId() != null
 				&& !$property->isGenericType()
 			);
-			
+
 			Assert::classExists($property->getClassName());
-			
+
 			// checking whether we're playing with value object
 			if (!method_exists($property->getClassName(), 'dao')) {
 				if (
@@ -218,35 +224,35 @@
 				}
 			} else {
 				$propertyDao = call_user_func(
-					array($property->getClassName(), 'dao')
+					[$property->getClassName(), 'dao']
 				);
-			
+
 				Assert::isNotNull(
 					$propertyDao,
-					'can not find target dao for "'.$property->getName()
-					.'" property at "'.get_class($proto).'"'
+					'can not find target dao for "' . $property->getName()
+					. '" property at "' . get_class($proto) . '"'
 				);
 			}
-			
+
 			$alias = $propertyDao->getJoinName(
 				$property->getColumnName(),
 				$prefix
 			);
-			
+
 			if (
 				$property->getRelationId() == MetaRelation::ONE_TO_MANY
 				|| $property->getRelationId() == MetaRelation::MANY_TO_MANY
 			) {
 				$remoteName = $property->getClassName();
 				$selfName = $this->getObjectName();
-				$self = new $selfName;
+				$self = new $selfName();
 				$getter = $property->getGetter();
-				$dao = call_user_func(array($remoteName, 'dao'));
-				
+				$dao = call_user_func([$remoteName, 'dao']);
+
 				if ($property->getRelationId() == MetaRelation::MANY_TO_MANY) {
 					$helperTable = $self->$getter()->getHelperTable();
 					$helperAlias = $helperTable;
-					
+
 					if (!$query->hasJoinedTable($helperAlias)) {
 						$logic =
 							Expression::eq(
@@ -254,26 +260,25 @@
 									$this->getIdName(),
 									$table
 								),
-								
 								DBField::create(
 									$self->$getter()->getParentIdField(),
 									$helperAlias
 								)
 							);
-						
-						if ($property->isRequired())
+
+						if ($property->isRequired()) {
 							$query->join($helperTable, $logic, $helperAlias);
-						else
-							$query->leftJoin($helperTable, $logic, $helperAlias);
+						} else {
+$query->leftJoin($helperTable, $logic, $helperAlias);
+                        }
 					}
-					
+
 					$logic =
 						Expression::eq(
 							DBField::create(
 								$propertyDao->getIdName(),
 								$alias
 							),
-							
 							DBField::create(
 								$self->$getter()->getChildIdField(),
 								$helperAlias
@@ -286,33 +291,33 @@
 								$self->$getter()->getParentIdField(),
 								$alias
 							),
-							
 							DBField::create(
 								$this->getIdName(),
 								$table
 							)
 						);
 				}
-				
+
 				if (!$query->hasJoinedTable($alias)) {
-					if ($property->isRequired() && $parentRequired)
+					if ($property->isRequired() && $parentRequired) {
 						$query->join($dao->getTable(), $logic, $alias);
-					else
-						$query->leftJoin($dao->getTable(), $logic, $alias);
+					} else {
+$query->leftJoin($dao->getTable(), $logic, $alias);
+                    }
 				}
 			} else { // OneToOne, lazy OneToOne
-				
 				// prevents useless joins
 				if (
 					isset($path[1])
 					&& (count($path) == 1)
 					&& ($path[1] == $propertyDao->getIdName())
-				)
+				) {
 					return
 						new DBField(
 							$property->getColumnName(),
 							$table
 						);
+                }
 
 				if (!$query->hasJoinedTable($alias)) {
 					$logic =
@@ -321,20 +326,20 @@
 								$property->getColumnName(),
 								$table
 							),
-							
 							DBField::create(
 								$propertyDao->getIdName(),
 								$alias
 							)
 						);
-					
-					if ($property->isRequired() && $parentRequired)
+
+					if ($property->isRequired() && $parentRequired) {
 						$query->join($propertyDao->getTable(), $logic, $alias);
-					else
-						$query->leftJoin($propertyDao->getTable(), $logic, $alias);
+					} else {
+$query->leftJoin($propertyDao->getTable(), $logic, $alias);
+                    }
 				}
 			}
-			
+
 			if ($path) {
 				return $propertyDao->guessAtom(
 					implode('.', $path),
@@ -344,26 +349,26 @@
 					$propertyDao->getJoinPrefix($property->getColumnName(), $prefix)
 				);
 			}
-			
+
 			// ok, we're done
 		}
-		
+
 		public function guessAtom(
 			$atom,
 			JoinCapableQuery $query,
 			$table = null,
 			$parentRequired = true,
 			$prefix = null
-		)
-		{
-			if ($table === null)
+		) {
+			if ($table === null) {
 				$table = $this->getTable();
+            }
 			if (is_string($atom)) {
 				if (strpos($atom, '.') !== false) {
 					return
 						$this->processPath(
 							call_user_func(
-								array($this->getObjectName(), 'proto')
+								[$this->getObjectName(), 'proto']
 							),
 							$atom,
 							$query,
@@ -386,16 +391,14 @@
 				}
 			} elseif ($atom instanceof MappableObject) {
 				return $atom->toMapped($this, $query);
-			}
-			elseif (
+			} elseif (
 				($atom instanceof DBValue)
 				|| ($atom instanceof DBField)
 				|| ($atom instanceof DialectString)
 			) {
 				return $atom;
 			}
-			
+
 			return new DBValue($atom);
 		}
 	}
-?>

@@ -1,47 +1,52 @@
 <?php
-	
+
 	final class TextUtilsTest extends TestCase
 	{
 		public function testFriendlyFileSize()
 		{
-			$units = array('', 'k' , 'M', 'G', 'T', 'P');
-			
+			$units = ['', 'k' , 'M', 'G', 'T', 'P'];
+
 			$this->assertEquals(TextUtils::friendlyFileSize(0), '0');
 			$this->assertEquals(TextUtils::friendlyFileSize(1024), '1k');
 			$this->assertEquals(TextUtils::friendlyFileSize(812), '812');
-			
+
 			for ($i = 0; $i < 6; ++$i) {
 				$this->assertEquals(
-					TextUtils::friendlyFileSize(2 * pow(1024, $i)), '2'.$units[$i]
+					TextUtils::friendlyFileSize(2 * pow(1024, $i)),
+                    '2' . $units[$i]
 				);
 			}
-			
+
 			$this->assertEquals(
-				TextUtils::friendlyFileSize(2 * pow(1024, 6)), '2048'.$units[5]
+				TextUtils::friendlyFileSize(2 * pow(1024, 6)),
+                '2048' . $units[5]
 			);
 		}
-		
+
 		public function testFriendlyNumber()
 		{
 			$localeInfo = localeconv();
 			$decimalPoint = $localeInfo['decimal_point'];
-			
+
 			$this->assertEquals(
-				TextUtils::friendlyNumber(100.02), '100'.$decimalPoint.'02'
+				TextUtils::friendlyNumber(100.02),
+                '100' . $decimalPoint . '02'
 			);
-			
+
 			$this->assertEquals(TextUtils::friendlyNumber((0.1 + 0.7) * 10), '8');
 			$this->assertEquals(TextUtils::friendlyNumber(10000), '10 000');
 
 			$this->assertEquals(
-				TextUtils::friendlyNumber(10000.45), '10 000'.$decimalPoint.'45'
+				TextUtils::friendlyNumber(10000.45),
+                '10 000' . $decimalPoint . '45'
 			);
 
 			$this->assertEquals(
-				TextUtils::friendlyNumber(-999999.99), '-999 999'.$decimalPoint.'99'
+				TextUtils::friendlyNumber(-999999.99),
+                '-999 999' . $decimalPoint . '99'
 			);
 		}
-		
+
 		public function testNormalizeUri()
 		{
 			$this->assertEquals(
@@ -134,7 +139,7 @@
 				'https://a/b/c/%7Bfoo%7D'
 			);
 		}
-		
+
 		public function testHex2Binary()
 		{
 			$this->assertEquals(
@@ -143,4 +148,3 @@
 			);
 		}
 	}
-?>

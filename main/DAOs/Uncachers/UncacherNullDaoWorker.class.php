@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -16,7 +17,7 @@
 	{
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 		/**
 		 * @param $uncacher UncacherNullDaoWorker same as self class
@@ -27,10 +28,9 @@
 			Assert::isInstance($uncacher, 'UncacherNullDaoWorker');
 			return $this;
 		}
-		
+
 		public function uncache()
 		{
 			/* do nothing */
 		}
 	}
-?>

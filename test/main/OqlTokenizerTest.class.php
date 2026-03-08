@@ -1,5 +1,5 @@
 <?php
-	
+
 	final class OqlTokenizerTest extends TestCase
 	{
 		public function testEmpty()
@@ -7,32 +7,32 @@
 			$this->
 				assertTokens(
 					'',
-					array()
+					[]
 				)->
 				assertTokens(
 					" \t\n\r\n",
-					array()
+					[]
 				);
 		}
-		
+
 		public function testPosition()
 		{
 			$this->assertTokens(
 				"\n1\n\r1\r\n\n1\n",
-				array(
+				[
 					OqlToken::make(1., '1', OqlToken::NUMBER, 2, 0),
 					OqlToken::make(1., '1', OqlToken::NUMBER, 3, 1),
 					OqlToken::make(1., '1', OqlToken::NUMBER, 5, 0)
-				)
+				]
 			);
 		}
-		
+
 		public function testString()
 		{
 			$this->assertTokens(
 				'"" "some string \"substring1\" \'substring2\' `substring3`"  '
-				."'многа \' \" ` букаф' `strange quotes` ",
-				array(
+				. "'многа \' \" ` букаф' `strange quotes` ",
+				[
 					OqlToken::make(
 						'',
 						'""',
@@ -61,15 +61,15 @@
 						1,
 						80
 					)
-				)
+				]
 			);
 		}
-		
+
 		public function testNumber()
 		{
 			$this->assertTokens(
 				'123 +123 .123 123.456 1e23 1E+23 1E-23 0.1e23 -.1e23',
-				array(
+				[
 					OqlToken::make(123., '123', OqlToken::NUMBER, 1, 0),
 					OqlToken::make('+', '+', OqlToken::ARITHMETIC_OPERATOR, 1, 4),
 					OqlToken::make(123., '123', OqlToken::NUMBER, 1, 5),
@@ -81,53 +81,53 @@
 					OqlToken::make(1e22, '0.1e23', OqlToken::NUMBER, 1, 39),
 					OqlToken::make('-', '-', OqlToken::ARITHMETIC_OPERATOR, 1, 46),
 					OqlToken::make(1e22, '.1e23', OqlToken::NUMBER, 1, 47)
-				)
+				]
 			);
 		}
-		
+
 		public function testBoolean()
 		{
 			$this->assertTokens(
 				'TrUe falSE',
-				array(
+				[
 					OqlToken::make(true, 'TrUe', OqlToken::BOOLEAN, 1, 0),
 					OqlToken::make(false, 'falSE', OqlToken::BOOLEAN, 1, 5)
-				)
+				]
 			);
 		}
-		
+
 		public function testNull()
 		{
 			$this->assertTokens(
 				'null testNULL nullTest testNULLtest NULL',
-				array(
+				[
 					OqlToken::make('null', 'null', OqlToken::NULL, 1, 0),
 					OqlToken::make('testNULL', 'testNULL', OqlToken::IDENTIFIER, 1, 5),
 					OqlToken::make('nullTest', 'nullTest', OqlToken::IDENTIFIER, 1, 14),
 					OqlToken::make('testNULLtest', 'testNULLtest', OqlToken::IDENTIFIER, 1, 23),
 					OqlToken::make('null', 'NULL', OqlToken::NULL, 1, 36)
-				)
+				]
 			);
 		}
-		
+
 		public function testSubstitution()
 		{
 			$this->assertTokens(
 				' $1 $22 $ ',
-				array(
+				[
 					OqlToken::make(1, '$1', OqlToken::SUBSTITUTION, 1, 1),
 					OqlToken::make(22, '$22', OqlToken::SUBSTITUTION, 1, 4)
-				)
+				]
 			);
 		}
-		
+
 		public function testKeyword()
 		{
 			$this->assertTokens(
 				"distinct From WHERE like between group \n\t\r by "
-				."ORDER BY asc desc having limit offset not and or "
-				."as in is SIMILAR  TO ilike",
-				array(
+				. "ORDER BY asc desc having limit offset not and or "
+				. "as in is SIMILAR  TO ilike",
+				[
 					OqlToken::make('distinct', 'distinct', OqlToken::KEYWORD, 1, 0),
 					OqlToken::make('from', 'From', OqlToken::KEYWORD, 1, 9),
 					OqlToken::make('where', 'WHERE', OqlToken::KEYWORD, 1, 14),
@@ -148,54 +148,54 @@
 					OqlToken::make('is', 'is', OqlToken::KEYWORD, 2, 61),
 					OqlToken::make('similar to', 'SIMILAR  TO', OqlToken::KEYWORD, 2, 64),
 					OqlToken::make('ilike', 'ilike', OqlToken::KEYWORD, 2, 76)
-				)
+				]
 			);
 		}
-			
+
 		public function testAggregateFunction()
 		{
 			$this->assertTokens(
 				'SUM aVg min Max count',
-				array(
+				[
 					OqlToken::make('sum', 'SUM', OqlToken::AGGREGATE_FUNCTION, 1, 0),
 					OqlToken::make('avg', 'aVg', OqlToken::AGGREGATE_FUNCTION, 1, 4),
 					OqlToken::make('min', 'min', OqlToken::AGGREGATE_FUNCTION, 1, 8),
 					OqlToken::make('max', 'Max', OqlToken::AGGREGATE_FUNCTION, 1, 12),
 					OqlToken::make('count', 'count', OqlToken::AGGREGATE_FUNCTION, 1, 16)
-				)
+				]
 			);
 		}
-		
+
 		public function testIdentifier()
 		{
 			$this->assertTokens(
 				'User _prop1.prop2.prop3 .prop4..prop5 0prop',
-				array(
+				[
 					OqlToken::make('User', 'User', OqlToken::IDENTIFIER, 1, 0),
 					OqlToken::make('_prop1.prop2.prop3', '_prop1.prop2.prop3', OqlToken::IDENTIFIER, 1, 5),
 					OqlToken::make('prop4', 'prop4', OqlToken::IDENTIFIER, 1, 25),
 					OqlToken::make('prop5', 'prop5', OqlToken::IDENTIFIER, 1, 32)
-				)
+				]
 			);
 		}
-		
+
 		public function testSymbol()
 		{
 			$this->assertTokens(
 				'(,)',
-				array(
+				[
 					OqlToken::make('(', '(', OqlToken::PARENTHESES, 1, 0),
 					OqlToken::make(',', ',', OqlToken::PUNCTUATION, 1, 1),
 					OqlToken::make(')', ')', OqlToken::PARENTHESES, 1, 2)
-				)
+				]
 			);
 		}
-		
+
 		public function testOperator()
 		{
 			$this->assertTokens(
 				'>= <= <> < > != = + - / *',
-				array(
+				[
 					OqlToken::make('>=', '>=', OqlToken::COMPARISON_OPERATOR, 1, 0),
 					OqlToken::make('<=', '<=', OqlToken::COMPARISON_OPERATOR, 1, 3),
 					OqlToken::make('!=', '<>', OqlToken::COMPARISON_OPERATOR, 1, 6),
@@ -207,18 +207,18 @@
 					OqlToken::make('-', '-', OqlToken::ARITHMETIC_OPERATOR, 1, 20),
 					OqlToken::make('/', '/', OqlToken::ARITHMETIC_OPERATOR, 1, 22),
 					OqlToken::make('*', '*', OqlToken::ARITHMETIC_OPERATOR, 1, 24)
-				)
+				]
 			);
 		}
-		
+
 		public function testQuery()
 		{
 			$this->assertTokens(
 				"AVG(user.id) as Avg, count(id), (id + 10) / 2\n"
-				."from UserGroup\n"
-				."where (id in (1, $1) or id >= $2) and (name like \"%'ы'%\") "
-				."order by id desc",
-				array(
+				. "from UserGroup\n"
+				. "where (id in (1, $1) or id >= $2) and (name like \"%'ы'%\") "
+				. "order by id desc",
+				[
 					OqlToken::make('avg', 'AVG', OqlToken::AGGREGATE_FUNCTION, 1, 0),
 					OqlToken::make('(', '(', OqlToken::PARENTHESES, 1, 3),
 					OqlToken::make('user.id', 'user.id', OqlToken::IDENTIFIER, 1, 4),
@@ -263,10 +263,10 @@
 					OqlToken::make('order by', 'order by', OqlToken::KEYWORD, 3, 58),
 					OqlToken::make('id', 'id', OqlToken::IDENTIFIER, 3, 67),
 					OqlToken::make('desc', 'desc', OqlToken::KEYWORD, 3, 70)
-				)
+				]
 			);
 		}
-		
+
 		/**
 		 * @return OqlTokenizerTest
 		**/
@@ -274,24 +274,23 @@
 		{
 			$tokenizer = new OqlTokenizer($string);
 			$tokens = $tokenizer->getList();
-			
+
 			$this->assertEquals(sizeof($tokens), sizeof($expectedTokens));
-			
+
 			reset($tokens);
-			
+
 			foreach ($expectedTokens as $expectedToken) {
 				$token = current($tokens);
-				
+
 				$this->assertEquals($token->getValue(), $expectedToken->getValue());
 				$this->assertEquals($token->getRawValue(), $expectedToken->getRawValue());
 				$this->assertEquals($token->getType(), $expectedToken->getType());
 				$this->assertEquals($token->getLine(), $expectedToken->getLine());
 				$this->assertEquals($token->getPosition(), $expectedToken->getPosition());
-				
+
 				next($tokens);
 			}
-			
+
 			return $this;
 		}
 	}
-?>

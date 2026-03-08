@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Support interface for use with FullTextUtils.
-	 * 
+	 *
 	 * @ingroup DAOs
 	 * @ingroup Module
 	**/
@@ -20,4 +21,3 @@
 		// index' field name
 		public function getIndexField();
 	}
-?>

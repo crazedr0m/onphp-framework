@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -16,8 +17,7 @@
 	{
 		/// returns encoded body as string
 		public function getEncodedBody();
-		
+
 		/// returns all related headers as string
 		public function getHeaders();
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,34 +19,36 @@
 		 * @throws WrongArgumentException
 		 * @return ManyToManyLinkedLazy
 		**/
-		public function sync($insert, $update = array(), $delete)
+		public function sync($insert, $update = [], $delete)
 		{
-			Assert::isTrue($update === array());
-			
+			Assert::isTrue($update === []);
+
 			$dao = $this->container->getDao();
-			
+
 			$db = DBPool::getByDao($dao);
-			
-			if ($insert)
-				for ($i = 0, $size = count($insert); $i < $size; ++$i)
+
+			if ($insert) {
+				for ($i = 0, $size = count($insert); $i < $size; ++$i) {
 					$db->queryNull($this->makeInsertQuery($insert[$i]));
+                }
+            }
 
 			if ($delete) {
 				$db->queryNull($this->makeDeleteQuery($delete));
-				
+
 				$dao->uncacheByIds($delete);
 			}
 
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function makeFetchQuery()
 		{
 			$uc = $this->container;
-			
+
 			return
 				$this->joinHelperTable(
 					$this->makeSelectQuery()->
@@ -59,4 +62,3 @@
 				);
 		}
 	}
-?>

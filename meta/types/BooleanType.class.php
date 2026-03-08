@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,19 +19,20 @@
 		{
 			return 'boolean';
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return BooleanType
 		**/
 		public function setDefault($default)
 		{
-			static $boolean = array('true' => true, 'false' => false);
+			static $boolean = ['true' => true, 'false' => false];
 
-			if (!isset($boolean[$default]))
+			if (!isset($boolean[$default])) {
 				throw new WrongArgumentException(
 					"strange default value given - '{$default}'"
 				);
+            }
 
 			$this->default = $boolean[$default];
 
@@ -39,11 +41,12 @@
 
 		public function getDeclaration()
 		{
-			if ($this->hasDefault())
+			if ($this->hasDefault()) {
 				return
 					$this->default
 						? 'true'
 						: 'false';
+            }
 
 			return 'null';
 		}
@@ -62,14 +65,13 @@
 			MetaClass $class,
 			MetaClassProperty $property,
 			MetaClassProperty $holder = null
-		)
-		{
+		) {
 			$name = $property->getName();
 			$camelName = ucfirst($name);
 
 			$methodName = "is{$camelName}";
 			$compatName = "get{$camelName}";
-			
+
 			if ($holder) {
 				return <<<EOT
 
@@ -99,7 +101,7 @@ public function {$methodName}()
 
 EOT;
 			}
-			
+
 			Assert::isUnreachable();
 		}
 
@@ -107,11 +109,10 @@ EOT;
 			MetaClass $class,
 			MetaClassProperty $property,
 			MetaClassProperty $holder = null
-		)
-		{
+		) {
 			$name = $property->getName();
-			$methodName = 'set'.ucfirst($name);
-			
+			$methodName = 'set' . ucfirst($name);
+
 			if ($holder) {
 				return <<<EOT
 
@@ -159,8 +160,7 @@ public function {$methodName}(\${$name} = null)
 EOT;
 				}
 			}
-			
+
 			return $method;
 		}
 	}
-?>

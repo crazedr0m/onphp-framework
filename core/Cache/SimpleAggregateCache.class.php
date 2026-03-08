@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2010 by Evgeny V. Kokovikhin                             *
  *                                                                          *
@@ -12,26 +13,27 @@
 	/**
 	 * A wrapper like AggregateCache, but it has very simple
 	 * (and fast) selective algorithm
-	 * 
+	 *
 	 * @ingroup Cache
 	**/
 	final class SimpleAggregateCache extends AggregateCache
 	{
 		private $peerAmount	= null;
 		private $labels		= null;
-		
+
 		/**
 		 * @return SimpleAggregateCache
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function addPeer(
-			$label, CachePeer $peer, $level = self::LEVEL_NORMAL
-		)
-		{
+			$label,
+            CachePeer $peer,
+            $level = self::LEVEL_NORMAL
+		) {
 			parent::addPeer($label, $peer, $level);
 
 			return $this->dropHelpers();
@@ -50,20 +52,22 @@
 
 			return $this->dropHelpers();
 		}
-		
+
 		/**
 		 * brainless ;)
 		**/
 		protected function guessLabel($key)
 		{
-			if ($this->peerAmount === null)
+			if ($this->peerAmount === null) {
 				$this->peerAmount = count($this->peers);
+            }
 
-			if ($this->labels === null)
+			if ($this->labels === null) {
 				$this->labels = array_keys($this->peers);
+            }
 
 			Assert::isGreaterOrEqual($this->peerAmount, 1);
-			
+
 			return
 				$this->labels[ord(substr($key, -1)) % $this->peerAmount];
 		}
@@ -76,4 +80,3 @@
 			return $this;
 		}
 	}
-?>

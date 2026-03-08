@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -23,8 +24,8 @@
 			try {
 				Base62Utils::setChars(
 					'0123456789abcdefghijklmn'
-					.'ЭЮЯ'
-					.'rstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+					. 'ЭЮЯ'
+					. 'rstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 				);
 				$this->fail('Pattern matching failed');
 			} catch (WrongArgumentException $e) {
@@ -42,7 +43,7 @@
 			}
 
 			try {
-				switch(PHP_INT_SIZE) {
+				switch (PHP_INT_SIZE) {
 					case 4:
 						Base62Utils::decode('q1w2e3r'); // 7 symbols
 						$this->fail('Wrong: int4 max length of code');
@@ -57,7 +58,6 @@
 						$this->fail('Wrong: PHP is rock');
 						break;
 				}
-
 			} catch (WrongArgumentException $e) {
 				//is ok
 			}
@@ -99,4 +99,3 @@
 			$this->assertSame('onPHP', $str);
 		}
 	}
-?>

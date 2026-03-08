@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,19 +14,19 @@
 	{
 		public function set($name, $value)
 		{
-			if (!isset($this->mapping[$name]))
+			if (!isset($this->mapping[$name])) {
 				throw new WrongArgumentException(
 					"knows nothing about property '{$name}'"
 				);
-			
+            }
+
 			$primitive = $this->mapping[$name];
-			
+
 			$this->object->importValue(
 				$primitive->getName(),
 				$value
 			);
-			
+
 			return $this;
 		}
 	}
-?>

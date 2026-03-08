@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -16,31 +17,32 @@
 	{
 		protected $templatePath		= null;
 		protected $partViewResolver	= null;
-		
+
 		public function __construct($templatePath, ViewResolver $partViewResolver)
 		{
 			$this->templatePath = $templatePath;
 			$this->partViewResolver = $partViewResolver;
 		}
-		
+
 		/**
 		 * @return SimplePhpView
 		**/
 		public function render(/* Model */ $model = null)
 		{
 			Assert::isTrue($model === null || $model instanceof Model);
-			
-			if ($model)
+
+			if ($model) {
 				extract($model->getList());
-			
+            }
+
 			$partViewer = new PartViewer($this->partViewResolver, $model);
-			
+
 			$this->preRender();
-			
+
 			include $this->templatePath;
-			
+
 			$this->postRender();
-			
+
 			return $this;
 		}
 
@@ -59,7 +61,7 @@
 				throw $e;
 			}
 		}
-		
+
 		/**
 		 * @return SimplePhpView
 		**/
@@ -67,7 +69,7 @@
 		{
 			return $this;
 		}
-		
+
 		/**
 		 * @return SimplePhpView
 		**/
@@ -76,4 +78,3 @@
 			return $this;
 		}
 	}
-?>

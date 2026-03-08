@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Nickolay G. Korolyov                       *
  *                                                                         *
@@ -15,12 +16,12 @@
 	class FloatType extends IntegerType
 	{
 		protected $precision = 0;
-		
+
 		public function getPrimitiveName()
 		{
 			return 'float';
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return FloatType
@@ -43,23 +44,22 @@
 		public function setPrecision($precision)
 		{
 			$this->precision = $precision;
-			
+
 			return $this;
 		}
-		
+
 		public function getPrecision()
 		{
 			return $this->precision;
 		}
-		
+
 		public function isMeasurable()
 		{
 			return true;
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::REAL)';
 		}
 	}
-?>

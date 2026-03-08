@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://www.postgresql.org/docs/current/interactive/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT
-	 * 
+	 *
 	 * @ingroup OSQL
 	**/
 	final class DatePart extends Enumeration
@@ -35,8 +36,8 @@
 		const TIMEZONE_MINUTE	= 17;
 		const WEEK				= 18;
 		const YEAR				= 19;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::CENTURY			=> 'CENTURY',
 			self::DAY				=> 'DAY',
 			self::DECADE			=> 'DECADE',
@@ -56,6 +57,5 @@
 			self::TIMEZONE_MINUTE	=> 'TIMEZONE_MINUTE',
 			self::WEEK				=> 'WEEK',
 			self::YEAR				=> 'YEAR'
-		);
+		];
 	}
-?>

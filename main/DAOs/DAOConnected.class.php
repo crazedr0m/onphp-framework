@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Helper for identifying object's DAO.
-	 * 
+	 *
 	 * @ingroup DAOs
 	 * @ingroup Module
 	**/
@@ -22,4 +23,3 @@
 		**/
 		public static function dao();
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class MissingElementException extends BaseException {/*_*/}
-?>
+	class MissingElementException extends BaseException
+    {
+/*_*/
+    }

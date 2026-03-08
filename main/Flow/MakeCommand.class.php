@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -20,14 +21,13 @@
 		public function run(Prototyped $subject, Form $form, HttpRequest $request)
 		{
 			$form->markGood('id');
-			
+
 			if (!$form->getErrors()) {
 				FormUtils::form2object($form, $subject);
-				
+
 				return parent::run($subject, $form, $request);
 			}
-			
+
 			return new ModelAndView();
 		}
 	}
-?>

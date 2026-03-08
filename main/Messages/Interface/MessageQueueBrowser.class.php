@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -16,4 +17,3 @@
 		**/
 		public function getNextMessage();
 	}
-?>

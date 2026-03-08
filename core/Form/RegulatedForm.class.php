@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,15 +12,15 @@
 
 	/**
 	 * Rules support for final Form.
-	 * 
+	 *
 	 * @ingroup Form
 	 * @ingroup Module
 	**/
 	abstract class RegulatedForm extends PlainForm
 	{
-		protected $rules		= array(); // forever
-		protected $violated		= array(); // rules
-		
+		protected $rules		= []; // forever
+		protected $violated		= []; // rules
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return Form
@@ -27,12 +28,12 @@
 		public function addRule($name, LogicalObject $rule)
 		{
 			Assert::isString($name);
-			
+
 			$this->rules[$name] = $rule;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @throws MissingElementException
 		 * @return Form
@@ -43,28 +44,28 @@
 				unset($this->rules[$name]);
 				return $this;
 			}
-			
+
 			throw new MissingElementException(
 				"no such rule with '{$name}' name"
 			);
 		}
-		
+
 		public function ruleExists($name)
 		{
 			return isset($this->rules[$name]);
 		}
-		
+
 		/**
 		 * @return Form
 		**/
 		public function checkRules()
 		{
 			foreach ($this->rules as $name => $logicalObject) {
-				if (!$logicalObject->toBoolean($this))
+				if (!$logicalObject->toBoolean($this)) {
 					$this->violated[$name] = Form::WRONG;
+                }
 			}
-			
+
 			return $this;
 		}
 	}
-?>

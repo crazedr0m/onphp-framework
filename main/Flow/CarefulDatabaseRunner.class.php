@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -19,14 +20,14 @@
 		 * @var InnerTransaction
 		 */
 		private $transaction	= null;
-		
+
 		private $running = false;
-		
+
 		final public function __construct(EditorCommand $command)
 		{
 			$this->command = $command;
 		}
-		
+
 		/**
 		 * @throws BaseException
 		 * @return ModelAndView
@@ -35,24 +36,24 @@
 		{
 			Assert::isFalse($this->running, 'command already running');
 			Assert::isTrue($subject instanceof DAOConnected);
-			
+
 			$this->transaction = InnerTransaction::begin($subject->dao());
-			
+
 			try {
 				$mav = $this->command->run($subject, $form, $request);
-				
+
 				$this->running = true;
-				
+
 				return $mav;
 			} catch (BaseException $e) {
 				$this->transaction->rollback();
-				
+
 				throw $e;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		/**
 		 * @return CarefulDatabaseRunner
 		**/
@@ -62,10 +63,10 @@
 				$this->transaction->commit();
 				$this->running = false;
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return CarefulDatabaseRunner
 		**/
@@ -77,13 +78,13 @@
 				} catch (DatabaseException $e) {
 					// keep silence
 				}
-				
+
 				$this->running = false;
 			}
-			
+
 			return $this;
 		}
-		
+
 		public function __destruct()
 		{
 			if ($this->running) {
@@ -91,4 +92,3 @@
 			}
 		}
 	}
-?>

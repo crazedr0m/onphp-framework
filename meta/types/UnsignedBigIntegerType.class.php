@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,13 +19,12 @@
 		{
 			return 8 & LightMetaProperty::UNSIGNED_FLAG;
 		}
-		
+
 		public function toColumnType()
 		{
 			return
 				parent::toColumnType()
-				."->\n"
-				.'setUnsigned(true)';
+				. "->\n"
+				. 'setUnsigned(true)';
 		}
 	}
-?>

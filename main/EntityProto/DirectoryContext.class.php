@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -11,21 +12,23 @@
 
 	final class DirectoryContext
 	{
-		private $map = array();
-		private $reverseMap = array();
+		private $map = [];
+		private $reverseMap = [];
 
 		public function bind($name, $object)
 		{
-			if (!is_dir($name))
+			if (!is_dir($name)) {
 				throw new WrongArgumentException(
-					'directory '.$name.' does not exists'
+					'directory ' . $name . ' does not exists'
 				);
+            }
 
 			if (
 				isset($this->map[$name])
 				&& $this->map[$name] !== $object
-			)
+			) {
 				throw new WrongArgumentException('consider using rebind()');
+            }
 
 			return $this->rebind($name, $object);
 		}
@@ -42,18 +45,19 @@
 
 		public function lookup($name)
 		{
-			if (!isset($this->map[$name]))
+			if (!isset($this->map[$name])) {
 				return null;
+            }
 
 			return $this->map[$name];
 		}
 
 		public function reverseLookup($object)
 		{
-			if (!isset($this->reverseMap[spl_object_hash($object)]))
+			if (!isset($this->reverseMap[spl_object_hash($object)])) {
 				return null;
+            }
 
 			return $this->reverseMap[spl_object_hash($object)];
 		}
 	}
-?>

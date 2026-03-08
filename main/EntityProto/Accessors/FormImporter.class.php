@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,24 +14,24 @@
 	{
 		public function set($name, $value)
 		{
-			if (!isset($this->mapping[$name]))
+			if (!isset($this->mapping[$name])) {
 				throw new WrongArgumentException(
 					"knows nothing about property '{$name}'"
 				);
-			
+            }
+
 			$primitive = $this->mapping[$name];
-			
-			if ($primitive instanceof PrimitiveForm)
+
+			if ($primitive instanceof PrimitiveForm) {
 				// inner form(s) has been already imported
 				$this->object->importValue($primitive->getName(), $value);
-				
-			else
-				$this->object->importOne(
-					$primitive->getName(),
-					array($primitive->getName() => $value)
-				);
-			
+			} else {
+$this->object->importOne(
+    $primitive->getName(),
+    [$primitive->getName() => $value]
+);
+            }
+
 			return $this;
 		}
 	}
-?>

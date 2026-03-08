@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -23,13 +24,14 @@
 			return new self($algorithm, $mode);
 		}
 
-		public function  __construct($algorithm, $mode)
+		public function __construct($algorithm, $mode)
 		{
 			if (
 				!$this->crResource
 				= mcrypt_module_open($algorithm, null, $mode, null)
-			)
+			) {
 				throw new WrongStateException('Mcrypt Module did not open.');
+            }
 
 			$this->iv = mcrypt_create_iv(
 				mcrypt_enc_get_iv_size($this->crResource),
@@ -39,7 +41,7 @@
 			$this->keySize = mcrypt_enc_get_key_size($this->crResource);
 		}
 
-		public function  __destruct()
+		public function __destruct()
 		{
 			mcrypt_generic_deinit($this->crResource);
 			mcrypt_module_close($this->crResource);
@@ -76,4 +78,3 @@
 			return substr(md5($secret), 0, $this->keySize);
 		}
 	}
-?>

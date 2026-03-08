@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -19,7 +20,7 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function getBitmask(AMQPBitmaskResolver $config)
@@ -32,7 +33,7 @@
 			return $this->mandatory;
 		}
 
-		/**		 
+		/**
 		 * @return AMQPOutgoingMessage
 		**/
 		public function setMandatory($mandatory)
@@ -57,4 +58,3 @@
 			return $this;
 		}
 	}
-?>

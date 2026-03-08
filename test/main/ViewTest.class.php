@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Igor V. Gulyaev                                 *
  *                                                                         *
@@ -15,12 +16,12 @@
 
 		public static function setUpBeforeClass()
 		{
-			self::$resolver = new PhpViewResolver(ONPHP_TEST_PATH.'main/data/views/', EXT_TPL);
+			self::$resolver = new PhpViewResolver(ONPHP_TEST_PATH . 'main/data/views/', EXT_TPL);
 		}
 
 		public static function tearDownAfterClass()
 		{
-			self::$resolver = NULL;
+			self::$resolver = null;
 		}
 
 		public function testToString()
@@ -35,4 +36,3 @@
 			);
 		}
 	}
-?>

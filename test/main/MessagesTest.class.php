@@ -4,15 +4,17 @@
 	{
 		public function testFileQueue()
 		{
-			$dir = ONPHP_TEMP_PATH.'tests/messages';
+			$dir = ONPHP_TEMP_PATH . 'tests/messages';
 
-			$uri = $dir.'/fileQueueItems';
+			$uri = $dir . '/fileQueueItems';
 
-			if (!is_dir($dir))
+			if (!is_dir($dir)) {
 				mkdir($dir, 0700, true);
+            }
 
-			if (file_exists($uri))
+			if (file_exists($uri)) {
 				unlink($uri);
+            }
 
 
 			$queue = TextFileQueue::create()->
@@ -63,4 +65,3 @@
 			$this->assertEquals('third ape', $message->getText());
 		}
 	}
-?>

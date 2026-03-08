@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -26,8 +27,8 @@ namespace {$ns->buildFullName('dao', true)};
 EOT;
 			}
 
-			$className = $ns ? $class->getName().'DAO' : 'Auto'.$class->getName().'DAO';
-			
+			$className = $ns ? $class->getName() . 'DAO' : 'Auto' . $class->getName() . 'DAO';
+
 			$out .= <<<EOT
 abstract class {$className} extends \\StorableDAO
 {
@@ -35,14 +36,13 @@ abstract class {$className} extends \\StorableDAO
 EOT;
 
 			$pointers = self::buildPointers($class);
-			
+
 			$out .= <<<EOT
 {$pointers}
 }
 
 EOT;
-			
-			return $out.self::getHeel();
+
+			return $out . self::getHeel();
 		}
 	}
-?>

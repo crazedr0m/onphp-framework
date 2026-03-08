@@ -252,7 +252,7 @@
 			
 			$schema = SchemaBuilder::getHead();
 			
-			$tables = array();
+			$tables = [];
 			
 			foreach ($this->classes as $class) {
 				if (
@@ -447,18 +447,18 @@
 				newLine();
 			
 			AutoloaderPool::get('onPHP')->
-				addPaths(array(
+				addPaths([
 					ONPHP_META_BUSINESS_DIR,
 					ONPHP_META_DAO_DIR,
 					ONPHP_META_PROTO_DIR,
 					ONPHP_META_AUTO_BUSINESS_DIR,
 					ONPHP_META_AUTO_DAO_DIR,
 					ONPHP_META_AUTO_PROTO_DIR,
-				));
+				]);
 			
 			$out->info("\t");
 			
-			$formErrors = array();
+			$formErrors = [];
 			
 			foreach ($this->classes as $name => $class) {
 				if (
@@ -503,7 +503,7 @@
 						$class->getPattern() instanceof EnumerationClassPattern
 						|| $class->getPattern() instanceof EnumClassPattern
 					) {
-						$object = new $name(call_user_func(array($name, 'getAnyId')));
+						$object = new $name(call_user_func([$name, 'getAnyId']));
 						
 						Assert::isTrue(
 							unserialize(serialize($object)) == $object
@@ -947,7 +947,7 @@
 		private function checkRecursion(
 			MetaClassProperty $property,
 			MetaClass $holder,
-			$paths = array()
+			$paths = []
 		) {
 			Assert::isTrue(
 				$property->getRelationId()
@@ -1381,7 +1381,7 @@
 			
 			$class = get_class($enumeration);
 			
-			$ids = array();
+			$ids = [];
 
 			if ($enumeration instanceof Enumeration)
 				$list = $enumeration->getList();

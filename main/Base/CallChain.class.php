@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Garmonbozia Research Group                      *
  *                                                                         *
@@ -14,57 +15,59 @@
 	**/
 	final class CallChain
 	{
-		private $chain = array();
-		
+		private $chain = [];
+
 		/**
 		 * @return CallChain
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return CallChain
 		**/
 		public function add($object)
 		{
 			$this->chain[] = $object;
-			
+
 			return $this;
 		}
-		
+
 		public function call($method, $args = null /* , ... */)
 		{
-			if (!$this->chain)
+			if (!$this->chain) {
 				throw new WrongStateException();
-			
+            }
+
 			$args = func_get_args();
 			array_shift($args);
-			
+
 			if (count($args)) {
 				$result = $args;
-				foreach ($this->chain as $object)
+				foreach ($this->chain as $object) {
 					$result = call_user_func_array(
-						array($object, $method),
+						[$object, $method],
 						is_array($result)
 							? $result
-							: array($result)
+							: [$result]
 					);
+                }
 			} else {
-				foreach ($this->chain as $object)
-					$result = call_user_func(array($object, $method));
+				foreach ($this->chain as $object) {
+					$result = call_user_func([$object, $method]);
+                }
 			}
-			
+
 			return $result;
 		}
-		
+
 		public function __call($method, $args = null)
 		{
 			return call_user_func_array(
-				array($this, 'call'),
-				array_merge(array($method), $args)
+				[$this, 'call'],
+				array_merge([$method], $args)
 			);
 		}
 	}
-?>

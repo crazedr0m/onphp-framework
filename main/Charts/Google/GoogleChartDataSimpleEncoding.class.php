@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -12,49 +13,48 @@
 	/**
 	 * @ingroup GoogleChart
 	**/
-	final class GoogleChartDataSimpleEncoding
-		extends BaseGoogleChartDataEncoding
+	final class GoogleChartDataSimpleEncoding extends BaseGoogleChartDataEncoding
 	{
 		protected $name = 's:';
-		
+
 		private $encodingChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		private $length = null;
-		
+
 		/**
 		 * @return GoogleChartDataSimpleEncoding
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			$this->length = strlen($this->encodingChars);
 		}
-		
+
 		public function encode(GoogleChartDataSet $set)
 		{
 			$encodedString = null;
-			
+
 			foreach ($set->getData() as $dataElement) {
-				if ($dataElement >= 0)
+				if ($dataElement >= 0) {
 					 $encodedString .=
 						$this->encodingChars[
 							round($this->length - 1)
 							* $dataElement
 							/ $this->maxValue
 						];
-				else
-					$encodedString .= '_';
+				} else {
+$encodedString .= '_';
+                }
 			}
-			
+
 			return $encodedString;
 		}
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Decode a uuencoded string.
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class UnixToUnixDecode extends BaseFilter
@@ -23,10 +24,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return convert_uudecode($value);
 		}
 	}
-?>

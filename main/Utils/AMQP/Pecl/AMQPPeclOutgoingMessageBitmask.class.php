@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -20,13 +21,14 @@
 
 			$bitmask = 0;
 
-			if ($config->getMandatory())
+			if ($config->getMandatory()) {
 				$bitmask = $bitmask | AMQP_MANDATORY;
+            }
 
-			if ($config->getImmediate())
+			if ($config->getImmediate()) {
 				$bitmask = $bitmask | AMQP_IMMEDIATE;
+            }
 
 			return $bitmask;
 		}
 	}
-?>

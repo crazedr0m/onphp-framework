@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -33,4 +34,3 @@
 				);
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -16,14 +17,16 @@
 	{
 		public function import($scope)
 		{
-			if (!BasePrimitive::import($scope))
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
+            }
+
 			$this->value = (string) $scope[$this->name];
-			
+
 			$this->selfFilter();
-			
-			if (!empty($this->value) && is_string($this->value)
+
+			if (
+                !empty($this->value) && is_string($this->value)
 				&& ($length = strlen($this->value))
 				&& !($this->max && $length > $this->max)
 				&& !($this->min && $length < $this->min)
@@ -32,8 +35,7 @@
 			} else {
 				$this->value = null;
 			}
-			
+
 			return false;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,7 +16,7 @@
 	final class JsonDecoderFilter extends BaseFilter
 	{
 		private $assoc = false;
-		
+
 		/**
 		 * @return JsonDecodeFilter
 		**/
@@ -23,20 +24,19 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return JsonDecodeFilter
 		**/
 		public function setAssoc($orly = true)
 		{
 			$this->assoc = (true === $orly);
-			
+
 			return $this;
 		}
-		
+
 		public function apply($value)
 		{
 			return json_decode($value, $this->assoc);
 		}
 	}
-?>

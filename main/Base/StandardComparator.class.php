@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -9,28 +10,26 @@
  *                                                                         *
  ***************************************************************************/
 
-	final class StandardComparator extends Singleton
-		implements Comparator, Instantiatable
+	final class StandardComparator extends Singleton implements Comparator, Instantiatable
 	{
  		private $cmpFunction = 'strcmp';
-		
+
 		public static function me()
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function setCmpFunction($name)
 		{
 			$this->cmpFunction = $name;
-			
+
 			return $this;
 		}
-		
+
 		public function compare($one, $two)
 		{
 			$cmpFunc = $this->cmpFunction;
-			
+
 			return $cmpFunc($one, $two);
 		}
 	}
-?>

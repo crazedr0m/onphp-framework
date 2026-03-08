@@ -1,5 +1,5 @@
 <?php
-	
+
 	final class EnumerationTest extends TestCase
 	{
 		public function testAnyId()
@@ -9,18 +9,18 @@
 					try {
 						$enum = new $className(
 							call_user_func(
-								array($className, 'getAnyId')
+								[$className, 'getAnyId']
 							)
 						);
-						
+
 						/* pass */
 					} catch (MissingElementException $e) {
 						$this->fail($className);
 					}
-				} elseif(is_subclass_of($className, 'Enum')) {
+				} elseif (is_subclass_of($className, 'Enum')) {
 					try {
 						$enum = new $className(
-							ClassUtils::callStaticMethod($className.'::getAnyId')
+							ClassUtils::callStaticMethod($className . '::getAnyId')
 						);
 
 						/* pass */
@@ -31,4 +31,3 @@
 			}
 		}
 	}
-?>

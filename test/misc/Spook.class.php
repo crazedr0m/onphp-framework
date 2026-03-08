@@ -1,4 +1,7 @@
 <?php
+
 	// provide fake spooked class
-	class Spook extends IdentifiableObject {/*_*/}
-?>
+	class Spook extends IdentifiableObject
+    {
+/*_*/
+    }

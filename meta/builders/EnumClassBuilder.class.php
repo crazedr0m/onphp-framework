@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -25,12 +26,13 @@ namespace {$ns->buildFullName('business', false)};
 
 EOT;
 			}
-			
-			if ($type = $class->getType())
+
+			if ($type = $class->getType()) {
 				$type = "{$type->getName()} ";
-			else
-				$type = null;
-			$parent = ($ns ? '\\' : '').'Enum';
+			} else {
+$type = null;
+            }
+			$parent = ($ns ? '\\' : '') . 'Enum';
 			$out .= <<<EOT
 {$type}class {$class->getName()} extends {$parent}
 {
@@ -39,8 +41,7 @@ EOT;
 }
 
 EOT;
-			
-			return $out.self::getHeel();
+
+			return $out . self::getHeel();
 		}
 	}
-?>

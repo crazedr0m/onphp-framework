@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -14,8 +15,8 @@
 	**/
 	class UncacherSmartDaoWorkerLists implements UncacherBase
 	{
-		private $classNameMap = array();
-		
+		private $classNameMap = [];
+
 		/**
 		 * @return UncacherSmartDaoWorkerLists
 		 */
@@ -23,17 +24,17 @@
 		{
 			return new self($className, $indexKey, $intKey);
 		}
-		
+
 		public function __construct($className, $indexKey, $intKey)
 		{
-			$this->classNameMap[$className] = array($indexKey, $intKey);
+			$this->classNameMap[$className] = [$indexKey, $intKey];
 		}
-		
+
 		public function getClassNameMap()
 		{
 			return $this->classNameMap;
 		}
-		
+
 		/**
 		 * @param $uncacher UncacherSmartDaoWorkerLists same as self class
 		 * @return BaseUncacher (this)
@@ -43,7 +44,7 @@
 			Assert::isInstance($uncacher, get_class($this));
 			return $this->mergeSelf($uncacher);
 		}
-		
+
 		public function uncache()
 		{
 			foreach ($this->classNameMap as $className => $classNameRow) {
@@ -51,30 +52,32 @@
 				$this->uncacheClassName($className, $indexKey, $intKey);
 			}
 		}
-		
-		protected function uncacheClassName($className, $indexKey, $intKey) {
+
+		protected function uncacheClassName($className, $indexKey, $intKey)
+        {
 			$cache = Cache::me();
 			$pool = SemaphorePool::me();
-			
+
 			if ($pool->get($intKey)) {
 				$indexList = $cache->mark($className)->get($indexKey);
 				$cache->mark($className)->delete($indexKey);
-					
+
 				if ($indexList) {
-					foreach (array_keys($indexList) as $key)
+					foreach (array_keys($indexList) as $key) {
 						$cache->mark($className)->delete($key);
+                    }
 				}
-				
+
 				$pool->free($intKey);
-				
+
 				return true;
 			}
-			
+
 			$cache->mark($className)->delete($indexKey);
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * @param UncacherBaseDaoWorker $uncacher
 		 * @return UncacherBaseDaoWorker
@@ -89,4 +92,3 @@
 			return $this;
 		}
 	}
-?>

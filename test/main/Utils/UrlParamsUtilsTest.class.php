@@ -1,21 +1,22 @@
 <?php
+
 	final class UrlParamsUtilsTest extends TestCase
 	{
 		public function testOneDeepLvl()
 		{
-			$scope = array(
+			$scope = [
 				'a' => '1',
 				'c' => '@3',
-				'g' => array('1' => '1', '0' => '[0]'),
-			);
-			
+				'g' => ['1' => '1', '0' => '[0]'],
+			];
+
 			$this->assertEquals(
 				'a=1&c=%403&g[1]=1&g[0]=%5B0%5D',
 				UrlParamsUtils::toStringOneDeepLvl($scope)
 			);
-			
-			$scope['z'] = array('2' => array('8' => '8'));
-			
+
+			$scope['z'] = ['2' => ['8' => '8']];
+
 			try {
 				UrlParamsUtils::toStringOneDeepLvl($scope);
 				$this->fail('expected exception');
@@ -26,32 +27,31 @@
 				);
 			}
 		}
-		
+
 		public function testAnyDeepLvl()
 		{
-			$scope = array(
-				'foo' => array('foo' => array('foo' => '@bar')),
-				'bar' => array('@bar' => array('bar' => "foo[]я")),
-				'fo' => array(
-					array('o', 'ba', 'r'),
-				)
-			);
-			
+			$scope = [
+				'foo' => ['foo' => ['foo' => '@bar']],
+				'bar' => ['@bar' => ['bar' => "foo[]я"]],
+				'fo' => [
+					['o', 'ba', 'r'],
+				]
+			];
+
 			$this->assertEquals(
-				array(
+				[
 					'foo[foo][foo]' => '@bar',
 					'bar[@bar][bar]' => 'foo[]я',
 					'fo[0][0]' => 'o',
 					'fo[0][1]' => 'ba',
 					'fo[0][2]' => 'r',
-				),
+				],
 				UrlParamsUtils::toParamsList($scope)
 			);
-			
+
 			$this->assertEquals(
 				'foo[foo][foo]=%40bar&bar[%40bar][bar]=foo%5B%5D%D1%8F&fo[0][0]=o&fo[0][1]=ba&fo[0][2]=r',
 				UrlParamsUtils::toString($scope)
 			);
 		}
 	}
-?>

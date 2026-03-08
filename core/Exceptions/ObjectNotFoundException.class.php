@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class ObjectNotFoundException extends DatabaseException {/*_*/}
-?>
+	class ObjectNotFoundException extends DatabaseException
+    {
+/*_*/
+    }

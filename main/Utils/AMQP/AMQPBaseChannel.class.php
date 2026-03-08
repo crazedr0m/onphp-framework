@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -29,8 +30,9 @@
 
 		public function __destruct()
 		{
-			if ($this->isOpen())
+			if ($this->isOpen()) {
 				$this->close();
+            }
 		}
 
 		public function getTransport()
@@ -58,4 +60,3 @@
 			return $this;
 		}
 	}
-?>

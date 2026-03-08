@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -44,15 +45,17 @@
 		{
 			$realCallbackName = null;
 
-			if(is_scalar($callback))
+			if (is_scalar($callback)) {
 				$realCallbackName = $callback;
-			elseif($callback instanceof Stringable)
+			} elseif ($callback instanceof Stringable) {
 				$realCallbackName = $callback->toString();
-			else
-				throw new WrongArgumentException('undefined type of callback, gived "'.gettype($callback).'"');
+			} else {
+throw new WrongArgumentException('undefined type of callback, gived "' . gettype($callback) . '"');
+            }
 
-			if(!preg_match(static::CALLBACK_PATTERN, $realCallbackName))
-				throw new WrongArgumentException('invalid function name, you should set valid javascript function name! gived "'.$realCallbackName.'"');
+			if (!preg_match(static::CALLBACK_PATTERN, $realCallbackName)) {
+				throw new WrongArgumentException('invalid function name, you should set valid javascript function name! gived "' . $realCallbackName . '"');
+            }
 
 			$this->callback = $realCallbackName;
 
@@ -69,7 +72,6 @@
 
 			$json = parent::toString($model);
 
-			return $this->callback.'('.$json.');';
+			return $this->callback . '(' . $json . ');';
 		}
-
-	}
+    }

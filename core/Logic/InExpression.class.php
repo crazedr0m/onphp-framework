@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2009 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,18 +12,18 @@
 
 	/**
 	 * Name says it all. :-)
-	 * 
+	 *
 	 * @ingroup Logic
 	**/
 	final class InExpression implements LogicalObject, MappableObject
 	{
 		const IN		= 'IN';
 		const NOT_IN	= 'NOT IN';
-		
+
 		private $left	= null;
 		private $right	= null;
 		private $logic	= null;
-		
+
 		public function __construct($left, $right, $logic)
 		{
 			Assert::isTrue(
@@ -31,91 +32,86 @@
 				|| ($right instanceof MappableObject)
 				|| is_array($right)
 			);
-			
+
 			Assert::isTrue(
 				($logic == self::IN)
 				|| ($logic == self::NOT_IN)
 			);
-			
+
 			$this->left		= $left;
 			$this->right	= $right;
 			$this->logic	= $logic;
 		}
-		
+
 		/**
 		 * @return InExpression
 		**/
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
 			if (is_array($this->right)) {
-				$right = array();
+				$right = [];
 				foreach ($this->right as $atom) {
 					$right[] = $dao->guessAtom($atom, $query);
 				}
-			} elseif ($this->right instanceof MappableObject)
+			} elseif ($this->right instanceof MappableObject) {
 				$right = $this->right->toMapped($dao, $query);
-			else
-				$right = $this->right; // untransformable
-			
+			} else {
+$right = $this->right; // untransformable
+            }
+
 			return new self(
 				$dao->guessAtom($this->left, $query),
 				$right,
 				$this->logic
 			);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$string =
 				'('
-				.$dialect->toFieldString($this->left)
-				.' '.$this->logic
-				.' ';
-			
+				. $dialect->toFieldString($this->left)
+				. ' ' . $this->logic
+				. ' ';
+
 			$right = $this->right;
-			
+
 			if ($right instanceof DialectString) {
-			
-				$string .= '('.$right->toDialectString($dialect).')';
-				
+				$string .= '(' . $right->toDialectString($dialect) . ')';
 			} elseif (is_array($right)) {
-				
 				$string .= SQLArray::create($right)->
 					toDialectString($dialect);
-					
-			} else
-				throw new WrongArgumentException(
-					'sql select or array accepted by '.$this->logic
-				);
+			} else {
+throw new WrongArgumentException(
+    'sql select or array accepted by ' . $this->logic
+);
+            }
 
 			$string .= ')';
 
 			return $string;
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			$left	= $form->toFormValue($this->left);
 			$right	= $this->right;
-			
+
 			$both =
 				(null !== $left)
 				&& (null !== $right);
 
 			switch ($this->logic) {
-				
 				case self::IN:
 					return $both && (in_array($left, $right));
-				
+
 				case self::NOT_IN:
 					return $both && (!in_array($left, $right));
-				
+
 				default:
-					
 					throw new UnsupportedMethodException(
 						"'{$this->logic}' doesn't supported"
 					);
 			}
 		}
 	}
-?>

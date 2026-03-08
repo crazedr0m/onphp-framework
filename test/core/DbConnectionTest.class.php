@@ -10,21 +10,19 @@
 					DB::spawn('PinbedPgSQL', 'postgres', '', 'localhost', 'wrongDatabase')
 				);
 		}
-		
+
 		public function testPostgresql()
 		{
 			try {
 				$link = DBPool::me()->getLink('badLink');
 				$this->fail('Unreachable code');
-			} catch(Exception $e) {
+			} catch (Exception $e) {
 				$this->assertInstanceOf('DatabaseException', $e);
 			}
 		}
-		
+
 		public function tearDown()
 		{
 			DBPool::me()->dropLink('badLink');
 		}
 	}
-
-?>

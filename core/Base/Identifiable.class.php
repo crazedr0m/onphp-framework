@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Essential interface for DAO-related operations.
-	 * 
+	 *
 	 * @see IdentifiableObject
-	 * 
+	 *
 	 * @ingroup Base
 	 * @ingroup Module
 	**/
@@ -22,4 +23,3 @@
 		public function getId();
 		public function setId($id);
 	}
-?>

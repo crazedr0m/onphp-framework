@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -22,20 +23,24 @@
 		public static function expAnd($left, $right)
 		{
 			return new BinaryExpression(
-				$left, $right, BinaryExpression::EXPRESSION_AND
+				$left,
+                $right,
+                BinaryExpression::EXPRESSION_AND
 			);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
 		public static function expOr($left, $right)
 		{
 			return new BinaryExpression(
-				$left, $right, BinaryExpression::EXPRESSION_OR
+				$left,
+                $right,
+                BinaryExpression::EXPRESSION_OR
 			);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -43,7 +48,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::EQUALS);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -51,17 +56,19 @@
 		{
 			return self::eq($field, DBValue::create($object->getId()));
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
 		public static function notEq($field, $value)
 		{
 			return new BinaryExpression(
-				$field, $value, BinaryExpression::NOT_EQUALS
+				$field,
+                $value,
+                BinaryExpression::NOT_EQUALS
 			);
 		}
-		
+
 		/**
 		 * greater than
 		 *
@@ -70,10 +77,12 @@
 		public static function gt($field, $value)
 		{
 			return new BinaryExpression(
-				$field, $value, BinaryExpression::GREATER_THAN
+				$field,
+                $value,
+                BinaryExpression::GREATER_THAN
 			);
 		}
-		
+
 		/**
 		 * greater than or equals
 		 *
@@ -82,10 +91,12 @@
 		public static function gtEq($field, $value)
 		{
 			return new BinaryExpression(
-				$field, $value, BinaryExpression::GREATER_OR_EQUALS
+				$field,
+                $value,
+                BinaryExpression::GREATER_OR_EQUALS
 			);
 		}
-		
+
 		/**
 		 * lower than
 		 *
@@ -94,10 +105,12 @@
 		public static function lt($field, $value)
 		{
 			return new BinaryExpression(
-				$field, $value, BinaryExpression::LOWER_THAN
+				$field,
+                $value,
+                BinaryExpression::LOWER_THAN
 			);
 		}
-		
+
 		/**
 		 * lower than or equals
 		 *
@@ -106,10 +119,12 @@
 		public static function ltEq($field, $value)
 		{
 			return new BinaryExpression(
-				$field, $value, BinaryExpression::LOWER_OR_EQUALS
+				$field,
+                $value,
+                BinaryExpression::LOWER_OR_EQUALS
 			);
 		}
-		
+
 		/**
 		 * @return PostfixUnaryExpression
 		**/
@@ -117,7 +132,7 @@
 		{
 			return new PostfixUnaryExpression($field, PostfixUnaryExpression::IS_NOT_NULL);
 		}
-		
+
 		/**
 		 * @return PostfixUnaryExpression
 		**/
@@ -125,7 +140,7 @@
 		{
 			return new PostfixUnaryExpression($field, PostfixUnaryExpression::IS_NULL);
 		}
-		
+
 		/**
 		 * @return PostfixUnaryExpression
 		**/
@@ -133,7 +148,7 @@
 		{
 			return new PostfixUnaryExpression($field, PostfixUnaryExpression::IS_TRUE);
 		}
-		
+
 		/**
 		 * @return PostfixUnaryExpression
 		**/
@@ -141,7 +156,7 @@
 		{
 			return new PostfixUnaryExpression($field, PostfixUnaryExpression::IS_FALSE);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -149,7 +164,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::LIKE);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -165,7 +180,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::ILIKE);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -173,7 +188,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::NOT_ILIKE);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -181,7 +196,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::SIMILAR_TO);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -189,7 +204,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::NOT_SIMILAR_TO);
 		}
-		
+
 		/**
 		 * @return EqualsLowerExpression
 		**/
@@ -197,7 +212,7 @@
 		{
 			return new EqualsLowerExpression($field, $value);
 		}
-		
+
 		/**
 		 * @return LogicalBetween
 		**/
@@ -205,7 +220,7 @@
 		{
 			return new LogicalBetween($field, $left, $right);
 		}
-		
+
 		/**
 		 * {,not}in handles strings, arrays and SelectQueries
 		 *
@@ -213,29 +228,33 @@
 		**/
 		public static function in($field, $value)
 		{
-			if (is_numeric($value) && $value == (int) $value)
+			if (is_numeric($value) && $value == (int) $value) {
 				return self::eq($field, $value);
-			elseif (is_array($value) && count($value) == 1)
+			} elseif (is_array($value) && count($value) == 1) {
 				return self::eq($field, current($value));
-			else {
+			} else {
 				return new InExpression(
-					$field, $value, InExpression::IN
+					$field,
+                    $value,
+                    InExpression::IN
 				);
 			}
 		}
-		
+
 		/**
 		 * @return LogicalObject
 		**/
 		public static function notIn($field, $value)
 		{
-			if (is_numeric($value) && $value == (int) $value)
+			if (is_numeric($value) && $value == (int) $value) {
 				return self::notEq($field, $value);
-			elseif (is_array($value) && count($value) == 1)
+			} elseif (is_array($value) && count($value) == 1) {
 				return self::notEq($field, current($value));
-			else {
+			} else {
 				return new InExpression(
-					$field, $value, InExpression::NOT_IN
+					$field,
+                    $value,
+                    InExpression::NOT_IN
 				);
 			}
 		}
@@ -249,7 +268,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::ADD);
 		}
-		
+
 		/**
 		 * -
 		 *
@@ -259,7 +278,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::SUBSTRACT);
 		}
-		
+
 		/**
 		 * *
 		 *
@@ -269,7 +288,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::MULTIPLY);
 		}
-		
+
 		/**
 		 * /
 		 *
@@ -279,7 +298,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::DIVIDE);
 		}
-		
+
 		/**
 		 * %
 		 *
@@ -289,7 +308,7 @@
 		{
 			return new BinaryExpression($field, $value, BinaryExpression::MOD);
 		}
-		
+
 		/**
 		 * @return FullTextSearch
 		**/
@@ -297,7 +316,7 @@
 		{
 			return new FullTextSearch($field, $wordsList, DB::FULL_TEXT_AND);
 		}
-		
+
 		/**
 		 * @return FullTextSearch
 		**/
@@ -305,7 +324,7 @@
 		{
 			return new FullTextSearch($field, $wordsList, DB::FULL_TEXT_OR);
 		}
-		
+
 		/**
 		 * @return FullTextRank
 		**/
@@ -313,7 +332,7 @@
 		{
 			return new FullTextRank($field, $wordsList, DB::FULL_TEXT_OR);
 		}
-		
+
 		/**
 		 * @return FullTextRank
 		**/
@@ -321,7 +340,7 @@
 		{
 			return new FullTextRank($field, $wordsList, DB::FULL_TEXT_AND);
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -343,7 +362,7 @@
 				BinaryExpression::EXPRESSION_AND
 			);
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -351,7 +370,7 @@
 		{
 			return new LogicalChain();
 		}
-		
+
 		/**
 		 * @return PrefixUnaryExpression
 		**/
@@ -367,15 +386,15 @@
 		{
 			return new PrefixUnaryExpression(PrefixUnaryExpression::MINUS, $field);
 		}
-		
+
 		/**
-		 * @return Ip4ContainsExpression 
+		 * @return Ip4ContainsExpression
 		**/
 		public static function containsIp($range, $ip)
 		{
 			return new Ip4ContainsExpression($range, $ip);
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -384,4 +403,3 @@
 			return LogicalChain::block($args, $logic);
 		}
 	}
-?>

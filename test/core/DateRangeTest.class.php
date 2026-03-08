@@ -1,22 +1,22 @@
 <?php
-	
+
 	final class DateRangeTest extends TestCase
 	{
 		public function testSplit()
 		{
 			$start = new Date('2007-03-26');
 			$end = new Date('2007-04-15');
-			
+
 			$range = DateRange::create()->lazySet($start, $end);
-			
+
 			$dates = $range->split();
-			
+
 			$this->assertEquals(count($dates), 21);
-			
+
 			$this->assertEquals(reset($dates), $start);
 			$this->assertEquals(end($dates), $end);
 		}
-		
+
 		public function testOverlaps()
 		{
 			$this->assertTrue(
@@ -31,7 +31,7 @@
 					)
 				)
 			);
-			
+
 			$this->assertFalse(
 				DateRange::create()->lazySet(
 					Date::create('2007-03-28'),
@@ -46,4 +46,3 @@
 			);
 		}
 	}
-?>

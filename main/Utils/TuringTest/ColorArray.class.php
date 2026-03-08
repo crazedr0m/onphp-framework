@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Dmitry E. Demidov                          *
  *                                                                         *
@@ -14,51 +15,52 @@
 	**/
 	final class ColorArray
 	{
-		private $colors = array();
-		
+		private $colors = [];
+
 		/**
 		 * @return ColorArray
 		**/
 		public function add(Color $color)
 		{
 			$this->colors[] = $color;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return ColorArray
 		**/
 		public function clear()
 		{
 			unset($this->colors);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @throws MissingElementException
 		 * @return Color
 		**/
 		public function getRandomTextColor()
 		{
-			if ($this->isEmpty())
+			if ($this->isEmpty()) {
 				throw new MissingElementException();
-				
+            }
+
 			return $this->colors[array_rand($this->colors)];
 		}
-	
+
 		public function getColors()
 		{
 			return $this->colors;
 		}
-		
+
 		public function isEmpty()
 		{
-			if (count($this->colors) == 0)
+			if (count($this->colors) == 0) {
 				return true;
-			else
-				return false;
+			} else {
+return false;
+            }
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *   Copyright (C) 2006-2008 by Ivan Y. Khvostishkov, Konstantin V. Arkhipov *
  *                                                                           *
@@ -16,18 +17,18 @@
 	{
 		public function getList()
 		{
-			if ($this->value)
+			if ($this->value) {
 				return $this->value->getObjectList();
-			elseif ($this->default)
+			} elseif ($this->default) {
 				return $this->default->getObjectList();
-			else {
+			} else {
 				$object = new $this->className(
-					call_user_func(array($this->className, 'getAnyId'))
+					call_user_func([$this->className, 'getAnyId'])
 				);
-				
+
 				return $object->getObjectList();
 			}
-			
+
 			Assert::isUnreachable();
 		}
 
@@ -38,48 +39,49 @@
 		public function of($class)
 		{
 			$className = $this->guessClassName($class);
-			
+
 			Assert::classExists($className);
-			
+
 			Assert::isInstance($className, 'Enumeration');
-			
+
 			$this->className = $className;
-			
+
 			return $this;
 		}
-		
+
 		public function importValue(/* Identifiable */ $value)
 		{
-			if ($value)
+			if ($value) {
 				Assert::isEqual(get_class($value), $this->className);
-			else
-				return parent::importValue(null);
-			
-			return $this->import(array($this->getName() => $value->getId()));
+			} else {
+return parent::importValue(null);
+            }
+
+			return $this->import([$this->getName() => $value->getId()]);
 		}
-		
+
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveEnumeration '{$this->name}'"
 				);
-			
+            }
+
 			$result = parent::import($scope);
-			
+
 			if ($result === true) {
 				try {
 					$this->value = new $this->className($this->value);
 				} catch (MissingElementException $e) {
 					$this->value = null;
-					
+
 					return false;
 				}
-				
+
 				return true;
 			}
-			
+
 			return $result;
 		}
 	}
-?>

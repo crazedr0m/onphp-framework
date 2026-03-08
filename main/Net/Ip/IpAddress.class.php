@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Vladimir A. Altuchov                       *
  *                                                                         *
@@ -15,7 +16,7 @@
 	class IpAddress implements Stringable, DialectString
 	{
 		private $longIp = null;
-		
+
 		/**
 		 * @return IpAddress
 		**/
@@ -23,59 +24,60 @@
 		{
 			return new self($ip);
 		}
-		
+
 		public static function createFromCutted($ip)
 		{
-			if (substr_count($ip, '.') < 3)
-				return self::createFromCutted($ip.'.0');
-			
+			if (substr_count($ip, '.') < 3) {
+				return self::createFromCutted($ip . '.0');
+            }
+
 			return self::create($ip);
 		}
-		
+
 		public function __construct($ip)
 		{
 			$this->setIp($ip);
 		}
-		
+
 		/**
 		 * @return IpAddress
 		**/
 		public function setIp($ip)
 		{
 			$long = ip2long($ip);
-			
-			if ($long === false)
+
+			if ($long === false) {
 				throw new WrongArgumentException('wrong ip given');
-			
+            }
+
 			$this->longIp = $long;
-			
+
 			return $this;
 		}
-		
+
 		public function getLongIp()
 		{
 			return $this->longIp;
 		}
-		
+
 		public function __toString()
 		{
 			return $this->toString();
 		}
-		
-		
+
+
 		public function toString()
 		{
 			return long2ip($this->longIp);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return $dialect->quoteValue($this->toString());
 		}
-		
+
 		public function toSignedInt()
 		{
 			return TypesUtils::unsignedToSigned($this->longIp);
 		}
 	}
-?>

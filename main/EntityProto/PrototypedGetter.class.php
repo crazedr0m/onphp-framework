@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,7 +13,7 @@
 	abstract class PrototypedGetter extends PrototypedMethodCaller
 	{
 		abstract public function get($name);
-		
+
 		public function getSetter()
 		{
 			throw new UnimplementedFeatureException(
@@ -20,4 +21,3 @@
 			);
 		}
 	}
-?>

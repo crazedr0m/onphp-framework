@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Dmitry E. Demidov                          *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Enumeration of http status codes
-	 * 
+	 *
 	 * @ingroup Http
-	**/	
+	**/
 	final class HttpStatus extends Enumeration
 	{
 		const CODE_100	= 100;
@@ -59,8 +60,8 @@
 		const CODE_504	= 504;
 		const CODE_507	= 507;
 		const CODE_510	= 510;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::CODE_100 => 'Continue',
 			self::CODE_101 => 'Switching Protocols',
 			self::CODE_200 => 'OK',
@@ -104,16 +105,15 @@
 			self::CODE_504 => 'Gateway Time-out',
 			self::CODE_507 => 'Insufficient Storage',
 			self::CODE_510 => 'Not Extended'
-		);
-		
+		];
+
 		public static function getAnyId()
 		{
 			return 200;
 		}
-		
+
 		public function toString()
 		{
-			return 'HTTP/1.1 '.$this->id.' '.$this->name;
+			return 'HTTP/1.1 ' . $this->id . ' ' . $this->name;
 		}
 	}
-?>

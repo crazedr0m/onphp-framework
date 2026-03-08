@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -14,41 +15,40 @@
 	**/
 	abstract class OqlQueryListedClause extends OqlQueryClause
 	{
-		protected $list = array();
-		
+		protected $list = [];
+
 		/**
 		 * @return OqlQueryListedClause
 		**/
 		public function add(OqlQueryParameter $property)
 		{
 			$this->list[] = $property;
-			
+
 			return $this;
 		}
-		
+
 		public function getList()
 		{
 			return $this->list;
 		}
-		
+
 		/**
 		 * @return OqlQueryListedClause
 		**/
 		public function setList(array $list)
 		{
 			$this->list = $list;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OqlQueryListedClause
 		**/
 		public function dropList()
 		{
-			$this->list = array();
-			
+			$this->list = [];
+
 			return $this;
 		}
 	}
-?>

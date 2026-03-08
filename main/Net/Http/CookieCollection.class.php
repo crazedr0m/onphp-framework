@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Evgeny V. Kokovikhin                            *
  *                                                                         *
@@ -13,7 +14,7 @@
 	/**
 	 * using java.utils.Collection Interface
 	 * see http://java.sun.com/javase/6/docs/api/java/util/Collection.html
-	 * 
+	 *
 	 * @ingroup Http
 	**/
 	final class CookieCollection extends AbstractCollection
@@ -23,15 +24,15 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function httpSetAll()
 		{
-			foreach ($this->items as $item)
+			foreach ($this->items as $item) {
 				$item->httpSet();
-				
+            }
+
 			return $this;
 		}
 	}
-?>

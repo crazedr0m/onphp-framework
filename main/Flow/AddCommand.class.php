@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -19,12 +20,11 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		protected function daoMethod()
 		{
 			return 'add';
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -21,7 +22,7 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return GmpBigInteger
 		**/
@@ -29,7 +30,7 @@
 		{
 			return GmpBigInteger::make($number, $base);
 		}
-		
+
 		/**
 		 * @return GmpBigInteger
 		**/
@@ -37,7 +38,7 @@
 		{
 			return GmpBigInteger::makeFromBinary($binary);
 		}
-		
+
 		/**
 		 * @return GmpBigInteger
 		**/
@@ -51,14 +52,13 @@
 			) {
 				$stop = $this->makeNumber($stop->toString());
 			}
-			
+
 			Assert::isTrue($stop instanceof GmpBigInteger);
-			
+
 			$numBytes = ceil(log($stop->floatValue(), 2) / 8);
-			
+
 			return $this->
-				makeFromBinary("\x00".$source->getBytes($numBytes))->
+				makeFromBinary("\x00" . $source->getBytes($numBytes))->
 				mod($stop);
 		}
 	}
-?>

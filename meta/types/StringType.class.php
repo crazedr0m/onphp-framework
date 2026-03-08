@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,7 +19,7 @@
 		{
 			return 'string';
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return StringType
@@ -29,25 +30,26 @@
 				$default,
 				"strange default value given - '{$default}'"
 			);
-			
+
 			$this->default = $default;
-			
+
 			return $this;
 		}
-		
+
 		public function getDeclaration()
 		{
-			if ($this->hasDefault())
+			if ($this->hasDefault()) {
 				return "'{$this->default}'";
-			
+            }
+
 			return 'null';
 		}
-		
+
 		public function isMeasurable()
 		{
 			return true;
 		}
-		
+
 		public function toColumnType($length = null)
 		{
 			return
@@ -56,4 +58,3 @@
 					: 'DataType::create(DataType::TEXT)';
 		}
 	}
-?>

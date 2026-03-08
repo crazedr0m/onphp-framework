@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,10 +16,9 @@
 	final class GoogleChartDataRange
 	{
 		private static $paramName = 'chxr';
-		
+
 		public static function getParamName()
 		{
 			return self::$paramName;
 		}
 	}
-?>

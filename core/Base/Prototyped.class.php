@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -20,4 +21,3 @@
 		**/
 		public static function proto();
 	}
-?>

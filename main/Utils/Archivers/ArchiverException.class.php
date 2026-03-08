@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,5 +13,7 @@
 	/**
 	 * @ingroup Utils
 	**/
-	class ArchiverException extends BaseException {/*_*/}
-?>
+	class ArchiverException extends BaseException
+    {
+/*_*/
+    }

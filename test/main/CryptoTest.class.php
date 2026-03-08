@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -14,37 +15,36 @@
 		public function runDiffieHellmanExchange(
 			BigNumberFactory $factory,
 			RandomSource $source
-		)
-		{
+		) {
 			$parameters = DiffieHellmanParameters::create(
 				$factory->makeNumber(2),
 				$factory->makeNumber(
 					'155172898181473697471232257763715539915724801'
-			        .'966915404479707795314057629378541917580651227423'
-			        .'698188993727816152646631438561595825688188889951'
-			        .'272158842675419950341258706556549803580104870537'
-			        .'681476726513255747040765857479291291572334510643'
-			        .'245094715007229621094194349783925984760375594985'
-			        .'848253359305585439638443'
+			        . '966915404479707795314057629378541917580651227423'
+			        . '698188993727816152646631438561595825688188889951'
+			        . '272158842675419950341258706556549803580104870537'
+			        . '681476726513255747040765857479291291572334510643'
+			        . '245094715007229621094194349783925984760375594985'
+			        . '848253359305585439638443'
 				)
 			);
-			
+
 			$sideA = DiffieHellmanKeyPair::generate($parameters, $source);
 			$sideB = DiffieHellmanKeyPair::generate($parameters, $source);
-			
+
 			$this->assertEquals(
 				$sideA->makeSharedKey($sideB->getPublic())->toString(),
 				$sideB->makeSharedKey($sideA->getPublic())->toString()
 			);
 		}
-		
+
 		public function runDiffieHellmanGeneration(BigNumberFactory $factory)
 		{
 			$parameters = DiffieHellmanParameters::create(
 				$factory->makeNumber(2),
 				$factory->makeNumber(126)
 			);
-			
+
 			$sourceA = new RandomSourceStub("\x02");
 			$pairA = DiffieHellmanKeyPair::generate($parameters, $sourceA);
 			$this->assertEquals(
@@ -55,8 +55,8 @@
 				$pairA->getPrivate()->toString(),
 				'2'
 			);
-			
-			
+
+
 			$sourceB = new RandomSourceStub("\x03");
 			$pairB = DiffieHellmanKeyPair::generate($parameters, $sourceB);
 			$this->assertEquals(
@@ -67,17 +67,17 @@
 				$pairB->getPrivate()->toString(),
 				'3'
 			);
-			
+
 			$this->assertEquals(
 				$pairA->makeSharedKey($pairB->getPublic())->toString(),
 				'64'
 			);
-			
+
 			$this->assertEquals(
 				$pairB->makeSharedKey($pairA->getPublic())->toString(),
 				'64'
 			);
-			
+
 			$bigSource = new RandomSourceStub(
 				$factory->
 					makeNumber(
@@ -104,17 +104,17 @@
 			);
 			$this->assertEquals(
 				$bigPair->makeSharedKey(
-						$factory->makeFromBinary(
-							base64_decode(
-								'ALOlru0GPBCbWulLlZPjRFCVPQDOnmQ+bUaowbHvgA4D1TEDlHA0WgX+HnQuq3KleYWK8jgY0nH/l02gdE93OCMq1Kitat+I8PE1HGVkAQ1J7pfM6f3WISSCa88xm63CLVg4MPTCP+0ONh6A5XUkN+D+LwS4ff9zUoF9GVRRKN6K'
-							)
-						)
-					)->
+                    $factory->makeFromBinary(
+                        base64_decode(
+                            'ALOlru0GPBCbWulLlZPjRFCVPQDOnmQ+bUaowbHvgA4D1TEDlHA0WgX+HnQuq3KleYWK8jgY0nH/l02gdE93OCMq1Kitat+I8PE1HGVkAQ1J7pfM6f3WISSCa88xm63CLVg4MPTCP+0ONh6A5XUkN+D+LwS4ff9zUoF9GVRRKN6K'
+                        )
+                    )
+                )->
 					toString(),
 				'130574307951871152424428936775752636435856388421474727121158044023326117405721624660812283811910707382094169797795608545580344115985070696700827335362669644864287947205210570090276035970957788252377653229959968013235712431298868299742980604595915492149293770517689028200287095518234357514745938567136863374034'
 			);
 		}
-		
+
 		/* void */ public function testGmp()
 		{
 			if (!extension_loaded('gmp')) {
@@ -124,21 +124,22 @@
 					return $this->markTestSkipped('gmp module not available');
 				}
 			}
-			
+
 			$this->runDiffieHellmanGeneration(GmpBigIntegerFactory::me());
-			
+
 			$this->runDiffieHellmanExchange(
 				GmpBigIntegerFactory::me(),
 				MtRandomSource::me()
 			);
-			
-			if (file_exists('/dev/urandom') && is_readable('/dev/urandom'))
+
+			if (file_exists('/dev/urandom') && is_readable('/dev/urandom')) {
 				$this->runDiffieHellmanExchange(
 					GmpBigIntegerFactory::me(),
 					new FileRandomSource('/dev/urandom')
 				);
+            }
 		}
-		
+
 		/**
 		 * @see http://csrc.nist.gov/ipsec/papers/rfc2202-testcases.txt
 		**/
@@ -151,7 +152,7 @@
 					"Hi There"
 				)
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					"Jefe",
@@ -159,7 +160,7 @@
 				),
 				TextUtils::hex2Binary('effcdf6ae5eb2fa2d27416d5f184df9c259a7c79')
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					TextUtils::hex2Binary('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -167,7 +168,7 @@
 				),
 				TextUtils::hex2Binary('125d7342b9ac11cd91a39af48aa17b4f63f175d3')
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					TextUtils::hex2Binary('0102030405060708090a0b0c0d0e0f10111213141516171819'),
@@ -175,7 +176,7 @@
 				),
 				TextUtils::hex2Binary('4c9007f4026250c6bc8414f9bf50c86c2d7235da')
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					TextUtils::hex2Binary('0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c'),
@@ -183,7 +184,7 @@
 				),
 				TextUtils::hex2Binary('4c1a03424b55e07fe7f27be1d58bb9324a9a5a04')
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					TextUtils::hex2Binary('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -191,7 +192,7 @@
 				),
 				TextUtils::hex2Binary('aa4ae5e15272d00e95705637ce8a3b55ed402112')
 			);
-			
+
 			$this->assertEquals(
 				CryptoFunctions::hmacsha1(
 					TextUtils::hex2Binary('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -201,19 +202,18 @@
 			);
 		}
 	}
-	
+
 	class RandomSourceStub implements RandomSource
 	{
 		private $data = null;
-		
+
 		public function __construct($data)
 		{
 			$this->data = $data;
 		}
-		
+
 		public function getBytes($numOfBytes)
 		{
 			return $this->data;
 		}
 	}
-?>

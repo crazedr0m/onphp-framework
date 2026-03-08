@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -16,38 +17,38 @@
 	{
 		private $root		= null;
 		private $path		= null;
-		
-		private $properties	= array();
-		
-		private static $daos	= array();
-		private static $protos	= array(); // zergs suck anyway ;-)
-		
+
+		private $properties	= [];
+
+		private static $daos	= [];
+		private static $protos	= []; // zergs suck anyway ;-)
+
 		public function __construct($root, $path)
 		{
 			Assert::isString($path, 'non-string path given');
-			
-			if (is_object($root))
+
+			if (is_object($root)) {
 				$className = get_class($root);
-			else {
+			} else {
 				Assert::classExists($root);
-				
+
 				$className = $root;
 			}
-			
+
 			$this->root = $className;
 			$this->path = $path;
-			
+
 			$this->fetchHelpers($className);
-			
+
 			$proto = self::$protos[$className];
-			
+
 			$path = explode('.', $path);
-			
+
 			for ($i = 0, $size = count($path); $i < $size; ++$i) {
 				$this->properties[$i]
 					= $property
 					= $proto->getPropertyByName($path[$i]);
-				
+
 				if ($className = $property->getClassName()) {
 					$this->fetchHelpers($className);
 					$proto = self::$protos[$className];
@@ -58,17 +59,17 @@
 				}
 			}
 		}
-		
+
 		public function getPath()
 		{
 			return $this->path;
 		}
-		
+
 		public function getRoot()
 		{
 			return $this->root;
 		}
-		
+
 		/**
 		 * @return AbstractProtoClass
 		**/
@@ -76,7 +77,7 @@
 		{
 			return self::$protos[$this->getFinalProperty()->getClassName()];
 		}
-		
+
 		/**
 		 * @return ProtoDAO
 		**/
@@ -84,7 +85,7 @@
 		{
 			return self::$daos[$this->getFinalProperty()->getClassName()];
 		}
-		
+
 		/**
 		 * @return LightMetaProperty
 		**/
@@ -92,18 +93,19 @@
 		{
 			return end($this->properties);
 		}
-		
+
 		/* void */ private function fetchHelpers($className)
 		{
-			if (isset(self::$protos[$className], self::$daos[$className]))
+			if (isset(self::$protos[$className], self::$daos[$className])) {
 				return /* boo */;
-			
-			self::$protos[$className] = call_user_func(array($className, 'proto'));
+            }
+
+			self::$protos[$className] = call_user_func([$className, 'proto']);
 			self::$daos[$className] =
 				ClassUtils::isInstanceOf($className, 'DAOConnected')
-					? call_user_func(array($className, 'dao'))
+					? call_user_func([$className, 'dao'])
 					: null;
-			
+
 			Assert::isTrue(
 				(self::$protos[$className] instanceof AbstractProtoClass)
 				&& (
@@ -113,4 +115,3 @@
 			);
 		}
 	}
-?>

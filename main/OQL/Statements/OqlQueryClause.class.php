@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -14,37 +15,37 @@
 	**/
 	abstract class OqlQueryClause
 	{
-		protected $parameters = array();
-		
+		protected $parameters = [];
+
 		/**
 		 * @return OqlQueryClause
 		**/
 		public function bind($index, $value)
 		{
 			$this->parameters[$index] = $value;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OqlQueryClause
 		**/
 		public function bindNext($value)
 		{
 			end($this->parameters);
-			
+
 			return $this->bind(key($this->parameters) + 1, $value);
 		}
-		
+
 		/**
 		 * @return OqlQueryClause
 		**/
 		public function bindAll(array $parameters)
 		{
-			if ($parameters)
+			if ($parameters) {
 				$this->parameters = $parameters;
-			
+            }
+
 			return $this;
 		}
 	}
-?>

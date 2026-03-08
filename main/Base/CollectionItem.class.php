@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -9,5 +10,7 @@
  *                                                                         *
  ***************************************************************************/
 
-	class CollectionItem extends IdentifiableObject {/*_*/}
-?>
+	class CollectionItem extends IdentifiableObject
+    {
+/*_*/
+    }

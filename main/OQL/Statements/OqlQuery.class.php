@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008-2009 by Vladlen Y. Koshelev                         *
  *                                                                          *
@@ -15,7 +16,7 @@
 	abstract class OqlQuery extends OqlQueryClause
 	{
 		protected $dao = null;
-		
+
 		/**
 		 * @return ProtoDAO
 		**/
@@ -23,15 +24,14 @@
 		{
 			return $this->dao;
 		}
-		
+
 		/**
 		 * @return OqlQuery
 		**/
 		public function setDao(ProtoDAO $dao)
 		{
 			$this->dao = $dao;
-			
+
 			return $this;
 		}
 	}
-?>

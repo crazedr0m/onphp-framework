@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,7 +19,6 @@
 		public function join($table, LogicalObject $logic, $alias = null);
 		public function leftJoin($table, LogicalObject $logic, $alias = null);
 		public function rightJoin($table, LogicalObject $logic, $alias = null);
-		
+
 		public function hasJoinedTable($table);
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -30,14 +31,16 @@
 		 * @return AMQPChannelInterface
 		**/
 		public function exchangeDeclare(
-			$name, AMQPExchangeConfig $conf
+			$name,
+            AMQPExchangeConfig $conf
 		);
 
 		/**
 		 * @return AMQPChannelInterface
 		**/
 		public function exchangeDelete(
-			$name, $ifUnused = false
+			$name,
+            $ifUnused = false
 		);
 
 		/**
@@ -80,7 +83,9 @@
 		 * @return AMQPChannelInterface
 		**/
 		public function basicPublish(
-			$exchange, $routingKey, AMQPOutgoingMessage $msg
+			$exchange,
+            $routingKey,
+            AMQPOutgoingMessage $msg
 		);
 
 		/**
@@ -108,4 +113,3 @@
 		**/
 		public function basicCancel($consumerTag);
 	}
-?>

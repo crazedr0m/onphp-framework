@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2011 by Evgeny V. Kokovikhin                             *
  *                                                                          *
@@ -16,4 +17,3 @@
 	{
 		protected $className = 'IpRange';
 	}
-?>

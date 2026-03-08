@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -16,17 +17,16 @@
 	{
 		const LINE					= 0x1;
 		const TWO_DIMENSIONAL_PIE	= 0x2;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::LINE					=> 'lc',
 			self::TWO_DIMENSIONAL_PIE	=> 'p'
-		);
-		
+		];
+
 		private $paramName = 'cht';
-		
+
 		public function toString()
 		{
-			return $this->paramName.'='.$this->name;
+			return $this->paramName . '=' . $this->name;
 		}
 	}
-?>

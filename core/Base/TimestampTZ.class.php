@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) by Georgiy T. Kutsurua                                  *
  *                                                                         *
@@ -25,11 +26,10 @@
 		/**
 		 * @return Timestamp
 		**/
-		public function toTimestamp($zone=null)
+		public function toTimestamp($zone = null)
 		{
-			if($zone) {
-
-				if(
+			if ($zone) {
+				if (
 					!($zone instanceof DateTimeZone)
 					&& is_scalar($zone)
 				) {
@@ -54,4 +54,3 @@
 			return parent::compare($left, $right);
 		}
 	}
-?>

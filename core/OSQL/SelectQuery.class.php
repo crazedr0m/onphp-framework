@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -12,54 +13,52 @@
 	/**
 	 * @ingroup OSQL
 	**/
-	final class SelectQuery
-		extends QuerySkeleton
-		implements Named, JoinCapableQuery, Aliased
+	final class SelectQuery extends QuerySkeleton implements Named, JoinCapableQuery, Aliased
 	{
 		private $distinct		= false;
-		
+
 		private $name			= null;
-		
+
 		private $joiner			= null;
-		
+
 		private $limit			= null;
 		private $offset			= null;
-		
-		private $fields			= array();
-		
+
+		private $fields			= [];
+
 		private $order			= null;
-		
-		private $group			= array();
-		
+
+		private $group			= [];
+
 		private $having			= null;
-		
+
 		public function __construct()
 		{
 			$this->joiner = new Joiner();
 			$this->order = new OrderChain();
 		}
-		
+
 		public function __clone()
 		{
 			$this->joiner = clone $this->joiner;
 			$this->order = clone $this->order;
 		}
-		
+
 		public function hasAliasInside($alias)
 		{
 			return isset($this->aliases[$alias]);
 		}
-		
+
 		public function getAlias()
 		{
 			return $this->name;
 		}
-		
+
 		public function getName()
 		{
 			return $this->name;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -67,10 +66,10 @@
 		{
 			$this->name = $name;
 			$this->aliases[$name] = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -79,12 +78,12 @@
 			$this->distinct = true;
 			return $this;
 		}
-		
+
 		public function isDistinct()
 		{
 			return $this->distinct;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -93,12 +92,12 @@
 			$this->distinct = false;
 			return $this;
 		}
-		
+
 		public function hasJoinedTable($table)
 		{
 			return $this->joiner->hasJoinedTable($table);
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -106,10 +105,10 @@
 		{
 			$this->joiner->join(new SQLJoin($table, $logic, $alias));
 			$this->aliases[$alias] = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -117,10 +116,10 @@
 		{
 			$this->joiner->leftJoin(new SQLLeftJoin($table, $logic, $alias));
 			$this->aliases[$alias] = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -128,7 +127,7 @@
 		{
 			$this->joiner->rightJoin(new SQLRightJoin($table, $logic, $alias));
 			$this->aliases[$alias] = true;
-			
+
 			return $this;
 		}
 
@@ -148,143 +147,148 @@
 
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function setOrderChain(OrderChain $chain)
 		{
 			$this->order = $chain;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function orderBy($field, $table = null)
 		{
 			$this->order->add($this->makeOrder($field, $table));
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function prependOrderBy($field, $table = null)
 		{
 			$this->order->prepend($this->makeOrder($field, $table));
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @throws WrongStateException
 		 * @return SelectQuery
 		**/
 		public function desc()
 		{
-			if (!$last = $this->order->getLast())
+			if (!$last = $this->order->getLast()) {
 				throw new WrongStateException('no fields to sort');
-			
+            }
+
 			$last->desc();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @throws WrongStateException
 		 * @return SelectQuery
 		**/
 		public function asc()
 		{
-			if (!$last = $this->order->getLast())
+			if (!$last = $this->order->getLast()) {
 				throw new WrongStateException('no fields to sort');
-			
+            }
+
 			$last->asc();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function groupBy($field, $table = null)
 		{
-			if ($field instanceof DialectString)
+			if ($field instanceof DialectString) {
 				$this->group[] = $field;
-			else
-				$this->group[] =
+			} else {
+$this->group[] =
 					new DBField($field, $this->getLastTable($table));
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function dropGroupBy()
 		{
-			$this->group = array();
+			$this->group = [];
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function having(LogicalObject $exp)
 		{
 			$this->having = $exp;
-			
+
 			return $this;
 		}
-		
+
 		public function getLimit()
 		{
 			return $this->limit;
 		}
-		
+
 		public function getOffset()
 		{
 			return $this->offset;
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return SelectQuery
 		**/
 		public function limit($limit = null, $offset = null)
 		{
-			if ($limit !== null)
+			if ($limit !== null) {
 				Assert::isPositiveInteger($limit, 'invalid limit specified');
-				
-			if ($offset !== null)
+            }
+
+			if ($offset !== null) {
 				Assert::isInteger($offset, 'invalid offset specified');
-			
+            }
+
 			$this->limit = $limit;
 			$this->offset = $offset;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function from($table, $alias = null)
 		{
 			$this->joiner->from(new FromTable($table, $alias));
-			
+
 			$this->aliases[$alias] = true;
-			
+
 			return $this;
 		}
-		
+
 		public function getFirstTable()
 		{
 			return $this->joiner->getFirstTable();
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return SelectQuery
@@ -297,45 +301,47 @@
 					$alias,
 					$this->getLastTable()
 				);
-			
+
 			if ($alias = $this->resolveAliasByField($field, $alias)) {
 				$this->aliases[$alias] = true;
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function multiGet(/* ... */)
 		{
 			$size = func_num_args();
-		
-			if ($size && $args = func_get_args())
-				for ($i = 0; $i < $size; ++$i)
+
+			if ($size && $args = func_get_args()) {
+				for ($i = 0; $i < $size; ++$i) {
 					$this->get($args[$i]);
-		
+                }
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function arrayGet($array, $prefix = null)
 		{
 			$size = count($array);
-			
+
 			if ($prefix) {
 				for ($i = 0; $i < $size; ++$i) {
 					if ($array[$i] instanceof DialectString) {
 						if ($array[$i] instanceof DBField) {
-							$alias = $prefix.$array[$i]->getField();
+							$alias = $prefix . $array[$i]->getField();
 						} else {
 							if ($array[$i] instanceof SQLFunction) {
 								$alias =
 									$array[$i]->setAlias(
-										$prefix.$array[$i]->getName()
+										$prefix . $array[$i]->getName()
 									)->
 									getAlias();
 							} else {
@@ -343,9 +349,9 @@
 							}
 						}
 					} else {
-						$alias = $prefix.$array[$i];
+						$alias = $prefix . $array[$i];
 					}
-					
+
 					$this->get($array[$i], $alias);
 				}
 			} else {
@@ -353,24 +359,24 @@
 					$this->get($array[$i]);
 				}
 			}
-			
+
 			return $this;
 		}
-		
+
 		public function getFieldsCount()
 		{
 			return count($this->fields);
 		}
-		
+
 		public function getTablesCount()
 		{
 			return $this->joiner->getTablesCount();
 		}
-		
+
 		public function getFieldNames()
 		{
-			$nameList = array();
-			
+			$nameList = [];
+
 			foreach ($this->fields as $field) {
 				if ($field instanceof SelectField) {
 					if ($alias = $field->getAlias()) {
@@ -383,64 +389,68 @@
 						}
 					}
 				}
-				
+
 				$nameList[] = $field->getName();
 			}
-			
+
 			return $nameList;
 		}
-		
+
 		public function returning($field, $alias = null)
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
-			$fieldList = array();
-			
-			foreach ($this->fields as $field)
+			$fieldList = [];
+
+			foreach ($this->fields as $field) {
 				$fieldList[] = $this->toDialectStringField($field, $dialect);
-			
+            }
+
 			$query =
-				'SELECT '.($this->distinct ? 'DISTINCT ' : null)
-				.implode(', ', $fieldList)
-				.$this->joiner->toDialectString($dialect);
-				
+				'SELECT ' . ($this->distinct ? 'DISTINCT ' : null)
+				. implode(', ', $fieldList)
+				. $this->joiner->toDialectString($dialect);
+
 			// WHERE
 			$query .= parent::toDialectString($dialect);
-			
+
 			if ($this->group) {
-				$groupList = array();
-				
-				foreach ($this->group as $group)
+				$groupList = [];
+
+				foreach ($this->group as $group) {
 					$groupList[] = $group->toDialectString($dialect);
-				
-				if ($groupList)
-					$query .= ' GROUP BY '.implode(', ', $groupList);
+                }
+
+				if ($groupList) {
+					$query .= ' GROUP BY ' . implode(', ', $groupList);
+                }
 			}
-			
-			if ($this->having)
-				$query .= ' HAVING '.$this->having->toDialectString($dialect);
-			
+
+			if ($this->having) {
+				$query .= ' HAVING ' . $this->having->toDialectString($dialect);
+            }
+
 			if ($this->order->getCount()) {
-				$query .= ' ORDER BY '.$this->order->toDialectString($dialect);
+				$query .= ' ORDER BY ' . $this->order->toDialectString($dialect);
 			}
 
 			$query .= $dialect->toLimitOffsetString($this->limit, $this->offset);
 
 			return $query;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function dropFields()
 		{
-			$this->fields = array();
+			$this->fields = [];
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -449,7 +459,7 @@
 			$this->order = new OrderChain();
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -458,15 +468,16 @@
 			$this->limit = $this->offset = null;
 			return $this;
 		}
-		
+
 		private function getLastTable($table = null)
 		{
-			if (!$table && ($last = $this->joiner->getLastTable()))
+			if (!$table && ($last = $this->joiner->getLastTable())) {
 				return $last;
-			
+            }
+
 			return $table;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -475,13 +486,13 @@
 			if (
 				$field instanceof OrderBy
 				|| $field instanceof DialectString
-			)
+			) {
 				return $field;
-			else
-				return
+			} else {
+return
 					new OrderBy(
 						new DBField($field, $this->getLastTable($table))
 					);
+            }
 		}
 	}
-?>

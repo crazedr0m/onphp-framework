@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -64,7 +65,7 @@
 
 			$val = 0;
 			$arr = array_flip(str_split(self::$chars));
-			for($i = 0; $i < $len; ++$i) {
+			for ($i = 0; $i < $len; ++$i) {
 				$val += $arr[$string[$i]] * pow($magicInt, $len - $i - 1);
 			}
 
@@ -81,4 +82,3 @@
 			);
 		}
 	}
-?>

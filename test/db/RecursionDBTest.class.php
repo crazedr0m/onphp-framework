@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * @group rdb
 	 */
@@ -10,7 +11,7 @@
 		public function testRecursiveContainers()
 		{
 			$this->markTestSkipped('wontfix');
-			
+
 			foreach (DBTestPool::me()->getPool() as $db) {
 				DBPool::me()->setDefault($db);
 				TestObject::dao()->import(
@@ -28,7 +29,7 @@
 				$type = TestType::dao()->getById(1);
 
 				$type->getObjects()->fetch()->setList(
-					array(TestObject::dao()->getById(1))
+					[TestObject::dao()->getById(1)]
 				)->
 				save();
 
@@ -43,12 +44,12 @@
 				$this->assertEquals($list[0], $modifiedObject);
 			}
 		}
-		
+
 		public function testRecursionObjects()
 		{
 			foreach (DBTestPool::me()->getPool() as $db) {
 				DBPool::me()->setDefault($db);
-				
+
 				$parentProperties =
 					Singleton::getInstance('ProtoTestParentObject')->
 					getPropertyList();
@@ -76,4 +77,3 @@
 			}
 		}
 	}
-?>

@@ -1,12 +1,13 @@
 <?php
+
 	/*
 	 *
 	 * Doxygen's helper file
 	 */
-	
+
 	/**
 	 * @mainpage onPHP
-	 * 
+	 *
 	 * For support consider using our <a href="http://onphp.org/contacts.en.html">maling lists</a>.
 	 *
 	 * <hr>
@@ -132,7 +133,7 @@
 	 *
 	 * @defgroup Containers IdentifiableObject collections handlers
 	 * @ingroup DAOs
-	 * 
+	 *
 	 * @defgroup Criteria Object queries API
 	 * @ingroup Main
 	 *
@@ -203,4 +204,3 @@
 	 *
 	 * @defgroup Module Classes implemented in PHP's extension.
 	**/
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2010 by Alexander V. Solomatin                          *
  *                                                                         *
@@ -23,14 +24,14 @@
 		const PARAM_LASTNAME	= 'lastname';
 		const PARAM_COUNTRY		= 'country';
 		const PARAM_LANGUAGE	= 'language';
-		
-		private $params			= array();
+
+		private $params			= [];
 		private $country		= null;
 		private $email			= null;
 		private $firstname		= null;
 		private $lastname		= null;
 		private $language		= null;
-		
+
 		/**
 		 * @return OpenIdExtensionAttributeExchange
 		**/
@@ -38,7 +39,7 @@
 		{
 			return new self();
 		}
-		
+
 		/**
 		 * @param Model $model
 		**/
@@ -47,7 +48,7 @@
 			$model->
 				set('openid.ns.ax', self::NAMESPACE_1_0)->
 				set('openid.ax.mode', 'fetch_request')->
-				set( 'openid.ax.required', implode(',', $this->params))->
+				set('openid.ax.required', implode(',', $this->params))->
 				set(
 					'openid.ax.type.country',
 					'http://axschema.org/contact/country/home'
@@ -69,7 +70,7 @@
 					'http://axschema.org/pref/language'
 				);
 		}
-		
+
 		/**
 		 * @param HttpRequest $request
 		 * @param array $params
@@ -79,69 +80,68 @@
 			if (!($prefix = $this->getPrefix($params))) {
 				return;
 			}
-			
+
 			foreach ($this->params as $param) {
 				$this->$param = null;
-				if (isset($params[$prefix.$param])) {
-					$this->$param = $params[$prefix.$param];
+				if (isset($params[$prefix . $param])) {
+					$this->$param = $params[$prefix . $param];
 				}
 			}
 		}
-		
+
 		/**
 		 * @return OpenIdExtensionAttributeExchange
 		**/
 		public function addParam($paramName)
 		{
-			$this->params []= $paramName;
-			
+			$this->params [] = $paramName;
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OpenIdExtensionAttributeExchange
 		**/
 		public function dropParams()
 		{
-			$this->params = array();
-			
+			$this->params = [];
+
 			return $this;
 		}
-		
+
 		public function getPrefix(array $params)
 		{
 			foreach ($params as $paramName => $val) {
 				if ($val == self::NAMESPACE_1_0) {
-					return 'openid.'.str_replace('openid.ns_', '', $paramName).'_value_';
+					return 'openid.' . str_replace('openid.ns_', '', $paramName) . '_value_';
 				}
 			}
-			
+
 			return null;
 		}
-		
+
 		public function getCountry()
 		{
 			return $this->country;
 		}
-		
+
 		public function getEmail()
 		{
 			return $this->email;
 		}
-		
+
 		public function getFirstname()
 		{
 			return $this->firstname;
 		}
-		
+
 		public function getLastname()
 		{
 			return $this->lastname;
 		}
-		
+
 		public function getLanguage()
 		{
 			return $this->language;
 		}
 	}
-?>

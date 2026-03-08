@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -12,5 +13,6 @@
 	/**
 	 * @ingroup OpenId
 	**/
-	class OpenIdException extends BaseException {}
-?>
+	class OpenIdException extends BaseException
+    {
+    }

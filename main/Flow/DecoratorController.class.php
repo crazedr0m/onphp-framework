@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,12 +16,12 @@
 	abstract class DecoratorController implements Controller
 	{
 		protected $inner = null;
-		
+
 		public function __construct(Controller $inner)
 		{
 			$this->inner = $inner;
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -29,4 +30,3 @@
 			return $this->inner->handleRequest($request);
 		}
 	}
-?>

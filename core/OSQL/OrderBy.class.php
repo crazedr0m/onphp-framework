@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -17,7 +18,7 @@
 	{
 		private $direction	= null;
 		private $nulls		= null;
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -25,21 +26,21 @@
 		{
 			return new self($field);
 		}
-		
+
 		public function __construct($field)
 		{
 			parent::__construct($field);
-			
+
 			$this->direction = new Ternary(null);
 			$this->nulls = new Ternary(null);
 		}
-		
+
 		public function __clone()
 		{
 			$this->direction = clone $this->direction;
 			$this->nulls = clone $this->nulls;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -48,7 +49,7 @@
 			$this->direction->setValue($direction);
 			return $this;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -57,7 +58,7 @@
 			$this->direction->setFalse();
 			return $this;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -66,12 +67,12 @@
 			$this->direction->setTrue();
 			return $this;
 		}
-		
+
 		public function isAsc()
 		{
 			return $this->direction->decide(true, false, true);
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -80,7 +81,7 @@
 			$this->nulls->setTrue();
 			return $this;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -89,12 +90,12 @@
 			$this->nulls->setFalse();
 			return $this;
 		}
-		
+
 		public function isNullsFirst()
 		{
 			return $this->nulls->decide(true, false, true);
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -103,7 +104,7 @@
 			$this->nulls->setValue($nullsFirst);
 			return $this;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -114,46 +115,49 @@
 					? $this->desc()
 					: $this->asc();
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
 			$order = self::create($dao->guessAtom($this->field, $query));
-			
-			if (!$this->nulls->isNull())
+
+			if (!$this->nulls->isNull()) {
 				$order->setNullsFirst($this->nulls->getValue());
-			
-			if (!$this->direction->isNull())
+            }
+
+			if (!$this->direction->isNull()) {
 				$order->setDirection($this->direction->getValue());
-			
+            }
+
 			return $order;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			if (
 				$this->field instanceof SelectQuery
 				|| $this->field instanceof LogicalObject
-			)
-				$result = '('.$dialect->fieldToString($this->field).')';
-			else
-				$result = parent::toDialectString($dialect);
-			
+			) {
+				$result = '(' . $dialect->fieldToString($this->field) . ')';
+			} else {
+$result = parent::toDialectString($dialect);
+            }
+
 			$result .=
 				$this->direction->decide(' ASC', ' DESC')
-				.$this->nulls->decide(' NULLS FIRST', ' NULLS LAST');
-			
+				. $this->nulls->decide(' NULLS FIRST', ' NULLS LAST');
+
 			return $result;
 		}
-		
+
 		public function getFieldName()
 		{
-			if ($this->field instanceof DBField)
+			if ($this->field instanceof DBField) {
 				return $this->field->getField();
-			else
-				return $this->field;
+			} else {
+return $this->field;
+            }
 		}
 	}
-?>

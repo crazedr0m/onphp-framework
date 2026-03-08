@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,43 +13,44 @@
 	final class DTOGetter extends PrototypedGetter
 	{
 		private $soapDto	= true;
-		
+
 		public function __construct(EntityProto $proto, $object)
 		{
 			Assert::isInstance($object, 'DTOClass');
-			
+
 			return parent::__construct($proto, $object);
 		}
-		
+
 		/**
 		 * @return DTOGetter
 		**/
 		public function setSoapDto($soapDto)
 		{
 			$this->soapDto = ($soapDto === true);
-			
+
 			return $this;
 		}
-		
+
 		// FIXME: isSoapDto()
 		public function getSoapDto()
 		{
 			return $this->soapDto;
 		}
-		
+
 		public function get($name)
 		{
-			if (!isset($this->mapping[$name]))
+			if (!isset($this->mapping[$name])) {
 				throw new WrongArgumentException(
 					"knows nothing about property '{$name}'"
 				);
-			
+            }
+
 			$primitive = $this->mapping[$name];
-			
-			$method = 'get'.ucfirst($primitive->getName());
-			
+
+			$method = 'get' . ucfirst($primitive->getName());
+
 			$result = $this->object->$method();
-			
+
 			// TODO: primitives refactoring
 			if (
 				$result !== null
@@ -61,10 +63,9 @@
 					|| ($primitive instanceof PrimitiveArray)
 				)
 			) {
-				$result = array($result);
+				$result = [$result];
 			}
-			
+
 			return $result;
 		}
 	}
-?>

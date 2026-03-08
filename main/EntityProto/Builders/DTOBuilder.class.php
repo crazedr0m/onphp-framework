@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,9 +14,8 @@
 	{
 		protected function createEmpty()
 		{
-			$className = $this->proto->className().'DTO';
-			
-			return new $className;
+			$className = $this->proto->className() . 'DTO';
+
+			return new $className();
 		}
 	}
-?>

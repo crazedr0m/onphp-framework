@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,42 +16,42 @@
 	final class GoogleChartLabelStyle extends BaseGoogleChartStyle
 	{
 		protected $name = 'chm';
-		
+
 		/**
 		 * @return GoogleChartLabelStyle
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleChartLineStyle
 		**/
 		public function addStyle($style)
 		{
 			Assert::isInstance($style, 'ChartLabelStyle');
-			
+
 			return parent::addStyle($style);
 		}
-		
+
 		public function hasStyles()
 		{
 			return !empty($this->styles);
 		}
-		
+
 		public function toString()
 		{
 			$queryString = "{$this->name}=";
-			
+
 			Assert::isNotEmptyArray($this->styles);
-			
+
 			$i = 0;
-			
-			foreach ($this->styles as $style)
-				$queryString .= $style->toString().'|';
-			
+
+			foreach ($this->styles as $style) {
+				$queryString .= $style->toString() . '|';
+            }
+
 			return rtrim($queryString, '|');
 		}
 	}
-?>

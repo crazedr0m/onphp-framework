@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -16,11 +17,12 @@
 	{
 		public static function build(MetaClass $class)
 		{
-			if (!$class->hasBuildableParent())
+			if (!$class->hasBuildableParent()) {
 				return DictionaryDaoBuilder::build($class);
-			else
-				$parent = $class->getParent();
-			
+			} else {
+$parent = $class->getParent();
+            }
+
 			$ns = $class->getNameSpace();
 			$out = self::getHead();
 
@@ -31,30 +33,29 @@ namespace {$ns->buildFullName('dao', true)};
 EOT;
 			}
 
-			$className = $ns ? $class->getName().'DAO' : 'Auto'.$class->getName().'DAO';
-			
+			$className = $ns ? $class->getName() . 'DAO' : 'Auto' . $class->getName() . 'DAO';
+
 			if (
 				$class->getParent()->getPattern()
 					instanceof InternalClassPattern
 			) {
-				$parentName = ($ns ? '\\': '').'StorableDAO';
+				$parentName = ($ns ? '\\' : '') . 'StorableDAO';
 			} else {
 				if ($parent->getNameSpace()) {
-					$parentName = $parent->getNameSpace()->buildFullName('dao', true).'\\'.$parent->getName().'DAO';
+					$parentName = $parent->getNameSpace()->buildFullName('dao', true) . '\\' . $parent->getName() . 'DAO';
 				} else {
-					$parentName = ($ns ? '\\': '').$parent->getName().'DAO';
+					$parentName = ($ns ? '\\' : '') . $parent->getName() . 'DAO';
 				}
 			}
-			
+
 			$out .= <<<EOT
 abstract class {$className} extends {$parentName}
 {
 
 EOT;
-			
-			$out .= self::buildPointers($class)."\n}\n";
-			
-			return $out.self::getHeel();
+
+			$out .= self::buildPointers($class) . "\n}\n";
+
+			return $out . self::getHeel();
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,9 +16,9 @@
 	final class GoogleChartTitle extends BaseGoogleChartParameter
 	{
 		protected static $paramName = 'chtt';
-		
+
 		private $title = null;
-		
+
 		/**
 		 * @return GoogleChartTitle
 		**/
@@ -25,15 +26,14 @@
 		{
 			return new self($title);
 		}
-		
+
 		public function __construct($title)
 		{
 			$this->title = $title;
 		}
-		
+
 		public function toString()
 		{
-			return 'chtt='.$this->title;
+			return 'chtt=' . $this->title;
 		}
 	}
-?>

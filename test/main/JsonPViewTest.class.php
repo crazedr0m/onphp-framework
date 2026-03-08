@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -11,40 +12,42 @@
 
 	final class JsonPViewTest extends TestCase
 	{
-		protected $array = array('<foo>',"'bar'",'"baz"','&blong&');
+		protected $array = ['<foo>',"'bar'",'"baz"','&blong&'];
 
 
 		public function testMain()
 		{
 			$model = Model::create()->set('array', $this->array);
-			$data = array('array' => $this->array);
+			$data = ['array' => $this->array];
 			$callback = 'myFunc';
 
 			//setup
 			$view = JsonPView::create();
 
-			try{
+			try {
 				// empty js callback function name
 				$view->toString($model);
 
 				$this->fail('empty callback javascript function name expected!');
-			} catch(WrongArgumentException $e) {}
+			} catch (WrongArgumentException $e) {
+            }
 
-			try{
+			try {
 				$view->setCallback('34_callback'); // invalid javascript function name
 
 				$this->fail('invalid javascript function name expected!');
-			} catch(WrongArgumentException $e) {}
+			} catch (WrongArgumentException $e) {
+            }
 
 			$view->setCallback($callback);
 
-			$this->assertEquals($this->makeString($callback, $data), $view->toString($model) );
+			$this->assertEquals($this->makeString($callback, $data), $view->toString($model));
 
 			$simpleStringableObject = SimpleStringableObject::create()->setString($callback);
 
 			$view->setCallback($simpleStringableObject);
 
-			$this->assertEquals($this->makeString($callback, $data), $view->toString($model) );
+			$this->assertEquals($this->makeString($callback, $data), $view->toString($model));
 		}
 
 		/**
@@ -54,12 +57,11 @@
 		 */
 		protected function makeString($callback, $data)
 		{
-			return $callback.'('.json_encode(
-					$data
-				).');';
+			return $callback . '(' . json_encode(
+                $data
+            ) . ');';
 		}
-
-	}
+    }
 
 	class SimpleStringableObject implements Stringable
 	{
@@ -101,4 +103,3 @@
 			return $this->string;
 		}
 	}
-?>

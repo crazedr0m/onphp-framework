@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,21 +12,21 @@
 
 	/**
 	 * Chained Filtrator.
-	 * 
+	 *
 	 * @ingroup Form
 	**/
 	final class FilterChain implements Filtrator
 	{
-		private $chain = array();
+		private $chain = [];
 
 		/**
 		 * @return FilterChain
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return FilterChain
 		**/
@@ -40,16 +41,16 @@
 		**/
 		public function dropAll()
 		{
-			$this->chain = array();
+			$this->chain = [];
 			return $this;
 		}
 
 		public function apply($value)
 		{
-			foreach ($this->chain as $filter)
+			foreach ($this->chain as $filter) {
 				$value = $filter->apply($value);
+            }
 
 			return $value;
 		}
 	}
-?>

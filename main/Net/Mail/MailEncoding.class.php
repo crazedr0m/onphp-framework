@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,14 +19,14 @@
 		const EIGHT_BITS		= 0x02;
 		const BASE64			= 0x03;
 		const QUOTED			= 0x04;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::SEVEN_BITS	=> '7bit',
 			self::EIGHT_BITS	=> '8bit',
 			self::BASE64		=> 'base64',
 			self::QUOTED		=> 'quoted-printable'
-		);
-		
+		];
+
 		/**
 		 * @return MailEncoding
 		**/
@@ -33,7 +34,7 @@
 		{
 			return new self(self::SEVEN_BITS);
 		}
-		
+
 		/**
 		 * @return MailEncoding
 		**/
@@ -41,7 +42,7 @@
 		{
 			return new self(self::EIGHT_BITS);
 		}
-		
+
 		/**
 		 * @return MailEncoding
 		**/
@@ -49,7 +50,7 @@
 		{
 			return new self(self::BASE64);
 		}
-		
+
 		/**
 		 * @return MailEncoding
 		**/
@@ -58,4 +59,3 @@
 			return new self(self::QUOTED);
 		}
 	}
-?>

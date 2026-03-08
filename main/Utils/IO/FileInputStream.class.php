@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2009 by Ivan Y. Khvostishkov                       *
  *                                                                         *
@@ -15,17 +16,17 @@
 	final class FileInputStream extends InputStream
 	{
 		private $fd		= null;
-		
+
 		private $mark	= null;
-		
+
 		public function __construct($nameOrFd)
 		{
 			if (is_resource($nameOrFd)) {
-				if (get_resource_type($nameOrFd) !== 'stream')
+				if (get_resource_type($nameOrFd) !== 'stream') {
 					throw new IOException('not a file resource');
-				
+                }
+
 				$this->fd = $nameOrFd;
-				
 			} else {
 				try {
 					$this->fd = fopen($nameOrFd, 'rb');
@@ -34,7 +35,7 @@
 				}
 			}
 		}
-		
+
 		public function __destruct()
 		{
 			try {
@@ -43,7 +44,7 @@
 				// boo.
 			}
 		}
-		
+
 		/**
 		 * @return FileInputStream
 		**/
@@ -51,32 +52,32 @@
 		{
 			return new self($nameOrFd);
 		}
-		
+
 		public function isEof()
 		{
 			return feof($this->fd);
 		}
-		
+
 		/**
 		 * @return FileInputStream
 		**/
 		public function mark()
 		{
 			$this->mark = $this->getOffset();
-			
+
 			return $this;
 		}
-		
+
 		public function getOffset()
 		{
 			return ftell($this->fd);
 		}
-		
+
 		public function markSupported()
 		{
 			return true;
 		}
-		
+
 		/**
 		 * @return FileInputStream
 		**/
@@ -84,28 +85,30 @@
 		{
 			return $this->seek($this->mark);
 		}
-		
+
 		/**
 		 * @return FileInputStream
 		**/
 		public function seek($offset)
 		{
-			if (fseek($this->fd, $offset) < 0)
+			if (fseek($this->fd, $offset) < 0) {
 				throw new IOException(
 					'mark has been invalidated'
 				);
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FileInputStream
 		**/
 		public function close()
 		{
-			if (!fclose($this->fd))
+			if (!fclose($this->fd)) {
 				throw new IOException('failed to close the file');
-			
+            }
+
 			return $this;
 		}
 
@@ -129,16 +132,18 @@
 				)
 				: fread($this->fd, $length);
 
-			if ($string && $result === false && feof($this->fd))
+			if ($string && $result === false && feof($this->fd)) {
 				$result = null; // fgets returns false on eof
+            }
 
-			if ($result === false)
+			if ($result === false) {
 				throw new IOException('failed to read from file');
+            }
 
-			if ($result === '')
+			if ($result === '') {
 				$result = null; // eof
+            }
 
 			return $result;
 		}
 	}
-?>

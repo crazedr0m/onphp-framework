@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see RegulatedPrimitive::addImportFilter()
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class NormalizeUrlFilter implements Filtrator
@@ -21,10 +22,10 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
-		
+
+
 		public function apply($value)
 		{
 			$url =
@@ -32,8 +33,7 @@
 				parse($value)->
 				ensureAbsolute()->
 				normalize();
-			
+
 			return $url->toString();
 		}
 	}
-?>

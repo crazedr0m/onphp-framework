@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -17,4 +18,3 @@
 		public function makeChannel(SimpleXMLElement $xmlFeed);
 		public function toXml(FeedChannel $channel, $itemsXml);
 	}
-?>

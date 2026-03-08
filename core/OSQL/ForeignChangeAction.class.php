@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -19,15 +20,15 @@
 		const CASCADE		= 0x03;
 		const SET_NULL		= 0x04;
 		const SET_DEFAULT	= 0x05;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::NO_ACTION		=> 'NO ACTION', // default one
 			self::RESTRICT		=> 'RESTRICT',
 			self::CASCADE		=> 'CASCADE',
 			self::SET_NULL		=> 'SET NULL',
 			self::SET_DEFAULT	=> 'SET DEFAULT'
-		);
-		
+		];
+
 		/**
 		 * @return ForeignChangeAction
 		**/
@@ -35,7 +36,7 @@
 		{
 			return new self(self::NO_ACTION);
 		}
-		
+
 		/**
 		 * @return ForeignChangeAction
 		**/
@@ -43,7 +44,7 @@
 		{
 			return new self(self::RESTRICT);
 		}
-		
+
 		/**
 		 * @return ForeignChangeAction
 		**/
@@ -51,7 +52,7 @@
 		{
 			return new self(self::CASCADE);
 		}
-		
+
 		/**
 		 * @return ForeignChangeAction
 		**/
@@ -59,7 +60,7 @@
 		{
 			return new self(self::SET_NULL);
 		}
-		
+
 		/**
 		 * @return ForeignChangeAction
 		**/
@@ -68,4 +69,3 @@
 			return new self(self::SET_DEFAULT);
 		}
 	}
-?>

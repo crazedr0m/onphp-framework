@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -17,24 +18,24 @@
 		protected $axesCollection 	= null;
 		protected $style 			= null;
 		protected $labelStyle 		= null;
-		
+
 		/**
 		 * @return GoogleLineChart
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			parent::__construct();
-			
+
 			$this->type =
 				new GoogleChartType(GoogleChartType::LINE);
-			
+
 			$this->color = GoogleChartColor::create();
-			
+
 			$this->legend =
 				GoogleChartLegend::create()->
 				setPosition(
@@ -42,19 +43,19 @@
 						GoogleChartLegendPositionType::BOTTOM
 					)
 				);
-			
+
 			$this->data =
 				GoogleChartData::create()->
 				setEncoding(GoogleChartDataTextEncoding::create())->
 				setDataScaling();
-			
+
 			$this->axesCollection = GoogleChartAxisCollection::create();
-			
+
 			$this->style = GoogleChartLineStyle::create();
-			
+
 			$this->labelStyle = GoogleChartLabelStyle::create();
 		}
-		
+
 		/**
 		 * @return GoogleLineChart
 		**/
@@ -63,51 +64,54 @@
 			$this->color->addColor($line->getColor());
 			$this->legend->addItem($line->getTitle());
 			$this->data->addDataSet($line->getValue());
-			
-			if ($style = $line->getStyle())
+
+			if ($style = $line->getStyle()) {
 				$this->style->addStyle($style);
-			
-			if ($labelStyle = $line->getLabelStyle())
+            }
+
+			if ($labelStyle = $line->getLabelStyle()) {
 				$this->labelStyle->addStyle(
 					$labelStyle->setDataSetIndex($this->data->getCount() - 1)
 				);
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleLineChart
 		**/
 		public function setLegendPosition(GoogleChartLegendPositionType $type)
 		{
 			$this->legend->setPosition($type);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleLineChart
 		**/
 		public function addAxis(GoogleChartAxis $axis)
 		{
 			$this->axesCollection->addAxis($axis);
-			
+
 			return $this;
 		}
-		
+
 		public function toString()
 		{
 			$string = parent::toString();
-			
-			$string .= '&'.$this->axesCollection->toString();
-			
-			if ($this->style->hasStyles())
-				$string .= '&'.$this->style->toString();
-			
-			if ($this->labelStyle->hasStyles())
-				$string .= '&'.$this->labelStyle->toString();
-			
+
+			$string .= '&' . $this->axesCollection->toString();
+
+			if ($this->style->hasStyles()) {
+				$string .= '&' . $this->style->toString();
+            }
+
+			if ($this->labelStyle->hasStyles()) {
+				$string .= '&' . $this->labelStyle->toString();
+            }
+
 			return $string;
 		}
 	}
-?>

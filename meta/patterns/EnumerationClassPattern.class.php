@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,12 +19,12 @@
 		{
 			return false;
 		}
-		
+
 		public function tableExists()
 		{
 			return false;
 		}
-		
+
 		/**
 		 * @return EnumerationClassPattern
 		**/
@@ -31,18 +32,18 @@
 		{
 			$ns = $class->getNameSpace();
 			$userFile = $ns ? $ns->buildFilePath('business') : ONPHP_META_BUSINESS_DIR
-				.$class->getName().EXT_CLASS;
-			
+				. $class->getName() . EXT_CLASS;
+
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
 				|| !file_exists($userFile)
-			)
+			) {
 				$this->dumpFile(
 					$userFile,
 					Format::indentize(EnumerationClassBuilder::build($class))
 				);
-			
+            }
+
 			return $this;
 		}
 	}
-?>

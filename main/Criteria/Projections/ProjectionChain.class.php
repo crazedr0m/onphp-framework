@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -14,8 +15,8 @@
 	**/
 	final class ProjectionChain implements ObjectProjection
 	{
-		private $list = array();
-		
+		private $list = [];
+
 		public function getList()
 		{
 			return $this->list;
@@ -28,52 +29,54 @@
 		{
 			if ($name) {
 				Assert::isFalse(isset($this->list[$name]));
-				
+
 				$this->list[$name] = $projection;
 			} else {
 				$this->list[] = $projection;
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return JoinCapableQuery
 		**/
 		public function process(Criteria $criteria, JoinCapableQuery $query)
 		{
-			foreach ($this->list as $projection)
+			foreach ($this->list as $projection) {
 				$projection->process($criteria, $query);
-			
+            }
+
 			return $query;
 		}
-		
+
 		public function isEmpty()
 		{
 			return count($this->list) == 0;
 		}
-		
+
 		/**
 		 * @return ProjectionChain
 		**/
 		public function dropByType(/* array */ $dropTypes)
 		{
-			$newList = array();
-			
-			if (!is_array($dropTypes))
-				$dropTypes = array($dropTypes);
-			
+			$newList = [];
+
+			if (!is_array($dropTypes)) {
+				$dropTypes = [$dropTypes];
+            }
+
 			foreach ($this->list as $name => &$projection) {
 				$class = get_class($projection);
-				
-				if (!in_array($class, $dropTypes))
+
+				if (!in_array($class, $dropTypes)) {
 					$newList[$name] = $projection;
+                }
 			}
-			
+
 			// swap
 			$this->list = $newList;
-			
+
 			return $this;
 		}
 	}
-?>

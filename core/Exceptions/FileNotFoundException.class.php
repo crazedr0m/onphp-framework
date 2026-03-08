@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 Denis M. Gabaidulin                           *
  *                                                                         *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class FileNotFoundException extends IOException {/*_*/}
-?>
+	class FileNotFoundException extends IOException
+    {
+/*_*/
+    }

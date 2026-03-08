@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -12,9 +13,7 @@
 	/**
 	 * @ingroup Patterns
 	**/
-	final class InternalClassPattern
-		extends BasePattern
-		implements GenerationPattern
+	final class InternalClassPattern extends BasePattern implements GenerationPattern
 	{
 		/**
 		 * @return InternalClassPattern
@@ -23,15 +22,14 @@
 		{
 			return $this;
 		}
-		
+
 		public function tableExists()
 		{
 			return false;
 		}
-		
+
 		public function daoExists()
 		{
 			return true;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Evgeniya Tekalin                                *
  *                                                                         *
@@ -17,7 +18,7 @@ final class AMQPPeclIncomingMessageAdapter extends StaticFactory
 	 */
 	public static function convert(AMQPEnvelope $incoming)
 	{
-		$data = array(
+		$data = [
 			AMQPIncomingMessage::APP_ID => $incoming->getAppId(),
 			AMQPIncomingMessage::BODY => $incoming->getBody(),
 			AMQPIncomingMessage::CONTENT_ENCODING => $incoming->getContentEncoding(),
@@ -39,11 +40,8 @@ final class AMQPPeclIncomingMessageAdapter extends StaticFactory
 			AMQPIncomingMessage::TIMESTAMP => $incoming->getTimeStamp(),
 			AMQPIncomingMessage::TYPE => $incoming->getType(),
 			AMQPIncomingMessage::USER_ID => $incoming->getUserId()
-		);
+		];
 
 		return AMQPIncomingMessage::spawn($data);
 	}
-
 }
-
-?>

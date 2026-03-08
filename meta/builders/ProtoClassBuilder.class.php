@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -24,25 +25,25 @@
 			$parentName = "AutoProto{$class->getName()}";
 			if ($ns) {
 				$className = $class->getName();
-				$parentName = $ns->buildFullName('proto', true).'\\'.$className;
+				$parentName = $ns->buildFullName('proto', true) . '\\' . $className;
 				$out .= <<<EOT
 namespace {$ns->buildFullName('proto', false)};
 
 EOT;
 			}
 
-			if ($type = $class->getType())
-				$typeName = $type->toString().' ';
-			else
-				$typeName = null;
+			if ($type = $class->getType()) {
+				$typeName = $type->toString() . ' ';
+			} else {
+$typeName = null;
+            }
 
 
 			$out .= <<<EOT
 {$typeName}class {$className} extends {$parentName} {/*_*/}
 
 EOT;
-			
-			return $out.self::getHeel();
+
+			return $out . self::getHeel();
 		}
 	}
-?>

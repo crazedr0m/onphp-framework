@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -19,15 +20,15 @@
 		private $dataSetIndex	= null;
 		private $size 			= null;
 		private $dataPoint		= null;
-		
+
 		/**
 		 * @return ChartLabelStyle
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			$this->color 		= Color::create('000000');
@@ -35,17 +36,17 @@
 			$this->size			= 10;
 			$this->dataPoint	= -1;
 		}
-		
+
 		/**
 		 * @return ChartLabelStyle
 		**/
 		public function setType(BaseGoogleChartLabelStyleType $type)
 		{
 			$this->type = $type;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return BaseGoogleChartLabelStyleType
 		**/
@@ -53,17 +54,17 @@
 		{
 			return $this->type;
 		}
-		
+
 		/**
 		 * @return ChartLabelStyle
 		**/
 		public function setColor(Color $color)
 		{
 			$this->color = $color;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Color
 		**/
@@ -71,58 +72,57 @@
 		{
 			return $this->color;
 		}
-		
+
 		public function setDataSetIndex($index)
 		{
 			Assert::isInteger($index);
-			
+
 			$this->dataSetIndex = $index;
-			
+
 			return $this;
 		}
-		
+
 		public function getDataSetIndex()
 		{
 			return $this->dataSetIndex;
 		}
-		
+
 		public function setSize($size)
 		{
 			Assert::isPositiveInteger($size);
-			
+
 			$this->size = $size;
-			
+
 			return $this;
 		}
-		
+
 		public function getSize()
 		{
 			return $this->size;
 		}
-		
+
 		public function setDataPoint($value)
 		{
 			$this->dataPoint = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function getDataPoint()
 		{
 			return $this->dataPoint;
 		}
-		
+
 		public function toString()
 		{
 			Assert::isNotNull($this->dataSetIndex);
 			Assert::isNotNull($this->size);
-			
+
 			return
 				$this->type->toString()
-				.','.$this->color->toString()
-				.','.$this->dataSetIndex
-				.','.$this->dataPoint
-				.','.$this->size;
+				. ',' . $this->color->toString()
+				. ',' . $this->dataSetIndex
+				. ',' . $this->dataPoint
+				. ',' . $this->size;
 		}
 	}
-?>

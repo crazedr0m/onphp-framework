@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -27,15 +28,15 @@ EOT;
 			}
 
 			$parent = $class->getParent();
-			
+
 			if ($class->hasBuildableParent()) {
 				if ($parent->getNameSpace()) {
-					$parentName = $parent->getNameSpace()->buildFullName('proto').'\\'.$parent->getName();
+					$parentName = $parent->getNameSpace()->buildFullName('proto') . '\\' . $parent->getName();
 				} else {
-					$parentName = ($ns ? '\\': '').'Proto'.$parent->getName();
+					$parentName = ($ns ? '\\' : '') . 'Proto' . $parent->getName();
 				}
 			} else {
-				$parentName = ($ns ? '\\': '').'AbstractProtoClass';
+				$parentName = ($ns ? '\\' : '') . 'AbstractProtoClass';
 			}
 
 			$className = $ns ? $class->getName() : "AutoProto{$class->getName()}";
@@ -44,7 +45,7 @@ abstract class {$className} extends {$parentName}
 {
 EOT;
 			$classDump = self::dumpMetaClass($class);
-			
+
 			$out .= <<<EOT
 
 {$classDump}
@@ -52,13 +53,13 @@ EOT;
 
 EOT;
 
-			return $out.self::getHeel();
+			return $out . self::getHeel();
 		}
-		
+
 		private static function dumpMetaClass(MetaClass $class)
 		{
 			$propertyList = $class->getWithInternalProperties();
-			
+
 			$out = <<<EOT
 	protected function makePropertyList()
 	{
@@ -83,21 +84,21 @@ EOT;
 
 EOT;
 			}
-			
+
 			$list = [];
-			
+
 			foreach ($propertyList as $property) {
 				$list[] =
 					"'{$property->getName()}' => "
-					.$property->toLightProperty($class)->toString();
+					. $property->toLightProperty($class)->toString();
 			}
-			
+
 			$out .= implode(",\n", $list);
-			
+
 			if ($class->hasBuildableParent()) {
 				$out .= "\n)";
 			}
-			
+
 			$out .= <<<EOT
 
 		);
@@ -106,4 +107,3 @@ EOT;
 			return $out;
 		}
 	}
-?>

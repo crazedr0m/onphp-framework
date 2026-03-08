@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -16,4 +17,3 @@
 	{
 		public function encode(GoogleChartDataSet $set);
 	}
-?>

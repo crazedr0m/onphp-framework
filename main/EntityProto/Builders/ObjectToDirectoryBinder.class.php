@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -18,7 +19,7 @@
 		{
 			return new self($proto);
 		}
-		
+
 		public function make($object, $recursive = true)
 		{
 			$this->checkDirectory();
@@ -34,10 +35,11 @@
 			if (is_link($this->directory)) {
 				$realDirectory = readlink($this->directory);
 
-				if ($realDirectory === false)
+				if ($realDirectory === false) {
 					throw new WrongStateException(
-						'invalid pointer: '.$this->directory
+						'invalid pointer: ' . $this->directory
 					);
+                }
 			}
 
 			$reversePath = $this->identityMap->reverseLookup($object);
@@ -48,8 +50,8 @@
 			) {
 				throw new WrongStateException(
 					'you must always store your object somewhere '
-					.'before you going to update pointer '
-					.$this->directory
+					. 'before you going to update pointer '
+					. $this->directory
 				);
 			}
 
@@ -61,10 +63,10 @@
 			) {
 				throw new WrongStateException(
 					'you should relocate object '
-					.$this->directory.' to '
-					.$reversePath
-					.' by yourself.'
-					.' cannot replace object with a link'
+					. $this->directory . ' to '
+					. $reversePath
+					. ' by yourself.'
+					. ' cannot replace object with a link'
 				);
 			}
 
@@ -83,10 +85,11 @@
 
 					$status = symlink($reversePath, $this->directory);
 
-					if ($status !== true)
+					if ($status !== true) {
 						throw new WrongStateException(
 							'error creating symlink'
 						);
+                    }
 				}
 
 				return $reversePath;
@@ -116,7 +119,7 @@
 		{
 			return new ObjectGetter($this->proto, $object);
 		}
-		
+
 		/**
 		 * @return FormSetter
 		**/
@@ -125,4 +128,3 @@
 			return new DirectorySetter($this->proto, $object);
 		}
 	}
-?>

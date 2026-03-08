@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -15,40 +16,40 @@
 	final class HttpRequest
 	{
 		// contains all variables from $_GET
-		private $get 		= array();
-		
+		private $get 		= [];
+
 		// from $_POST
-		private $post		= array();
-		
+		private $post		= [];
+
 		// guess what
-		private $server		= array();
-		
+		private $server		= [];
+
 		// fortune one
-		private $cookie		= array();
-		
+		private $cookie		= [];
+
 		// reference, not copy
-		private $session	= array();
-		
+		private $session	= [];
+
 		// uploads and downloads (CurlHttpClient)
-		private $files		= array();
-		
+		private $files		= [];
+
 		// all other sh1t
-		private $attached	= array();
-		
+		private $attached	= [];
+
 		private $headers	= null;
-		
+
 		/**
 		 * @var HttpMethod
 		 */
 		private $method		= null;
-		
+
 		/**
 		 * @var HttpUrl
 		 */
 		private $url		= null;
 
 		private $body		= null;
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -70,8 +71,9 @@
 				setCookie($_COOKIE)->
 				setFiles($_FILES);
 
-			if (isset($_SESSION))
+			if (isset($_SESSION)) {
 				$request->setSession($_SESSION);
+            }
 
 			foreach ($_SERVER as $name => $value) {
 				if (strpos($name, 'HTTP_') === 0) {
@@ -83,9 +85,10 @@
 			if (
 				$request->hasServerVar('CONTENT_TYPE')
 				&& $request->getServerVar('CONTENT_TYPE') !== 'application/x-www-form-urlencoded'
-			)
+			) {
 				$request->setBody(file_get_contents('php://input'));
-			
+            }
+
 			$request->setMethod(
 				HttpMethod::createByName($request->getServerVar('REQUEST_METHOD'))
 			);
@@ -97,32 +100,32 @@
 		{
 			$this->headers = new HttpHeaderCollection();
 		}
-		
+
 		public function &getGet()
 		{
 			return $this->get;
 		}
-		
+
 		public function getGetVar($name)
 		{
 			return $this->get[$name];
 		}
-		
+
 		public function hasGetVar($name)
 		{
 			return isset($this->get[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setGet(array $get)
 		{
 			$this->get = $get;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -131,32 +134,32 @@
 			$this->get[$name] = $value;
 			return $this;
 		}
-		
+
 		public function &getPost()
 		{
 			return $this->post;
 		}
-		
+
 		public function getPostVar($name)
 		{
 			return $this->post[$name];
 		}
-		
+
 		public function hasPostVar($name)
 		{
 			return isset($this->post[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setPost(array $post)
 		{
 			$this->post = $post;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -165,22 +168,22 @@
 			$this->post[$name] = $value;
 			return $this;
 		}
-		
+
 		public function &getServer()
 		{
 			return $this->server;
 		}
-		
+
 		public function getServerVar($name)
 		{
 			return $this->server[$name];
 		}
-		
+
 		public function hasServerVar($name)
 		{
 			return isset($this->server[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -190,7 +193,7 @@
 
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -199,32 +202,32 @@
 			$this->server[$name] = $value;
 			return $this;
 		}
-		
+
 		public function &getCookie()
 		{
 			return $this->cookie;
 		}
-		
+
 		public function getCookieVar($name)
 		{
 			return $this->cookie[$name];
 		}
-		
+
 		public function hasCookieVar($name)
 		{
 			return isset($this->cookie[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setCookie(array $cookie)
 		{
 			$this->cookie = $cookie;
-			
+
 			return $this;
 		}
-		
+
 		public function &getSession()
 		{
 			return $this->session;
@@ -238,57 +241,57 @@
 		{
 			return $this->session[$name];
 		}
-		
+
 		public function hasSessionVar($name)
 		{
 			return isset($this->session[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setFiles(array $files)
 		{
 			$this->files = $files;
-			
+
 			return $this;
 		}
-		
+
 		public function &getFiles()
 		{
 			return $this->files;
 		}
-		
+
 		public function getFilesVar($name)
 		{
 			return $this->files[$name];
 		}
-		
+
 		public function hasFilesVar($name)
 		{
 			return isset($this->files[$name]);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setSession(array &$session)
 		{
 			$this->session = &$session;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function setAttachedVar($name, $var)
 		{
 			$this->attached[$name] = $var;
-			
+
 			return $this;
 		}
-		
+
 		public function &getAttached()
 		{
 			return $this->attached;
@@ -302,42 +305,42 @@
 		{
 			return $this->attached[$name];
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
 		public function unsetAttachedVar($name)
 		{
 			unset($this->attached[$name]);
-			
+
 			return $this;
 		}
-		
+
 		public function hasAttachedVar($name)
 		{
 			return isset($this->attached[$name]);
 		}
-		
+
 		public function getByType(RequestType $type)
 		{
 			return $this->{$type->getName()};
 		}
-		
+
 		public function getHeaderList()
 		{
 			return $this->headers->getAll();
 		}
-		
+
 		public function hasHeaderVar($name)
 		{
 			return isset($this->headers[$name]);
 		}
-		
+
 		public function getHeaderVar($name)
 		{
 			return $this->headers->get($name);
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -346,7 +349,7 @@
 			unset($this->headers[$name]);
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -355,7 +358,7 @@
 			$this->headers->set($name, $var);
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -364,7 +367,7 @@
 			$this->headers = new HttpHeaderCollection($headers);
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -373,7 +376,7 @@
 			$this->method = $method;
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpMethod
 		**/
@@ -381,7 +384,7 @@
 		{
 			return $this->method;
 		}
-		
+
 		/**
 		 * @return HttpRequest
 		**/
@@ -390,7 +393,7 @@
 			$this->url = $url;
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpUrl
 		**/
@@ -398,17 +401,17 @@
 		{
 			return $this->url;
 		}
-		
+
 		public function hasBody()
 		{
 			return $this->body !== null;
 		}
-		
+
 		public function getBody()
 		{
 			return $this->body;
 		}
-		
+
 		/**
 		 * @param string $body
 		 * @return HttpRequest
@@ -419,4 +422,3 @@
 			return $this;
 		}
 	}
-?>

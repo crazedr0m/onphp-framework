@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -14,21 +15,20 @@
 	**/
 	abstract class BaseGoogleChartStyle extends BaseGoogleChartParameter
 	{
-		protected $styles = array();
-		
+		protected $styles = [];
+
 		/**
 		 * @return BaseGoogleChartStyle
 		**/
 		public function addStyle($style)
 		{
 			$this->styles[] = $style;
-			
+
 			return $this;
 		}
-		
+
 		public function hasStyles()
 		{
 			return !empty($this->styles);
 		}
 	}
-?>

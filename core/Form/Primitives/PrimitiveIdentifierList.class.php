@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2007-2008 by Denis M. Gabaidulin, Konstantin V. Arkhipov *
  *                                                                          *
@@ -14,23 +15,23 @@
 	**/
 	final class PrimitiveIdentifierList extends PrimitiveIdentifier
 	{
-		protected $value = array();
+		protected $value = [];
 		private $ignoreEmpty = false;
 		private $ignoreWrong = false;
-		
+
 		/**
 		 * @return PrimitiveIdentifierList
 		**/
 		public function clean()
 		{
 			parent::clean();
-			
+
 			// restoring our very own default
-			$this->value = array();
-			
+			$this->value = [];
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return PrimitiveIdentifierList
 		**/
@@ -40,87 +41,93 @@
 				Assert::isArray($value);
 				Assert::isInstance(current($value), $this->className);
 			}
-			
+
 			$this->value = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function importValue($value)
 		{
 			if ($value instanceof UnifiedContainer) {
-				if ($value->isLazy())
+				if ($value->isLazy()) {
 					return $this->import(
-						array($this->name => $value->getList())
+						[$this->name => $value->getList()]
 					);
-				elseif (
+				} elseif (
 					$value->getParentObject()->getId()
 					&& ($list = $value->getList())
 				) {
 					return $this->import(
-						array($this->name => ArrayUtils::getIdsArray($list))
+						[$this->name => ArrayUtils::getIdsArray($list)]
 					);
 				} else {
 					return parent::importValue(null);
 				}
 			}
-			
+
 			if (is_array($value)) {
 				try {
-					if ($this->scalar)
+					if ($this->scalar) {
 						Assert::isScalar(current($value));
-					else
-						Assert::isInteger(current($value));
-					
+					} else {
+Assert::isInteger(current($value));
+                    }
+
 					return $this->import(
-						array($this->name => $value)
+						[$this->name => $value]
 					);
 				} catch (WrongArgumentException $e) {
 					return $this->import(
-						array($this->name => ArrayUtils::getIdsArray($value))
+						[$this->name => ArrayUtils::getIdsArray($value)]
 					);
 				}
 			}
-			
+
 			return parent::importValue($value);
 		}
-		
+
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveIdentifierList '{$this->name}'"
 				);
-			
-			if (!BasePrimitive::import($scope))
+            }
+
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
-			if (!is_array($scope[$this->name]))
+            }
+
+			if (!is_array($scope[$this->name])) {
 				return false;
-			
+            }
+
 			$list = array_unique($scope[$this->name]);
-			
-			$values = array();
-			
+
+			$values = [];
+
 			foreach ($list as $id) {
-				if ((string) $id == "" && $this->isIgnoreEmpty())
+				if ((string) $id == "" && $this->isIgnoreEmpty()) {
 					continue;
+                }
 
 				if (
 					($this->scalar && !Assert::checkScalar($id))
 					|| (!$this->scalar && !Assert::checkInteger($id))
 				) {
-					if (!$this->isIgnoreWrong())
+					if (!$this->isIgnoreWrong()) {
 						return false;
-					else
-						continue; //just skip it
+					} else {
+continue; //just skip it
+                    }
 				}
-				
+
 				$values[] = $id;
 			}
-			
+
 			$objectList = $this->dao()->getListByIds($values);
-			
+
 			if (
 				(
 					(count($objectList) == count($values))
@@ -132,15 +139,16 @@
 				$this->value = $objectList;
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function exportValue()
 		{
-			if (!$this->value)
+			if (!$this->value) {
 				return null;
-			
+            }
+
 			return ArrayUtils::getIdsArray($this->value);
 		}
 
@@ -155,17 +163,16 @@
 		{
 			return $this->ignoreEmpty;
 		}
-		
+
 		public function setIgnoreWrong($orly = true)
 		{
 			$this->ignoreWrong = ($orly === true);
-			
+
 			return $this;
 		}
-		
+
 		public function isIgnoreWrong()
 		{
 			return $this->ignoreWrong;
 		}
 	}
-?>

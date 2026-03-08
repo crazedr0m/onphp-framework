@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -29,7 +30,7 @@ EOT;
 			$this->assertEquals(9, count($parser->getHeaders()));
 			$this->assertEquals('close', $parser->getHeader('connection'));
 		}
-		
+
 		public function testMultiline()
 		{
 			$raw = <<<EOT
@@ -49,4 +50,3 @@ EOT;
 			$this->assertEquals($parser->getHeader('content-length'), '123');
 		}
 	}
-?>

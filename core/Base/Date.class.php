@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2009 by Garmonbozia Research Group                 *
  *   Anton E. Lebedevich, Konstantin V. Arkhipov                           *
@@ -12,9 +13,9 @@
 
 	/**
 	 * Date's container and utilities.
-	 * 
+	 *
 	 * @see DateRange
-	 * 
+	 *
 	 * @ingroup Base
 	**/
 	class Date implements Stringable, DialectString
@@ -39,12 +40,12 @@
 		{
 			return new static($date);
 		}
-		
+
 		public static function today($delimiter = '-')
 		{
 			return date("Y{$delimiter}m{$delimiter}d");
 		}
-		
+
 		/**
 		 * @return Date
 		**/
@@ -52,7 +53,7 @@
 		{
 			return new static(static::today());
 		}
-		
+
 		/**
 		 * @return Date
 		 * @see http://www.faqs.org/rfcs/rfc3339.html
@@ -60,24 +61,30 @@
 		**/
 		public static function makeFromWeek($weekNumber, $year = null)
 		{
-			if (!$year)
+			if (!$year) {
 				$year = date('Y');
+            }
 
 			Assert::isTrue(
 				($weekNumber > 0)
 				&& ($weekNumber <= static::getWeekCountInYear($year))
 			);
-			
+
 			$date =
 				new static(
 					date(
 						static::getFormat(),
 						mktime(
-							0, 0, 0, 1, 1, $year
+							0,
+                            0,
+                            0,
+                            1,
+                            1,
+                            $year
 						)
 					)
 				);
-			
+
 			$days =
 				(
 					(
@@ -86,10 +93,10 @@
 					)
 					* 7
 				) + 1 - $date->getWeekDay();
-			
+
 			return $date->modify("+{$days} day");
 		}
-		
+
 		public static function dayDifference(Date $left, Date $right)
 		{
 			return
@@ -104,13 +111,14 @@
 					$left->getYear()
 				);
 		}
-		
+
 		public static function compare(Date $left, Date $right)
 		{
-			if ($left->toStamp() == $right->toStamp())
+			if ($left->toStamp() == $right->toStamp()) {
 				return 0;
-			else
-				return ($left->toStamp() > $right->toStamp() ? 1 : -1);
+			} else {
+return ($left->toStamp() > $right->toStamp() ? 1 : -1);
+            }
 		}
 
 		public static function getWeekCountInYear($year)
@@ -133,27 +141,27 @@
 		{
 			$this->dateTime = clone $this->dateTime;
 		}
-			
-		public function  __sleep()
+
+		public function __sleep()
 		{
-			return array('dateTime');
+			return ['dateTime'];
 		}
 
 		public function toStamp()
 		{
 			return $this->getDateTime()->getTimestamp();
 		}
-		
+
 		public function toDate($delimiter = '-')
 		{
 			return
 				$this->getYear()
-				.$delimiter
-				.$this->getMonth()
-				.$delimiter
-				.$this->getDay();
+				. $delimiter
+				. $this->getMonth()
+				. $delimiter
+				. $this->getDay();
 		}
-		
+
 		public function getYear()
 		{
 			return $this->dateTime->format('Y');
@@ -168,7 +176,7 @@
 		{
 			return $this->dateTime->format('d');
 		}
-		
+
 		public function getWeek()
 		{
 			return date('W', $this->dateTime->getTimestamp());
@@ -178,7 +186,7 @@
 		{
 			return strftime('%w', $this->dateTime->getTimestamp());
 		}
-		
+
 		/**
 		 * @return Date
 		**/
@@ -186,13 +194,14 @@
 		{
 
 			$child = new static($this->toString());
-			
-			if ($modification)
+
+			if ($modification) {
 				return $child->modify($modification);
-			
+            }
+
 			return $child;
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return Date
@@ -206,49 +215,53 @@
 					"wrong time string '{$string}'"
 				);
 			}
-			
+
 			return $this;
 		}
-		
+
 		public function getDayStartStamp()
 		{
 			return
 				mktime(
-					0, 0, 0,
+					0,
+                    0,
+                    0,
 					$this->getMonth(),
 					$this->getDay(),
 					$this->getYear()
 				);
 		}
-		
+
 		public function getDayEndStamp()
 		{
 			return
 				mktime(
-					23, 59, 59,
+					23,
+                    59,
+                    59,
 					$this->getMonth(),
 					$this->getDay(),
 					$this->getYear()
 				);
 		}
-		
+
 		/**
 		 * @return Date
 		**/
 		public function getFirstDayOfWeek($weekStart = Date::WEEKDAY_MONDAY)
 		{
 			return $this->spawn(
-				'-'.((7 + $this->getWeekDay() - $weekStart) % 7).' days'
+				'-' . ((7 + $this->getWeekDay() - $weekStart) % 7) . ' days'
 			);
 		}
-		
+
 		/**
 		 * @return Date
 		**/
 		public function getLastDayOfWeek($weekStart = Date::WEEKDAY_MONDAY)
 		{
 			return $this->spawn(
-				'+'.((13 - $this->getWeekDay() + $weekStart) % 7).' days'
+				'+' . ((13 - $this->getWeekDay() + $weekStart) % 7) . ' days'
 			);
 		}
 
@@ -261,18 +274,18 @@
 		{
 			return $this->dateTime->format(static::getFormat());
 		}
-		
+
 		public function toFormatString($format)
 		{
 			return $this->dateTime->format($format);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			// there are no known differences yet
 			return $dialect->quoteValue($this->toString());
 		}
-		
+
 		/**
 		 * ISO 8601 date string
 		**/
@@ -280,7 +293,7 @@
 		{
 			return $this->toString();
 		}
-		
+
 		/**
 		 * @return Timestamp
 		**/
@@ -296,7 +309,7 @@
 		{
 			return $this->dateTime;
 		}
-		
+
 		protected static function getFormat()
 		{
 			return 'Y-m-d';
@@ -305,12 +318,10 @@
 
 		protected function import($date)
 		{
-			try{
+			try {
 				if (is_int($date) || is_numeric($date)) { // unix timestamp
 					$this->dateTime = new DateTime(date(static::getFormat(), $date));
-
 				} elseif ($date && is_string($date)) {
-
 					if (
 						preg_match('/^(\d{1,4})[-\.](\d{1,2})[-\.](\d{1,2})/', $date, $matches)
 					) {
@@ -327,14 +338,10 @@
 
 					$this->dateTime = new DateTime($date);
 				}
-
-
-			} catch(Exception $e) {
+			} catch (Exception $e) {
 				throw new WrongArgumentException(
 					"strange input given - '{$date}'"
 				);
 			}
-
 		}
 	}
-?>

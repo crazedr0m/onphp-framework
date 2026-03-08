@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -12,5 +13,7 @@
 	/**
 	 * @ingroup Projections
 	**/
-	final class RowCountProjection extends CountProjection {/*_*/}
-?>
+	final class RowCountProjection extends CountProjection
+    {
+/*_*/
+    }

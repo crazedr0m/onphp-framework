@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * System-V semaphores based locking.
-	 * 
+	 *
 	 * @ingroup Lockers
 	**/
 	final class SystemFiveLocker extends BaseLocker
@@ -27,10 +28,10 @@
 			} catch (BaseException $e) {
 				return null;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function free($key)
 		{
 			if (isset($this->pool[$key])) {
@@ -41,10 +42,10 @@
 					return false;
 				}
 			}
-			
+
 			return null;
 		}
-		
+
 		public function drop($key)
 		{
 			if (isset($this->pool[$key])) {
@@ -60,8 +61,7 @@
 					return false;
 				}
 			}
-			
+
 			return null;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 	class IdDBTest extends TestCaseDAO
 	{
 		public function testGetByEmptyId()
@@ -32,7 +33,7 @@
 
 			$this->assertEquals($identifier->getType(), 'scalarIdentifier');
 		}
-		
+
 		private function getByEmptyIdTest($id)
 		{
 			try {
@@ -43,4 +44,3 @@
 			}
 		}
 	}
-?>

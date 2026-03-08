@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return ProjectionChain
 		**/
@@ -33,8 +34,7 @@
 					$property->evaluate($this->parameters)
 				);
 			}
-			
+
 			return $projection;
 		}
 	}
-?>

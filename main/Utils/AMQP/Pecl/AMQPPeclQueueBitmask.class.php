@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -20,10 +21,10 @@
 
 			$bitmask = parent::getBitmask($config);
 
-			if ($config->getExclusive())
+			if ($config->getExclusive()) {
 				$bitmask = $bitmask | AMQP_EXCLUSIVE;
+            }
 
 			return $bitmask;
 		}
 	}
-?>

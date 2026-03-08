@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,15 +12,15 @@
 
 	/**
 	 * @ingroup Filters
-	 * 
+	 *
 	 * @see http://www.artlebedev.ru/tools/typograf/
 	**/
 	final class RussianTypograph extends BaseFilter
 	{
 		const MAGIC_DELIMITER = '<>'; // brilliant!
-		
+
 		private static $symbols =
-			array(
+			[
 				' '		=> ' ', // bovm
 				' < '	=> ' &lt; ',
 				' > '	=> ' &gt; ',
@@ -47,7 +48,7 @@
 				'+/-'	=> '&plusmn;',
 				'!='	=> '&ne;',
 				'<>'	=> '&ne;',
-				
+
 				// just to avoid regexp's
 				' 1/4'	=> ' &frac14;',
 				' 1/2'	=> ' &frac12;',
@@ -55,9 +56,9 @@
 				'1/4 '	=> '&frac14; ',
 				'1/2 '	=> '&frac12; ',
 				'3/4 '	=> '&frac34; '
-			);
-		
-		private static $from = array(
+			];
+
+		private static $from = [
 			'~\-{2,}~',							// --
 			'~([\w\pL\pP]+)\s+\-\s+~u',			// foo - bar
 			'~(\s)\s*~u',						// n -> 2 whitespaces to process short strings (bar to a foo)
@@ -65,9 +66,9 @@
 			'~(&nbsp;|\s)\s+~u',				// compress whitespaces
 			'~\"([^\s]*)\"~',					// "quote"
 			'~\"([^\s]*)\s+([^\s\.]*)\"~',		// "quote quote"
-		);
-		
-		private static $to = array(
+		];
+
+		private static $to = [
 			'-',
 			'$1&nbsp;&#151; ',
 			'$1$1',
@@ -75,7 +76,7 @@
 			'$1',
 			'&laquo;$1&raquo;',
 			'&laquo;$1 $2&raquo;',
-		);
+		];
 
 		private $replaces = null;
 
@@ -86,12 +87,13 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
-			if (!$value = trim(strtr($value, self::$symbols)))
+			if (!$value = trim(strtr($value, self::$symbols))) {
 				return null;
-			
+            }
+
 			$list =
 				preg_split(
 					'~([^<>]*)(?![^<]*?>)~',
@@ -101,10 +103,10 @@
 						| PREG_SPLIT_NO_EMPTY
 						| PREG_SPLIT_OFFSET_CAPTURE
 				);
-			
-			$tags = array();
+
+			$tags = [];
 			$text = null;
-			
+
 			foreach ($list as $row) {
 				$string = $row[0];
 				if (
@@ -117,23 +119,24 @@
 					$text .= self::MAGIC_DELIMITER;
 				}
 			}
-			
+
 			$text = $this->typographize($text);
-			
+
 			if ($tags) {
 				$i = 0;
 				$out = null;
-				
+
 				foreach (explode(self::MAGIC_DELIMITER, $text) as $chunk) {
 					$out .= $chunk;
-					
-					if (isset($tags[$i]))
+
+					if (isset($tags[$i])) {
 						$out .= $tags[$i++];
+                    }
 				}
-				
+
 				return $out;
 			}
-			
+
 			return CompressWhitespaceFilter::me()->apply($text);
 		}
 
@@ -146,12 +149,13 @@
 		{
 			return $this->innerQuotes($text);
 		}
-		
+
 		private function typographize($text)
 		{
-			if (mb_strlen($text) < 2)
+			if (mb_strlen($text) < 2) {
 				return $text;
-			
+            }
+
 			$text = preg_replace(self::$from, self::$to, stripslashes($text));
 			foreach ($this->getCbReplaces() as $pattern => $callback) {
 				$text = preg_replace_callback($pattern, $callback, $text);
@@ -163,10 +167,10 @@
 		{
 			return
 				preg_replace(
-					array(
+					[
 						'~&laquo;(.*)&raquo;~U',
 						'~\"(.*)\"~U',
-					),
+					],
 					'&#132;$1&#147;',
 					stripslashes($text)
 				);
@@ -193,4 +197,3 @@
 			return $this->replaces;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -14,8 +15,8 @@
 	**/
 	class UncacherTaggableDaoWorker implements UncacherBase
 	{
-		private $classNameMap = array();
-		
+		private $classNameMap = [];
+
 		/**
 		 * @return UncacherTaggableDaoWorker
 		 */
@@ -23,12 +24,12 @@
 		{
 			return new self($className, $idKey, $tags, $worker);
 		}
-		
+
 		public function __construct($className, $idKey, $tags, TaggableDaoWorker $worker)
 		{
-			$this->classNameMap[$className] = array(array($idKey), $tags, $worker);
+			$this->classNameMap[$className] = [[$idKey], $tags, $worker];
 		}
-		
+
 		/**
 		 * @return array
 		 */
@@ -45,22 +46,24 @@
 			Assert::isInstance($uncacher, 'UncacherTaggableDaoWorker');
 			return $this->mergeSelf($uncacher);
 		}
-		
+
 		public function uncache()
 		{
 			foreach ($this->classNameMap as $className => $uncaches) {
 				list($idKeys, $tags, $worker) = $uncaches;
 				/* @var $worker TaggableDaoWorker */
 				$worker->expireTags($tags);
-				
-				foreach ($idKeys as $key)
+
+				foreach ($idKeys as $key) {
 					Cache::me()->mark($className)->delete($idKey);
-				
+                }
+
 				ClassUtils::callStaticMethod("$className::dao")->uncacheLists();
 			}
 		}
-		
-		private function mergeSelf(UncacherTaggableDaoWorker $uncacher) {
+
+		private function mergeSelf(UncacherTaggableDaoWorker $uncacher)
+        {
 			foreach ($uncacher->getClassNameMap() as $className => $uncaches) {
 				if (!isset($this->classNameMap[$className])) {
 					$this->classNameMap[$className] = $uncaches;
@@ -80,4 +83,3 @@
 			return $this;
 		}
 	}
-?>

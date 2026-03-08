@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Evgeny V. Kokovikhin                            *
  *                                                                         *
@@ -22,7 +23,7 @@
 		private $domain		= null;
 		private $secure		= false;
 		private $httpOnly	= false;
-		
+
 		/**
 		 * @return Cookie
 		**/
@@ -30,100 +31,101 @@
 		{
 			return new self($name);
 		}
-		
+
 		public function __construct($name)
 		{
 			$this->id = $this->name = $name;
 		}
-		
+
 		public function getName()
 		{
 			return $this->name;
 		}
-		
+
 		public function setValue($value)
 		{
 			$this->value = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function getValue()
 		{
 			return $this->value;
 		}
-		
+
 		public function setMaxAge($expire)
 		{
 			Assert::isInteger($expire);
-			
+
 			$this->expire = $expire;
-			
+
 			return $this;
 		}
-		
+
 		public function getMaxAge()
 		{
 			return $this->expire;
 		}
-		
+
 		public function setPath($path)
 		{
 			Assert::isString($path);
-			
+
 			$this->path = $path;
-			
+
 			return $this;
 		}
-		
+
 		public function getPath()
 		{
 			return $this->path;
 		}
-		
+
 		public function setDomain($domain)
 		{
 			Assert::isString($domain);
-			
+
 			$this->domain = $domain;
-			
+
 			return $this;
 		}
-		
+
 		public function getDomain()
 		{
 			return $this->domain;
 		}
-		
+
 		public function setSecure($secure = true)
 		{
-			$this->secure = (boolean) $secure;
-			
+			$this->secure = (bool) $secure;
+
 			return $this;
 		}
-		
+
 		public function getSecure()
 		{
 			return $this->secure;
 		}
-		
+
 		public function setHttpOnly($httpOnly = true)
 		{
-			$this->httpOnly = (boolean) $httpOnly;
-			
+			$this->httpOnly = (bool) $httpOnly;
+
 			return $this;
 		}
-		
+
 		public function getHttpOnly()
 		{
 			return $this->httpOnly;
 		}
-		
+
 		public function httpSet()
 		{
-			if (headers_sent())
+			if (headers_sent()) {
 				throw new WrongStateException('headers already send');
-			
+            }
+
 			return
 				setcookie(
 					$this->getName(),
@@ -138,4 +140,3 @@
 				);
 		}
 	}
-?>

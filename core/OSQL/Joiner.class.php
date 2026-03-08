@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,29 +16,29 @@
 	**/
 	final class Joiner implements DialectString
 	{
-		private $from	= array();
-		private $tables	= array();
-		
+		private $from	= [];
+		private $tables	= [];
+
 		/**
 		 * @return Joiner
 		**/
 		public function from(FromTable $from)
 		{
 			$this->from[] = $from;
-			
+
 			return $this;
 		}
-		
+
 		public function hasJoinedTable($table)
 		{
 			return isset($this->tables[$table]);
 		}
-		
+
 		public function getTablesCount()
 		{
 			return count($this->from);
 		}
-		
+
 		/**
 		 * @return Joiner
 		**/
@@ -45,10 +46,10 @@
 		{
 			$this->from[] = $join;
 			$this->tables[$join->getTable()] = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Joiner
 		**/
@@ -56,10 +57,10 @@
 		{
 			$this->from[] = $join;
 			$this->tables[$join->getTable()] = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Joiner
 		**/
@@ -67,7 +68,7 @@
 		{
 			$this->from[] = $join;
 			$this->tables[$join->getTable()] = true;
-			
+
 			return $this;
 		}
 
@@ -82,47 +83,50 @@
 
 			return $this;
 		}
-		
+
 		public function getFirstTable()
 		{
-			if ($this->from)
+			if ($this->from) {
 				return $this->from[0]->getTable();
-			
+            }
+
 			return null;
 		}
-		
+
 		public function getLastTable()
 		{
-			if ($this->from)
+			if ($this->from) {
 				return $this->from[count($this->from) - 1]->getTable();
-			
+            }
+
 			return null;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$fromString = null;
-			
+
 			for ($i = 0, $size = count($this->from); $i < $size; ++$i) {
-				if ($i == 0)
+				if ($i == 0) {
 					$separator = null;
-				elseif (
+				} elseif (
 					$this->from[$i] instanceof FromTable &&
 					!$this->from[$i]->getTable() instanceof SelectQuery
-				)
+				) {
 					$separator = ', ';
-				else
-					$separator = ' ';
-				
+				} else {
+$separator = ' ';
+                }
+
 				$fromString .=
 					$separator
-					.$this->from[$i]->toDialectString($dialect);
+					. $this->from[$i]->toDialectString($dialect);
 			}
-			
-			if ($fromString)
-				return ' FROM '.$fromString;
-			
+
+			if ($fromString) {
+				return ' FROM ' . $fromString;
+            }
+
 			return null;
 		}
 	}
-?>

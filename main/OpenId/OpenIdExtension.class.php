@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2010 by Alexander V. Solomatin                          *
  *                                                                         *
@@ -17,4 +18,3 @@
 		public function addParamsToModel(Model $model);
 		public function parseResponce(HttpRequest $request, array $params);
 	}
-?>

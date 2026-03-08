@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -28,12 +29,12 @@
 		const REPLY_TO = 'reply_to';
 
 		const DELIVERY_MODE_NONPERISISTENT = 1;
-		const DELIVERY_MODE_PERISISTENT = 2;		
+		const DELIVERY_MODE_PERISISTENT = 2;
 
 		const PRIORITY_MIN = 0;
 		const PRIORITY_MAX = 9;
 
-		protected $properties = array();
+		protected $properties = [];
 		protected $timestamp = null;
 		protected $body = null;
 
@@ -51,8 +52,9 @@
 
 		public function getProperty($key)
 		{
-			if (isset($this->properties[$key]))
+			if (isset($this->properties[$key])) {
 				return $this->properties[$key];
+            }
 
 			return null;
 		}
@@ -64,9 +66,10 @@
 		{
 			$this->properties = $assoc;
 
-			if (isset($this->properties[self::TIMESTAMP]))
+			if (isset($this->properties[self::TIMESTAMP])) {
 				$this->timestamp =
 					new Timestamp($this->properties[self::TIMESTAMP]);
+            }
 
 			return $this;
 		}
@@ -158,17 +161,17 @@
 		**/
 		public function setDeliveryMode($int)
 		{
-			Assert::isInteger($int, __METHOD__.": requires integer, given {$int}");
+			Assert::isInteger($int, __METHOD__ . ": requires integer, given {$int}");
 
 			Assert::isTrue(
 				in_array(
 					$int,
-					array(
+					[
 						self::DELIVERY_MODE_NONPERISISTENT,
 						self::DELIVERY_MODE_PERISISTENT
-					)
+					]
 				),
-				__METHOD__.": unknown mode {$int}"
+				__METHOD__ . ": unknown mode {$int}"
 			);
 
 			$this->properties[self::DELIVERY_MODE] = $int;
@@ -282,6 +285,5 @@
 		public function getReplyTo()
 		{
 			return $this->getProperty(self::REPLY_TO);
-		}		
+		}
 	}
-?>

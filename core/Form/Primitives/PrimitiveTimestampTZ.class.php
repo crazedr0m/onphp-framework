@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -31,8 +32,9 @@
 				)
 				&& is_array($scope[$this->name])
 			) {
-				if ($this->isEmpty($scope))
+				if ($this->isEmpty($scope)) {
 					return !$this->isRequired();
+                }
 
 				$zone = $scope[$this->name][self::ZONE];
 
@@ -44,14 +46,15 @@
 				$month = (int) $scope[$this->name][self::MONTH];
 				$day = (int) $scope[$this->name][self::DAY];
 
-				if (!checkdate($month, $day, $year))
+				if (!checkdate($month, $day, $year)) {
 					return false;
+                }
 
 				try {
 					$stamp = new TimestampTZ(
-						$year.'-'.$month.'-'.$day.' '
-						.$hours.':'.$minutes.':'.$seconds
-						.' '.$zone
+						$year . '-' . $month . '-' . $day . ' '
+						. $hours . ':' . $minutes . ':' . $seconds
+						. ' ' . $zone
 					);
 				} catch (WrongArgumentException $e) {
 					return false;
@@ -75,17 +78,14 @@
 		{
 			$parent = parent::exportValue();
 
-			if(is_array($parent)) {
-				if($this->value) {
+			if (is_array($parent)) {
+				if ($this->value) {
 					$parent[static::ZONE] = $this->value->getDateTime()->getTimezone()->getName();
-
 				} else {
 					$parent[static::ZONE] = null;
 				}
-
 			}
 
 			return $parent;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 	class CriteriaDBTest extends TestCaseDAO
 	{
 		public function testCriteria()
@@ -15,4 +16,3 @@
 			}
 		}
 	}
-?>

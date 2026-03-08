@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                           *
  *                                                                          *
@@ -13,5 +14,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	final class ClassNotFoundException extends BaseException {/*_*/}
-?>
+	final class ClassNotFoundException extends BaseException
+    {
+/*_*/
+    }

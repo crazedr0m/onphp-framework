@@ -1,4 +1,5 @@
 <?php
+
 	final class TestSuite extends PHPUnit_Framework_TestSuite
 	{
 		public function setUp()
@@ -12,10 +13,9 @@
 				$this->markTestSuiteSkipped('No more workers available.');
 			}
 		}
-		
+
 		public function tearDown()
 		{
 			echo "\n";
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Basis for primitives which can be scattered across import scope.
-	 * 
+	 *
 	 * @ingroup Primitives
 	 * @ingroup Module
 	**/
@@ -79,26 +80,27 @@
 
 		public function import($scope)
 		{
-			if (!BasePrimitive::import($scope))
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
-			if ($this->single->isTrue())
+            }
+
+			if ($this->single->isTrue()) {
 				return $this->importSingle($scope);
-			elseif ($this->single->isFalse())
+			} elseif ($this->single->isFalse()) {
 				return $this->importMarried($scope);
-			else {
-				if (!$this->importMarried($scope))
+			} else {
+				if (!$this->importMarried($scope)) {
 					return $this->importSingle($scope);
+                }
 
 				return true;
 			}
 
 			Assert::isUnreachable();
 		}
-		
+
 		public function exportValue()
 		{
 			throw new UnimplementedFeatureException();
 		}
 	}
-?>

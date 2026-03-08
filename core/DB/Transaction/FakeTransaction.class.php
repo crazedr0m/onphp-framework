@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Transaction-like wrapper around DB's queryNull.
-	 * 
+	 *
 	 * @ingroup Transaction
 	**/
 	final class FakeTransaction extends BaseTransaction
@@ -22,10 +23,10 @@
 		public function add(Query $query)
 		{
 			$this->db->queryNull($query);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FakeTransaction
 		**/
@@ -34,4 +35,3 @@
 			return $this;
 		}
 	}
-?>

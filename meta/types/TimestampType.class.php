@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,10 +19,9 @@
 		{
 			return 'timestamp';
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::TIMESTAMP)';
 		}
 	}
-?>

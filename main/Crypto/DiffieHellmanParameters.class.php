@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -11,22 +12,22 @@
 
 	/**
 	 * @see http://tools.ietf.org/html/rfc2631
-	 * 
+	 *
 	 * @ingroup Crypto
 	**/
 	final class DiffieHellmanParameters
 	{
 		private $gen		= null;
 		private $modulus	= null;
-		
+
 		public function __construct(BigInteger $gen, BigInteger $modulus)
 		{
 			Assert::brothers($gen, $modulus);
-			
+
 			$this->gen = $gen;
 			$this->modulus = $modulus;
 		}
-		
+
 		/**
 		 * @return DiffieHellmanParameters
 		**/
@@ -34,7 +35,7 @@
 		{
 			return new self($gen, $modulus);
 		}
-		
+
 		/**
 		 * @return BigInteger
 		**/
@@ -42,7 +43,7 @@
 		{
 			return $this->gen;
 		}
-		
+
 		/**
 		 * @return BigInteger
 		**/
@@ -51,4 +52,3 @@
 			return $this->modulus;
 		}
 	}
-?>

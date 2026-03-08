@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Evgeniya Tekalin                                *
  *                                                                         *
@@ -14,7 +15,7 @@
 		/**
 		 * @var array of AMQPChannelInterface instances
 		**/
-		protected $channels	= array();
+		protected $channels	= [];
 
 		/**
 		 * @var string
@@ -25,14 +26,14 @@
 		 * @var sting
 		 */
 		private $current = null;
-		private $pool = array();
+		private $pool = [];
 
 		/**
 		 * @return AMQPAgregate
 		**/
 		public static function me()
 		{
-			return new self;
+			return new self();
 		}
 
 		/**
@@ -52,8 +53,9 @@
 			foreach ($pool->getList() as $name => $amqp) {
 				$this->addLink($name, $amqp);
 
-				if ($name == 'default')
+				if ($name == 'default') {
 					$this->setCurrent('default');
+                }
 			}
 
 			return $this;
@@ -65,13 +67,15 @@
 		**/
 		public function addLink($name, AMQP $amqp)
 		{
-			if (isset($this->pool[$name]))
+			if (isset($this->pool[$name])) {
 				throw new WrongArgumentException(
 					"amqp link with name '{$name}' already registered"
 				);
+            }
 
-			if ($this->pool)
+			if ($this->pool) {
 				Assert::isInstance($amqp, current($this->pool));
+            }
 
 			$this->pool[$name] = $amqp;
 
@@ -84,10 +88,11 @@
 		**/
 		public function dropLink($name)
 		{
-			if (!isset($this->pool[$name]))
+			if (!isset($this->pool[$name])) {
 				throw new MissingElementException(
 					"amqp link with name '{$name}' not found"
 				);
+            }
 
 			unset($this->pool[$name]);
 
@@ -105,21 +110,24 @@
 		{
 			Assert::isInteger($id);
 
-			if (isset($this->channels[$id]))
+			if (isset($this->channels[$id])) {
 				throw new WrongArgumentException(
 					"AMQP channel with id '{$id}' already registered"
 				);
+            }
 
-			if (!$this->current)
+			if (!$this->current) {
 				$this->setCurrent($this->getAlive());
-			
-			if (!$this->isConnected())
+            }
+
+			if (!$this->isConnected()) {
 				$this->connect();
+            }
 
 			$this->channels[$id] = new self::$proxy(
 				$this->getCurrentItem()->spawnChannel($id, $this)
 			);
-			
+
 			$this->channels[$id]->open();
 
 			return $this->channels[$id];
@@ -131,8 +139,9 @@
 		**/
 		public function getChannel($id)
 		{
-			if (isset($this->channels[$id]))
+			if (isset($this->channels[$id])) {
 				return $this->channels[$id];
+            }
 
 			throw new MissingElementException(
 				"Can't find AMQP channel with id '{$id}'"
@@ -154,10 +163,11 @@
 		**/
 		public function dropChannel($id)
 		{
-			if (!isset($this->channels[$id]))
+			if (!isset($this->channels[$id])) {
 				throw new MissingElementException(
 					"AMQP channel with id '{$id}' not found"
 				);
+            }
 
 			$this->channels[$id]->close();
 
@@ -250,7 +260,7 @@
 					$this->getCurrentItem()->connect();
 
 					return call_user_func_array(
-						array($this->getCurrentItem(), $method),
+						[$this->getCurrentItem(), $method],
 						$args
 					);
 				} catch (AMQPServerConnectionException $e) {
@@ -266,8 +276,9 @@
 		public function getAlive()
 		{
 			foreach ($this->pool as $name => $item) {
-				if ($item->isAlive())
+				if ($item->isAlive()) {
 					return $name;
+                }
 			}
 
 			Assert::isUnreachable("no alive connection");
@@ -280,7 +291,7 @@
 		public function setCurrent($name)
 		{
 			Assert::isIndexExists($this->pool, $name);
-			
+
 			$this->current = $name;
 
 			return $this;
@@ -292,10 +303,10 @@
 		 */
 		protected function getCurrentItem()
 		{
-			if ($this->current && $this->pool[$this->current]->isAlive())
+			if ($this->current && $this->pool[$this->current]->isAlive()) {
 				return $this->pool[$this->current];
+            }
 
 			Assert::isUnreachable("no current connection");
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -18,7 +19,7 @@
 		{
 			return new self($proto);
 		}
-		
+
 		/**
 		 * @return FormImporter
 		**/
@@ -26,7 +27,7 @@
 		{
 			return new DTOGetter($this->proto, $object);
 		}
-		
+
 		/**
 		 * @return FormImporter
 		**/
@@ -35,4 +36,3 @@
 			return new FormImporter($this->proto, $object);
 		}
 	}
-?>

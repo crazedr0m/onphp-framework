@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see NamedObject
-	 * 
+	 *
 	 * @ingroup Base
 	 * @ingroup Module
 	**/
@@ -20,4 +21,3 @@
 		public function getName();
 		public function setName($name);
 	}
-?>

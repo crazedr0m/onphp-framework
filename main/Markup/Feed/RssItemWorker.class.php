@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -21,11 +22,11 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function makeItems(SimpleXMLElement $xmlFeed)
 		{
-			$result = array();
-			
+			$result = [];
+
 			if (isset($xmlFeed->channel->item)) {
 				foreach ($xmlFeed->channel->item as $item) {
 					$feedItem =
@@ -40,60 +41,61 @@
 							)
 						)->
 						setLink((string) $item->link);
-					
-					if (isset($item->guid))
+
+					if (isset($item->guid)) {
 						$feedItem->setId($item->guid);
-					
-					if (isset($item->category))
+                    }
+
+					if (isset($item->category)) {
 						$feedItem->setCategory((string) $item->category);
-					
+                    }
+
 					$result[] = $feedItem;
 				}
 			}
-			
+
 			return $result;
 		}
-		
+
 		public function toXml(FeedItem $item)
 		{
 			return
 				'<item>'
-					.(
+					. (
 						$item->getPublished()
 							?
 								'<pubDate>'
-									.date('r', $item->getPublished()->toStamp())
-								.'</pubDate>'
+									. date('r', $item->getPublished()->toStamp())
+								. '</pubDate>'
 							: null
 					)
-					.(
+					. (
 						$item->getId()
 							?
 								'<guid isPermaLink="false">'
-									.$item->getId()
-								.'</guid>'
+									. $item->getId()
+								. '</guid>'
 							: null
 					)
-					.'<title>'.$item->getTitle().'</title>'
-					.(
+					. '<title>' . $item->getTitle() . '</title>'
+					. (
 						$item->getLink()
 							?
 								'<link>'
-								.str_replace("&", "&amp;", $item->getLink())
-								.'</link>'
+								. str_replace("&", "&amp;", $item->getLink())
+								. '</link>'
 							: null
 					)
-					.(
+					. (
 						$item->getSummary()
-							? '<description>'.$item->getSummary().'</description>'
+							? '<description>' . $item->getSummary() . '</description>'
 							: null
 					)
-					.(
+					. (
 						$item->getCategory()
-							? '<category>'.$item->getCategory().'</category>'
+							? '<category>' . $item->getCategory() . '</category>'
 							: null
 					)
-				.'</item>';
+				. '</item>';
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -17,11 +18,11 @@
 		abstract public function getChannelWorker();
 		abstract public function getItemWorker();
 		abstract public function isAcceptable(SimpleXMLElement $xmlFeed);
-		
+
 		public function parse(SimpleXMLElement $xmlFeed)
 		{
 			$this->checkWorkers();
-			
+
 			return
 				$this->getChannelWorker()->
 					makeChannel($xmlFeed)->
@@ -30,33 +31,35 @@
 								makeItems($xmlFeed)
 						);
 		}
-		
+
 		public function toXml(FeedChannel $channel)
 		{
 			$this->checkWorkers();
-			
+
 			$itemsXml = null;
 			$itemWorker = $this->getItemWorker();
-			
-			foreach ($channel->getFeedItems() as $feedItem)
+
+			foreach ($channel->getFeedItems() as $feedItem) {
 				$itemsXml .= $itemWorker->toXml($feedItem);
-			
+            }
+
 			return $this->getChannelWorker()->toXml($channel, $itemsXml);
 		}
-		
+
 		private function checkWorkers()
 		{
-			if (!$this->getChannelWorker())
+			if (!$this->getChannelWorker()) {
 				throw new WrongStateException(
 					'Setup channelWorker must be assigned'
 				);
-			
-			if (!$this->getItemWorker())
+            }
+
+			if (!$this->getItemWorker()) {
 				throw new WrongStateException(
 					'Setup itemWorker must be assigned'
 				);
-			
+            }
+
 			return $this;
 		}
 	}
-?>

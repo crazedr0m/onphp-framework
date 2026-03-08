@@ -15,10 +15,8 @@
 			$this->assertEquals($calendarDay->getDay(), $unserializedDay->getDay());
 			$this->assertEquals($calendarDay->getMonth(), $unserializedDay->getMonth());
 			$this->assertEquals($calendarDay->getYear(), $unserializedDay->getYear());
-			
+
 			$this->assertEquals($calendarDay->isOutside(), $unserializedDay->isOutside());
 			$this->assertEquals($calendarDay->isSelected(), $unserializedDay->isSelected());
-
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Replaces \n and \r by whitespace
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class RemoveNewlineFilter extends BaseFilter
@@ -23,10 +24,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return preg_replace('/[\n\r]+/', ' ', $value);
 		}
 	}
-?>

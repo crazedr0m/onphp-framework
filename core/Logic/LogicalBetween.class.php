@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,7 +12,7 @@
 
 	/**
 	 * SQL's BETWEEN or logical check whether value in-between given limits.
-	 * 
+	 *
 	 * @ingroup Logic
 	**/
 	final class LogicalBetween implements LogicalObject, MappableObject
@@ -19,26 +20,26 @@
 		private $field  = null;
 		private $left   = null;
 		private $right  = null;
-		
+
 		public function __construct($field, $left, $right)
 		{
 			$this->left		= $left;
 			$this->right	= $right;
 			$this->field	= $field;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return
 				'('
-				.$dialect->toFieldString($this->field)
-				.' BETWEEN '
-				.$dialect->toValueString($this->left)
-				.' AND '
-				.$dialect->toValueString($this->right)
-				.')';
+				. $dialect->toFieldString($this->field)
+				. ' BETWEEN '
+				. $dialect->toValueString($this->left)
+				. ' AND '
+				. $dialect->toValueString($this->right)
+				. ')';
 		}
-		
+
 		/**
 		 * @return LogicalBetween
 		**/
@@ -50,15 +51,14 @@
 				$dao->guessAtom($this->right, $query)
 			);
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			$left	= $form->toFormValue($this->left);
 			$right	= $form->toFormValue($this->right);
 			$value	= $form->toFormValue($this->field);
-			
+
 			return ($left	<= $value)
 				&& ($value	<= $right);
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,40 +22,38 @@
 	{
 		const DEFAULT_PORT		= 11211;
 		const DEFAULT_HOST		= '127.0.0.1';
-		
+
 		private $instance = null;
-		
+
 		/**
 		 * @return PeclMemcache
 		**/
 		public static function create(
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT
-		)
-		{
+		) {
 			return new self($host, $port);
 		}
-		
+
 		public function __construct(
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT
-		)
-		{
+		) {
 			$this->instance = new Memcache();
-			
+
 			try {
 				try {
 					$this->instance->pconnect($host, $port);
 				} catch (BaseException $e) {
 					$this->instance->connect($host, $port);
 				}
-				
+
 				$this->alive = true;
 			} catch (BaseException $e) {
 				// bad luck.
 			}
 		}
-		
+
 		public function __destruct()
 		{
 			if ($this->alive) {
@@ -65,7 +64,7 @@
 				}
 			}
 		}
-		
+
 		/**
 		 * @return PeclMemcached
 		**/
@@ -76,10 +75,10 @@
 			} catch (BaseException $e) {
 				$this->alive = false;
 			}
-			
+
 			return parent::clean();
 		}
-		
+
 		public function increment($key, $value)
 		{
 			try {
@@ -88,7 +87,7 @@
 				return null;
 			}
 		}
-		
+
 		public function decrement($key, $value)
 		{
 			try {
@@ -97,31 +96,32 @@
 				return null;
 			}
 		}
-		
+
 		public function getList($indexes)
 		{
 			return
 				($return = $this->get($indexes))
 					? $return
-					: array();
+					: [];
 		}
-		
+
 		public function get($index)
 		{
 			try {
 				return $this->instance->get($index);
 			} catch (BaseException $e) {
-				if(strpos($e->getMessage(), 'Invalid key') !== false)
+				if (strpos($e->getMessage(), 'Invalid key') !== false) {
 					return null;
-				
+                }
+
 				$this->alive = false;
-				
+
 				return null;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function delete($index)
 		{
 			try {
@@ -132,10 +132,10 @@
 			} catch (BaseException $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function append($key, $data)
 		{
 			try {
@@ -143,14 +143,16 @@
 			} catch (BaseException $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		protected function store(
-			$action, $key, $value, $expires = Cache::EXPIRES_MEDIUM
-		)
-		{
+			$action,
+            $key,
+            $value,
+            $expires = Cache::EXPIRES_MEDIUM
+		) {
 			try {
 				return
 					$this->instance->$action(
@@ -164,8 +166,7 @@
 			} catch (BaseException $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
 	}
-?>

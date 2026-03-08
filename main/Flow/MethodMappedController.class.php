@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                              *
  *                                                                          *
@@ -8,57 +9,59 @@
  *   License, or (at your option) any later version.                        *
  *                                                                          *
  ****************************************************************************/
-	
+
 	/**
 	 * @ingroup Flow
 	**/
 	abstract class MethodMappedController implements Controller
 	{
-		private $methodMap		= array();
+		private $methodMap		= [];
 		private $defaultAction	= null;
-		
+
 		/**
 		 * @return ModelAndView
 		**/
 		public function handleRequest(HttpRequest $request)
 		{
 			if ($action = $this->chooseAction($request)) {
-				
 				$method = $this->methodMap[$action];
 				$mav = $this->{$method}($request);
-				
-				if ($mav->viewIsRedirect())
+
+				if ($mav->viewIsRedirect()) {
 					return $mav;
-					
+                }
+
 				$mav->getModel()->set('action', $action);
-				
+
 				return $mav;
-				
-			} else
-				return ModelAndView::create();
-				
+			} else {
+return ModelAndView::create();
+            }
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function chooseAction(HttpRequest $request)
 		{
 			$action = Primitive::choice('action')->setList($this->methodMap);
 
-			if ($this->getDefaultAction())
+			if ($this->getDefaultAction()) {
 				$action->setDefault($this->getDefaultAction());
+            }
 
 			Form::create()->
 				add($action)->
 				import($request->getGet())->
 				importMore($request->getPost())->
 				importMore($request->getAttached());
-			
-			if (!$command = $action->getValue())
+
+			if (!$command = $action->getValue()) {
 				return $action->getDefault();
+            }
 
 			return $command;
 		}
-		
+
 		/**
 		 * @return MethodMappedController
 		**/
@@ -67,46 +70,46 @@
 			$this->methodMap[$action] = $methodName;
 			return $this;
 		}
-		
+
 		/**
 		 * @return MethodMappedController
 		**/
 		public function dropMethodMapping($action)
 		{
 			unset($this->methodMap[$action]);
-			
+
 			return $this;
 		}
-		
+
 		public function getMethodMapping()
 		{
 			return $this->methodMap;
 		}
-		
+
 		/**
 		 * @return MethodMappedController
 		**/
 		public function setDefaultAction($action)
 		{
 			$this->defaultAction = $action;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MethodMappedController
 		**/
 		public function setMethodMappingList($array)
 		{
-			foreach ($array as $action => $methodName)
+			foreach ($array as $action => $methodName) {
 				$this->setMethodMapping($action, $methodName);
-			
+            }
+
 			return $this;
 		}
-		
+
 		public function getDefaultAction()
 		{
 			return $this->defaultAction;
 		}
 	}
-?>

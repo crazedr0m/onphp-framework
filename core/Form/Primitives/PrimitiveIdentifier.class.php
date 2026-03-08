@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,7 +16,7 @@
 	class PrimitiveIdentifier extends IdentifiablePrimitive
 	{
 		private $methodName	= 'getById';
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return PrimitiveIdentifier
@@ -23,20 +24,20 @@
 		public function of($class)
 		{
 			$className = $this->guessClassName($class);
-			
+
 			Assert::classExists($className);
-			
+
 			Assert::isInstance(
 				$className,
 				'DAOConnected',
 				"class '{$className}' must implement DAOConnected interface"
 			);
-			
+
 			$this->className = $className;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GenericDAO
 		**/
@@ -46,10 +47,10 @@
 				$this->className,
 				'specify class name first of all'
 			);
-			
-			return call_user_func(array($this->className, 'dao'));
+
+			return call_user_func([$this->className, 'dao']);
 		}
-		
+
 		/**
 		 * @return PrimitiveIdentifier
 		**/
@@ -59,87 +60,86 @@
 				/* all ok, call what you want */
 			} elseif (strpos($methodName, '::') === false) {
 				$dao = $this->dao();
-				
+
 				Assert::isTrue(
 					method_exists($dao, $methodName),
-					"knows nothing about '".get_class($dao)
-					."::{$methodName}' method"
+					"knows nothing about '" . get_class($dao)
+					. "::{$methodName}' method"
 				);
 			} else {
 				ClassUtils::checkStaticMethod($methodName);
 			}
-			
+
 			$this->methodName = $methodName;
-			
+
 			return $this;
 		}
-		
+
 		public function importValue($value)
 		{
 			if ($value instanceof Identifiable) {
 				try {
 					Assert::isInstance($value, $this->className);
-					
+
 					return
 						$this->import(
-							array($this->getName() => $this->actualExportValue($value))
+							[$this->getName() => $this->actualExportValue($value)]
 						);
-				
 				} catch (WrongArgumentException $e) {
 					return false;
 				}
 			}
-			
+
 			return parent::importValue($value);
 		}
-		
+
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveIdentifier '{$this->name}'"
 				);
-			
+            }
+
 			$className = $this->className;
-			
+
 			if (
 				isset($scope[$this->name])
 				&& $scope[$this->name] instanceof $className
 			) {
 				$value = $scope[$this->name];
-				
+
 				$this->raw = $this->actualExportValue($value);
 				$this->setValue($value);
-				
+
 				return $this->imported = true;
 			}
-			
+
 			$result = parent::import($scope);
-			
+
 			if ($result === true) {
 				try {
 					$result = $this->actualImportValue($this->value);
-					
+
 					Assert::isInstance($result, $className);
-					
+
 					$this->value = $result;
-					
+
 					return true;
-				
 				} catch (WrongArgumentException $e) {
 					// not imported
 				} catch (ObjectNotFoundException $e) {
 					// not imported
 				}
-				
+
 				$this->value = null;
-				
+
 				return false;
 			}
-			
+
 			return $result;
 		}
-		
+
 		protected function actualImportValue($value)
 		{
 			if (is_callable($this->methodName)) {
@@ -151,4 +151,3 @@
 			}
 		}
 	}
-?>

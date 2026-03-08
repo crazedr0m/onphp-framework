@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Dmitry V. Sokolov, Denis M. Gabaidulin           *
  *                                                                          *
@@ -19,36 +20,36 @@
 		private $request			= null;
 		private $requestType		= null;
 		private $requestGetter		= null;
-		
-		private static $requestGetterMap = array(
+
+		private static $requestGetterMap = [
 			RequestType::ATTACHED	=> 'Attached',
 			RequestType::GET		=> 'Get',
 			RequestType::POST		=> 'Post'
-		);
-		
+		];
+
 		/**
 		 * @return ProxyController
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			$this->requestType = RequestType::post();
 		}
-		
+
 		/**
 		 * @return ProxyController
 		**/
 		public function setInner(Controller $controller)
 		{
 			$this->innerController = $controller;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Controller
 		**/
@@ -56,12 +57,12 @@
 		{
 			return $this->innerController;
 		}
-		
+
 		public function getName()
 		{
 			return get_class($this->innerController);
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -69,17 +70,17 @@
 		{
 			return $this->getInner()->handleRequest($request);
 		}
-		
+
 		/**
 		 * @return ProxyController
 		**/
 		public function setRequestType(RequestType $requestType)
 		{
 			$this->requestType = $requestType;
-			
+
 			return $this;
 		}
-		
+
 		public function isActive($request)
 		{
 			return $this->fetchVariable('controller', $request)
@@ -89,23 +90,23 @@
 				)
 				: false;
 		}
-		
+
 		public function getRequestGetter()
 		{
 			Assert::isNotNull($this->requestType);
-			
-			if (!$this->requestGetter)
+
+			if (!$this->requestGetter) {
 				$this->requestGetter =
 					self::$requestGetterMap[$this->requestType->getId()];
-			
+            }
+
 			return $this->requestGetter;
 		}
-		
+
 		private function fetchVariable($name, HttpRequest $request)
 		{
-			return $request->{'has'.$this->getRequestGetter().'Var'}($name)
-				? $request->{'get'.$this->getRequestGetter().'Var'}($name)
+			return $request->{'has' . $this->getRequestGetter() . 'Var'}($name)
+				? $request->{'get' . $this->getRequestGetter() . 'Var'}($name)
 				: false;
 		}
 	}
-?>

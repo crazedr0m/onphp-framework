@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006 by Unknown Hero                                    *
  *   non.existent.login@forgotten.host                                     *
@@ -23,9 +24,8 @@
 					required()
 				)->
 				import($request->getPost());
-			
+
 			if (!$form->getErrors()) {
-				
 				try {
 					$admin = Administrator::dao()->logIn(
 						$form->getValue('username'),
@@ -35,18 +35,18 @@
 					// failed to log in
 					return ModelAndView::create()->setView('error');
 				}
-				
-				if (!Session::isStarted())
+
+				if (!Session::isStarted()) {
 					Session::start();
-				
+                }
+
 				Session::assign(Administrator::LABEL, $admin);
 
 				return
 					ModelAndView::create()->
 					setView(new RedirectToView('main'));
 			}
-			
+
 			return ModelAndView::create()->setView('login');
 		}
 	}
-?>

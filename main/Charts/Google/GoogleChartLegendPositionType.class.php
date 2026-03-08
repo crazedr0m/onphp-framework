@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -18,16 +19,16 @@
 		const TOP		= 0x2;
 		const LEFT		= 0x3;
 		const RIGHT		= 0x4;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::BOTTOM	=> 'b',
 			self::TOP		=> 't',
 			self::LEFT		=> 'l',
 			self::RIGHT		=> 'r'
-		);
-		
+		];
+
 		private $paramName = 'chdlp';
-		
+
 		/**
 		 * @return GoogleChartLegendPositionType
 		**/
@@ -35,10 +36,9 @@
 		{
 			return new self($id);
 		}
-		
+
 		public function toString()
 		{
-			return $this->paramName.'='.$this->name;
+			return $this->paramName . '=' . $this->name;
 		}
 	}
-?>

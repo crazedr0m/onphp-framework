@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -19,22 +20,26 @@
 		 * @return LogicalChain
 		**/
 		public static function getOpenRange(
-			$left, $right, $min = null, $max = null
-		)
-		{
+			$left,
+            $right,
+            $min = null,
+            $max = null
+		) {
 			Assert::isFalse(
 				($min === null) && ($max === null),
 				'how can i build logic from emptyness?'
 			);
-			
-			if ($min !== null)
+
+			if ($min !== null) {
 				$min = new DBValue($min);
-			
-			if ($max !== null)
+            }
+
+			if ($max !== null) {
 				$max = new DBValue($max);
-			
+            }
+
 			$chain = new LogicalChain();
-			
+
 			if ($min !== null && $max !== null) {
 				$chain->expOr(
 					Expression::orBlock(
@@ -81,28 +86,29 @@
 					)
 				);
 			}
-			
+
 			return $chain;
 		}
-		
-		
+
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return LogicalChain
 		**/
 		public static function getOpenPoint(
-			$left, $right, $point
-		)
-		{
+			$left,
+            $right,
+            $point
+		) {
 			Assert::isFalse(
 				($point === null),
 				'how can i build logic from emptyness?'
 			);
-			
+
 			$point = new DBValue($point);
-			
+
 			$chain = new LogicalChain();
-			
+
 			$chain->expOr(
 				Expression::orBlock(
 					Expression::andBlock(
@@ -124,8 +130,7 @@
 					)
 				)
 			);
-			
+
 			return $chain;
 		}
 	}
-?>

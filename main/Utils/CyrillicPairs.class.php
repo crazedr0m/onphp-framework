@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,12 +13,12 @@
 	/**
 	 * Based on CPAN's Lingua::DetectCharset.
 	 * Thanks to John Neystadt, http://www.neystadt.org/john/
-	 * 
+	 *
 	 * @ingroup Utils
 	**/
 	final class CyrillicPairs extends StaticFactory
 	{
-		private static $table = array(
+		private static $table = [
 			'ст' => 21815, 'ен' => 19276, 'на' => 16528, 'ов' => 15172,
 			'го' => 15161, 'но' => 14457, 'ни' => 14151, 'ог' => 13562,
 			'пр' => 13327, 'ре' => 11067, 'ал' => 10935, 'ан' => 10268,
@@ -172,11 +173,10 @@
 			'зж' => 1, 'Оф' => 1, 'Иж' => 1, 'зт' => 1, 'cр' => 1, 'oт' => 1,
 			'хм' => 1, 'цл' => 1, 'цм' => 1, 'Еж' => 1, 'уc' => 1, 'cо' => 1,
 			'Бу' => 1, 'йп' => 1, 'Ск' => 1, 'Ит' => 1,
-		);
-		
+		];
+
 		public static function getTable()
 		{
 			return self::$table;
 		}
 	}
-?>

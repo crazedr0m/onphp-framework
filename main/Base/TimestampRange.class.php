@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -12,7 +13,7 @@
 	/**
 	 * @see Timestamp
 	 * @see DateRange
-	 * 
+	 *
 	 * @ingroup Helpers
 	**/
 	class TimestampRange extends DateRange
@@ -24,25 +25,25 @@
 		{
 			return new self($start, $end);
 		}
-		
+
 		public function getStartStamp() // null if start is null
 		{
 			if ($start = $this->getStart()) {
 				return $start->toStamp();
 			}
-			
+
 			return null;
 		}
-		
+
 		public function getEndStamp() // null if end is null
 		{
 			if ($end = $this->getEnd()) {
 				return $end->toStamp();
 			}
-			
+
 			return null;
 		}
-		
+
 		/**
 		 * @return TimestampRange
 		**/
@@ -50,10 +51,9 @@
 		{
 			return $this;
 		}
-		
+
 		protected function getObjectName()
 		{
 			return 'Timestamp';
 		}
 	}
-?>

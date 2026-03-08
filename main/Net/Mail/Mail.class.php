@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	/**
 	 * @ingroup Mail
 	 *
@@ -27,110 +28,120 @@
 		private $contentType	= null;
 		private $returnPath		= null;
 		private $headers        = null;
-		
+
 		private $sendmailAdditionalArgs	= null;
-		
+
 		/**
 		 * @return Mail
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
 		public function send()
 		{
-			if ($this->to == null)
+			if ($this->to == null) {
 				throw new WrongArgumentException("mail to: is not specified");
-			
+            }
+
 			$siteEncoding = mb_get_info('internal_encoding');
-			
-			if (!$this->encoding
+
+			if (
+                !$this->encoding
 				|| $this->encoding == $siteEncoding
 			) {
 				$encoding = $siteEncoding;
 				$to = $this->to;
 				$from = $this->from;
 				$subject =
-					"=?".$encoding."?B?"
-					.base64_encode($this->subject)
-					."?=";
+					"=?" . $encoding . "?B?"
+					. base64_encode($this->subject)
+					. "?=";
 				$body = $this->text;
 				$returnPath = $this->returnPath;
 			} else {
 				$encoding = $this->encoding;
 				$to = mb_convert_encoding($this->to, $encoding);
-				
-				if ($this->from)
+
+				if ($this->from) {
 					$from = mb_convert_encoding($this->from, $encoding);
-				else
-					$from = null;
-				
-				if ($this->returnPath)
+				} else {
+$from = null;
+                }
+
+				if ($this->returnPath) {
 					$returnPath = mb_convert_encoding($this->returnPath, $encoding);
-				else
-					$returnPath = null;
-				
+				} else {
+$returnPath = null;
+                }
+
 				$subject =
-					"=?".$encoding."?B?"
-					.base64_encode(
+					"=?" . $encoding . "?B?"
+					. base64_encode(
 						iconv(
 							$siteEncoding,
-							$encoding.'//TRANSLIT',
+							$encoding . '//TRANSLIT',
 							$this->subject
 						)
-					)."?=";
-				
+					) . "?=";
+
 				$body = iconv(
 					$siteEncoding,
-					$encoding.'//TRANSLIT',
+					$encoding . '//TRANSLIT',
 					$this->text
 				);
 			}
-			
+
 			$headers = null;
-			
+
 			$returnPathAtom =
 				$returnPath !== null
 					? $returnPath
 					: $from;
-			
+
 			if ($from != null) {
-				$headers .= "From: ".$from."\n";
-				$headers .= "Return-Path: ".$returnPathAtom."\n";
+				$headers .= "From: " . $from . "\n";
+				$headers .= "Return-Path: " . $returnPathAtom . "\n";
 			}
-			
-			if ($this->cc != null)
-				$headers .= "Cc: ".$this->cc."\n";
+
+			if ($this->cc != null) {
+				$headers .= "Cc: " . $this->cc . "\n";
+            }
 
 			if (!$this->getHeaders()) {
-				if ($this->contentType === null)
+				if ($this->contentType === null) {
 					$this->contentType = 'text/plain';
+                }
 
 				$headers .=
-					"Content-type: ".$this->contentType
-					."; charset=".$encoding."\n";
+					"Content-type: " . $this->contentType
+					. "; charset=" . $encoding . "\n";
 
 				$headers .= "Content-Transfer-Encoding: 8bit\n";
-				$headers .= "Date: ".date('r')."\n";
+				$headers .= "Date: " . date('r') . "\n";
 			} else {
 				$headers .= $this->getHeaders();
 			}
 
 			if (
 				!mail(
-					$to, $subject, $body, $headers,
+					$to,
+                    $subject,
+                    $body,
+                    $headers,
 					$this->getSendmailAdditionalArgs()
 				)
-			)
+			) {
 				throw new MailNotSentException();
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -139,7 +150,7 @@
 			$this->to = $to;
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -148,7 +159,7 @@
 			$this->cc = $cc;
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -157,7 +168,7 @@
 			$this->subject = $subject;
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -166,7 +177,7 @@
 			$this->text = $text;
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -175,7 +186,7 @@
 			$this->from = $from;
 			return $this;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -184,12 +195,12 @@
 			$this->encoding = $encoding;
 			return $this;
 		}
-		
+
 		public function getContentType()
 		{
 			return $this->contentType;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -198,12 +209,12 @@
 			$this->contentType = $contentType;
 			return $this;
 		}
-		
+
 		public function getSendmailAdditionalArgs()
 		{
 			return $this->sendmailAdditionalArgs;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -212,12 +223,12 @@
 			$this->sendmailAdditionalArgs = $sendmailAdditionalArgs;
 			return $this;
 		}
-		
+
 		public function getReturnPath()
 		{
 			return $this->returnPath;
 		}
-		
+
 		/**
 		 * @return Mail
 		**/
@@ -241,4 +252,3 @@
 			return $this->headers;
 		}
 	}
-?>

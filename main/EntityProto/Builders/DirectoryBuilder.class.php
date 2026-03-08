@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -19,16 +20,16 @@
 		{
 			parent::__construct($proto);
 
-			$this->identityMap = new DirectoryContext;
+			$this->identityMap = new DirectoryContext();
 		}
 
 		public function setDirectory($directory)
 		{
 			$this->directory = $directory;
-			
+
 			return $this;
 		}
-		
+
 		public function getDirectory()
 		{
 			return $this->directory;
@@ -80,7 +81,7 @@
 			$result = parent::cloneInnerBuilder($property);
 
 			$result->
-				setDirectory($this->directory.'/'.$property)->
+				setDirectory($this->directory . '/' . $property)->
 				setPermissions($this->permissions)->
 				setIdentityMap($this->identityMap);
 
@@ -91,25 +92,26 @@
 		{
 			$this->checkDirectory();
 
-			if (!$object instanceof Identifiable)
+			if (!$object instanceof Identifiable) {
 				throw new WrongArgumentException(
 					'cannot build list of items without identity'
 				);
+            }
 
 			return $this->cloneBuilder($this->proto)->
 				setPermissions($this->permissions)->
-				setDirectory($this->directory.'/'.$object->getId());
+				setDirectory($this->directory . '/' . $object->getId());
 		}
 
 		protected function createEmpty()
 		{
 			$result = $this->directory;
 
-			if (!file_exists($result))
+			if (!file_exists($result)) {
 				mkdir($result, $this->permissions, true);
-			elseif (is_link($result)) {
+			} elseif (is_link($result)) {
 				throw new WrongStateException(
-					'cannot make object by reference: '.$this->directory
+					'cannot make object by reference: ' . $this->directory
 				);
 			}
 
@@ -122,8 +124,8 @@
 				if (!is_link($this->directory)) {
 					throw new WrongStateException(
 						'you should remove the storage '
-						.$this->directory
-						.' by your hands'
+						. $this->directory
+						. ' by your hands'
 					);
 				}
 
@@ -135,12 +137,12 @@
 
 		protected function checkDirectory()
 		{
-			if (!$this->directory)
+			if (!$this->directory) {
 				throw new WrongStateException(
 					'you must specify the context for this builder'
 				);
+            }
 
 			return $this;
 		}
 	}
-?>

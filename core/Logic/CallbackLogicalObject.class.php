@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2011 Victor V. Bolshov                                   *
  *                                                                          *
@@ -26,7 +27,7 @@
 		 * @param Closure $callback
 		 * @return CallbackLogicalObject
 		 */
-		static public function create($callback)
+		public static function create($callback)
 		{
 			return new static($callback);
 		}
@@ -58,4 +59,3 @@
 			throw new UnimplementedFeatureException("toDialectString is not needed here");
 		}
 	}
-?>

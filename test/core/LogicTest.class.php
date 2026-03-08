@@ -1,225 +1,221 @@
 <?php
-	
+
 	final class LogicTest extends TestCaseDB
 	{
 		public function testBaseSqlGeneration()
 		{
 			$dialect = ImaginaryDialect::me();
 			$pgDialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$this->assertRegExp(
 				'/^\(a (AND|and) b\)$/',
 				Expression::expAnd('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (OR|or) b\)$/',
 				Expression::expOr('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				Expression::eq('a', 'b')->toDialectString($dialect),
 				'(a = b)'
 			);
-			
+
 			$some = IdentifiableObject::wrap(123);
 			$this->assertEquals(
 				Expression::eqId('a', $some)->toDialectString($dialect),
 				'(a = 123)'
 			);
-			
+
 			$this->assertEquals(
 				Expression::notEq('a', 'b')->toDialectString($dialect),
 				'(a != b)'
 			);
-			
+
 			$this->assertEquals(
 				Expression::gt('a', 'b')->toDialectString($dialect),
 				'(a > b)'
 			);
-			
+
 			$this->assertEquals(
 				Expression::gtEq('a', 'b')->toDialectString($dialect),
 				'(a >= b)'
 			);
-			
+
 			$this->assertEquals(
 				Expression::lt('a', 'b')->toDialectString($dialect),
 				'(a < b)'
 			);
-			
+
 			$this->assertEquals(
 				Expression::ltEq('a', 'b')->toDialectString($dialect),
 				'(a <= b)'
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((IS NOT NULL)|(is not null)) *\)$/',
 				Expression::notNull('a')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((IS NULL)|(is null)) *\)$/',
 				Expression::isNull('a')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((IS TRUE)|(is true)) *\)$/',
 				Expression::isTrue('a')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((IS FALSE)|(is false)) *\)$/',
 				Expression::isFalse('a')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (LIKE|like) b\)$/',
 				Expression::like('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((NOT LIKE)|(not like)) b\)$/',
 				Expression::notLike('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (ILIKE|ilike) b\)$/',
 				Expression::ilike('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((NOT ILIKE)|(not like)) b\)$/',
 				Expression::notIlike('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((SIMILAR TO)|(similar to)) b\)$/',
 				Expression::similar('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((NOT SIMILAR TO)|(not similar to)) b\)$/',
 				Expression::notSimilar('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(lower(a) = b)',
 				Expression::eqLower('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(lower(a) = lower(b))',
-				
 				Expression::eqLower(new DBValue('a'), new DBValue('b'))->
 				toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(lower(\'a\') = lower(\'b\'))',
-				
 				Expression::eqLower(new DBValue('a'), new DBValue('b'))->
 				toDialectString($pgDialect)
 			);
-			
+
 			$this->assertEquals(
 				'(lower(\'a\') = lower("b"))',
-				
 				Expression::eqLower(new DBValue('a'), new DBField('b'))->
 				toDialectString($pgDialect)
 			);
-			
+
 			$this->assertEquals(
 				'(lower("a") = lower(\'b\'))',
-				
 				Expression::eqLower(new DBField('a'), new DBValue('b'))->
 				toDialectString($pgDialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (BETWEEN|between) b (AND|and) c\)$/',
 				Expression::between('a', 'b', 'c')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a = 123)',
 				Expression::in('a', 123)->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a = 123)',
-				Expression::in('a', array(123))->toDialectString($dialect)
+				Expression::in('a', [123])->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (in|IN) \(123, 456\)\)$/',
-				Expression::in('a', array(123, 456))->toDialectString($dialect)
+				Expression::in('a', [123, 456])->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a != 123)',
 				Expression::notIn('a', 123)->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a != 123)',
-				Expression::notIn('a', array(123))->toDialectString($dialect)
+				Expression::notIn('a', [123])->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a ((not in)|(NOT IN)) \(123, 456\)\)$/',
-				Expression::notIn('a', array(123, 456))->toDialectString($dialect)
+				Expression::notIn('a', [123, 456])->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a + b)',
 				Expression::add('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a - b)',
 				Expression::sub('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a * b)',
 				Expression::mul('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(a / b)',
 				Expression::div('a', 'b')->toDialectString($dialect)
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(a (between|BETWEEN) b (and|AND) c\)$/',
 				Expression::between('a', 'b', 'c')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(-1 IS NULL)',
 				Expression::isNull(-1)->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(NOT a)',
 				Expression::not('a')->toDialectString($dialect)
 			);
-			
+
 			$this->assertEquals(
 				'(- a)',
 				Expression::minus('a')->toDialectString($dialect)
 			);
-			
+
 			try {
 				Expression::eq('id', null)->toDialectString($dialect);
-				
+
 				$this->fail();
 			} catch (WrongArgumentException $e) {
 				//it's Ok
 			}
 		}
-		
+
 		public function testPgGeneration()
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
@@ -242,21 +238,19 @@
 							Expression::isTrue(
 								Expression::eqLower(new DBField('a'), new DBField('b'))
 							),
-							
 							Expression::eq(new DBField('g'), new DBValue(12)),
-							
 							Expression::between('j', new DBValue(3), new DBField('p'))
 						),
 						Expression::notNull(new DBField('c', 'table'))
 					),
 					Expression::notIn(
 						new DBField('a', 'sometable'),
-						array('q', 'qwer', 'xcvzxc', 'wer')
+						['q', 'qwer', 'xcvzxc', 'wer']
 					)
 				)->toDialectString($dialect)
 			);
 		}
-		
+
 		public function testFormCalculation()
 		{
 			$form = Form::create()->
@@ -279,35 +273,35 @@
 					Primitive::boolean('f')
 				)->
 				import(
-					array(
+					[
 						'a' => 'asDfg',
 						'b' => 'true',
 						'c' => '1',
 						'd' => '2',
 						'e' => '3'
-					)
+					]
 				);
-			
+
 			$this->assertTrue(
 				Expression::isTrue(new FormField('b'))->toBoolean($form)
 			);
-			
+
 			$this->assertFalse(
 				Expression::isTrue(new FormField('f'))->toBoolean($form)
 			);
-			
+
 			$this->assertFalse(
 				Expression::eq('asdf', new FormField('a'))->toBoolean($form)
 			);
-			
+
 			$this->assertTrue(
 				Expression::eqLower('asdfg', new FormField('a'))->toBoolean($form)
 			);
-			
+
 			$this->assertTrue(
 				Expression::eq('asDfg', new FormField('a'))->toBoolean($form)
 			);
-			
+
 			$this->assertTrue(
 				Expression::andBlock(
 					Expression::expOr(
@@ -327,25 +321,24 @@
 				)->
 				toBoolean($form)
 			);
-			
+
 			$this->assertTrue(
 				Expression::between(new FormField('d'), new FormField('c'), new FormField('e'))->toBoolean($form)
 			);
-			
+
 			$this->assertFalse(
 				Expression::between(new FormField('c'), new FormField('d'), new FormField('e'))->toBoolean($form)
 			);
-			
+
 			$this->assertFalse(
 				Expression::not(new FormField('b'))->toBoolean($form)
 			);
-			
+
 			$this->assertTrue(
 				Expression::not(new FormField('f'))->toBoolean($form)
 			);
-			
 		}
-		
+
 		public function testChainSQL()
 		{
 			$this->assertRegExp(
@@ -365,7 +358,7 @@
 					)->
 					toDialectString(ImaginaryDialect::me())
 			);
-			
+
 			$this->assertRegExp(
 				'/^\(\(a = b\) (OR|or) \(d (OR|or) \(c > e\)\) (OR|or) \(f (in|IN) \(qwer, asdf, zxcv\)\)\)$/',
 				Expression::chain()->
@@ -376,7 +369,7 @@
 						Expression::expOr('d', Expression::gt('c', 'e'))
 					)->
 					expOr(
-						Expression::in('f', array('qwer', 'asdf', 'zxcv'))
+						Expression::in('f', ['qwer', 'asdf', 'zxcv'])
 					)->
 					toDialectString(ImaginaryDialect::me())
 			);
@@ -404,13 +397,13 @@
 					Primitive::string('f')
 				)->
 				import(
-					array(
+					[
 						'a' => 'true',
 						'c' => 123,
 						'd'	=> 123,
-					)
+					]
 				);
-			
+
 			$andChain = Expression::chain()->
 				expAnd(
 					Expression::expOr(
@@ -421,15 +414,16 @@
 				expAnd(
 					Expression::eq(
 						new FormField('c'),
-						new FormField('d'))
+                        new FormField('d')
+                    )
 				)->
 				expAnd(
 					Expression::isFalse(new FormField('e'))
 				);
 
 			$this->assertTrue($andChain->toBoolean($form));
-			
-			$form->importMore(array('e' => 'on'));
+
+			$form->importMore(['e' => 'on']);
 			$this->assertFalse($andChain->toBoolean($form));
 
 			$orChain = Expression::chain()->
@@ -446,63 +440,62 @@
 					)
 				)->
 				expOr(
-					Expression::in(new FormField('f'), array('qwer', 'asdf', 'zxcv'))
+					Expression::in(new FormField('f'), ['qwer', 'asdf', 'zxcv'])
 				);
 
-			$form->import(array());
+			$form->import([]);
 			$this->assertFalse($orChain->toBoolean($form));
-			
-			$form->import(array(
+
+			$form->import([
 				'e' => '1'
-			));
+			]);
 			$this->assertTrue($orChain->toBoolean($form));
-			
-			$form->import(array(
+
+			$form->import([
 				'a' => 'asdf',
 				'b' => 'qwerq',
 				'c' => '13',
 				'd' => '1313',
 				'f' => 'iukj'
-			));
+			]);
 			$this->assertFalse($orChain->toBoolean($form));
-			
-			$form->import(array(
+
+			$form->import([
 				'c' => '13',
 				'd' => '12'
-			));
+			]);
 			$this->assertTrue($orChain->toBoolean($form));
-			
-			$form->import(array(
+
+			$form->import([
 				'f' => 'asdfwer'
-			));
+			]);
 			$this->assertFalse($orChain->toBoolean($form));
-			
-			$form->import(array(
+
+			$form->import([
 				'f' => 'qwer'
-			));
+			]);
 			$this->assertTrue($orChain->toBoolean($form));
 		}
-		
+
 		public function testCallbackLogicalObject()
 		{
 			if (mb_substr(PHP_VERSION, 0, 3) < '5.3') {
 				$this->markTestSkipped('only php 5.3 or later');
 			}
-			$callBack = function(Form $form) {
+			$callBack = function (Form $form) {
 				return $form->getValue('repository') == 'git';
 			};
-			
+
 			$form = Form::create()->
 				add(Primitive::string('repository'))->
 				addRule('isOurRepository', CallbackLogicalObject::create($callBack));
-			
-			$form->import(array('repository' => 'svn'))->checkRules();
-			$this->assertEquals(array('isOurRepository' => Form::WRONG), $form->getErrors());
-			
+
+			$form->import(['repository' => 'svn'])->checkRules();
+			$this->assertEquals(['isOurRepository' => Form::WRONG], $form->getErrors());
+
 			$form->clean()->dropAllErrors();
-			
-			$form->import(array('repository' => 'git'))->checkRules();
-			$this->assertEquals(array(), $form->getErrors());
+
+			$form->import(['repository' => 'git'])->checkRules();
+			$this->assertEquals([], $form->getErrors());
 		}
 	}
-?>

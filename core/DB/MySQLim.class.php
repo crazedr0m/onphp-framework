@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,10 +12,10 @@
 
 	/**
 	 * MySQL DB connector.
-	 * 
+	 *
 	 * @see http://www.mysql.com/
 	 * @see http://www.php.net/mysqli
-	 * 
+	 *
 	 * @ingroup DB
 	**/
 	class MySQLim extends Sequenceless
@@ -22,7 +23,7 @@
 		private $needAutoCommit = false;
 		private $defaultEngine;
 		private $compressed = false;
-		private $initCommands = array();
+		private $initCommands = [];
 
 		/**
 		 * @param bool $really
@@ -63,7 +64,7 @@
 		public function setDbEncoding()
 		{
 			mysqli_set_charset($this->link, $this->encoding);
-			
+
 			return $this;
 		}
 
@@ -109,7 +110,7 @@
 			try {
 				mysqli_real_connect(
 					$this->link,
-					($this->persistent ? 'p:': '').$this->hostname,
+					($this->persistent ? 'p:' : '') . $this->hostname,
 					$this->username,
 					$this->password,
 					$this->basename,
@@ -119,30 +120,32 @@
 				);
 			} catch (BaseException $e) {
 				throw new DatabaseException(
-					'can not connect to MySQL server: '.$e->getMessage()
+					'can not connect to MySQL server: ' . $e->getMessage()
 				);
 			}
-			
-			if ($this->encoding)
+
+			if ($this->encoding) {
 				$this->setDbEncoding();
+            }
 
 			$this->setupAutoCommit();
 			$this->setupDefaultEngine();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MySQLim
 		**/
 		public function disconnect()
 		{
-			if ($this->isConnected())
+			if ($this->isConnected()) {
 				mysqli_close($this->link);
+            }
 
 			return $this;
 		}
-		
+
 		public function isConnected()
 		{
 			$connected = (parent::isConnected() || $this->link instanceof \mysqli);
@@ -153,7 +156,8 @@
 			$alive = false;
 			try {
 				$alive = mysqli_ping($this->link);
-			} catch (BaseException $e) {}
+			} catch (BaseException $e) {
+            }
 
 			if ($alive) {
 				return true;
@@ -162,13 +166,14 @@
 			if ($connected) {
 				try {
 					mysqli_close($this->link);
-				} catch (BaseException $e) {}
+				} catch (BaseException $e) {
+                }
 			}
 			$this->link = null;
 
 			return false;
 		}
-		
+
 		/**
 		 * Same as query, but returns number of
 		 * affected rows in insert/update queries
@@ -176,54 +181,58 @@
 		public function queryCount(Query $query)
 		{
 			$this->queryNull($query);
-			
+
 			return mysqli_affected_rows($this->link);
 		}
-		
+
 		public function queryRow(Query $query)
 		{
 			$res = $this->query($query);
-			
-			if ($this->checkSingle($res))
+
+			if ($this->checkSingle($res)) {
 				return mysqli_fetch_assoc($res);
-			else
-				return null;
+			} else {
+return null;
+            }
 		}
-		
+
 		public function queryColumn(Query $query)
 		{
 			$res = $this->query($query);
-			
-			if ($res) {
-				$array = array();
 
-				while ($row = mysqli_fetch_row($res))
+			if ($res) {
+				$array = [];
+
+				while ($row = mysqli_fetch_row($res)) {
 					$array[] = $row[0];
+                }
 
 				return $array;
-			} else
-				return null;
+			} else {
+return null;
+            }
 		}
-		
+
 		public function querySet(Query $query)
 		{
 			$res = $this->query($query);
-			
-			if ($res) {
-				$array = array();
 
-				while ($row = mysqli_fetch_assoc($res))
+			if ($res) {
+				$array = [];
+
+				while ($row = mysqli_fetch_assoc($res)) {
 					$array[] = $row;
+                }
 
 				return $array;
-			} else
-				return null;
+			} else {
+return null;
+            }
 		}
-		
+
 		public function queryRaw($queryString)
 		{
 			if (!$result = mysqli_query($this->link, $queryString)) {
-				
 				$code = mysqli_errno($this->link);
 
 				if ($code == 1062) {
@@ -233,17 +242,17 @@
 				}
 
 				throw new $e(
-					mysqli_error($this->link).' - '.$queryString,
+					mysqli_error($this->link) . ' - ' . $queryString,
 					$code
 				);
 			}
-			
+
 			return $result;
 		}
-		
+
 		public function getTableInfo($table)
 		{
-			static $types = array(
+			static $types = [
 				'tinyint'		=> DataType::SMALLINT,
 				'smallint'		=> DataType::SMALLINT,
 				'int'			=> DataType::INTEGER,
@@ -251,7 +260,7 @@
 				'mediumint'		=> DataType::INTEGER,
 
 				'bigint'		=> DataType::BIGINT,
-				
+
 				'float'			=> DataType::REAL,
 				'double'		=> DataType::DOUBLE,
 				'decimal'		=> DataType::NUMERIC,
@@ -262,7 +271,7 @@
 				'tinytext'		=> DataType::TEXT,
 				'mediumtext'	=> DataType::TEXT,
 				'longtext'		=> DataType::TEXT,
-				
+
 				'date'			=> DataType::DATE,
 				'time'			=> DataType::TIME,
 				'timestamp'		=> DataType::TIMESTAMP,
@@ -272,24 +281,24 @@
 				'set'			=> null,
 				'enum'			=> null,
 				'year'			=> null
-			);
-			
+			];
+
 			try {
-				$result = $this->queryRaw('SHOW COLUMNS FROM '.$table);
+				$result = $this->queryRaw('SHOW COLUMNS FROM ' . $table);
 			} catch (BaseException $e) {
 				throw new ObjectNotFoundException(
 					"unknown table '{$table}'"
 				);
 			}
-			
+
 			$table = new DBTable($table);
-			
+
 			while ($row = mysqli_fetch_array($result)) {
 				$name = strtolower(
 					$this->getTableInfoFieldValue('Field', $row)
 				);
-				$matches = array();
-				$info = array('type' => null, 'extra' => null);
+				$matches = [];
+				$info = ['type' => null, 'extra' => null];
 				$type = strtolower($this->getTableInfoFieldValue('Type', $row));
 				if (
 					preg_match(
@@ -302,18 +311,18 @@
 					$info['size'] = $matches[3];
 					$info['extra'] = $matches[4];
 				}
-				
+
 				Assert::isTrue(
 					array_key_exists($info['type'], $types),
-					
 					'unknown type "'
-					.$info['type']
-					.'" found in column "'.$name.'"'
+					. $info['type']
+					. '" found in column "' . $name . '"'
 				);
-				
-				if (empty($types[$info['type']]))
+
+				if (empty($types[$info['type']])) {
 					continue;
-				
+                }
+
 				$column = DBColumn::create(
 					DataType::create($types[$info['type']])->
 						setUnsigned(
@@ -324,7 +333,6 @@
 								$this->getTableInfoFieldValue('Null', $row)
 							) == 'yes'
 						),
-					
 					$name
 				)->
 				setAutoincrement(
@@ -345,7 +353,7 @@
 
 				$table->addColumn($column);
 			}
-			
+
 			return $table;
 		}
 
@@ -366,12 +374,12 @@
 		{
 			return false;
 		}
-		
+
 		protected function getInsertId()
 		{
 			return mysqli_insert_id($this->link);
 		}
-		
+
 		/**
 		 * @return MyImprovedDialect
 		**/
@@ -379,29 +387,29 @@
 		{
 			return new MyImprovedDialect();
 		}
-		
+
 		private function checkSingle($result)
 		{
-			if (mysqli_num_rows($result) > 1)
+			if (mysqli_num_rows($result) > 1) {
 				throw new TooManyRowsException(
 					'query returned too many rows (we need only one)'
 				);
-			
+            }
+
 			return $result;
 		}
 
-		protected  function setupAutoCommit()
+		protected function setupAutoCommit()
 		{
 			if ($this->isConnected()) {
 				mysqli_autocommit($this->link, $this->needAutoCommit);
 			}
 		}
 
-		protected  function setupDefaultEngine()
+		protected function setupDefaultEngine()
 		{
 			if ($this->defaultEngine && $this->isConnected()) {
-				mysqli_query($this->link, 'SET storage_engine='.$this->defaultEngine);
+				mysqli_query($this->link, 'SET storage_engine=' . $this->defaultEngine);
 			}
 		}
 	}
-?>

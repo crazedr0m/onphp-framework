@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -14,8 +15,8 @@
 		const NIL = 'nil';
 		const AMQP_NONE = AMQP_NOPARAM;
 
-		protected $exchangeList = array();
-		protected $queueList = array();
+		protected $exchangeList = [];
+		protected $queueList = [];
 		protected $opened = false;
 
 
@@ -101,17 +102,17 @@
 		 */
 		public function basicCancel($consumerTag)
 		{
-			if (!$this->consumer instanceof AMQPConsumer)
+			if (!$this->consumer instanceof AMQPConsumer) {
 				throw new WrongStateException();
+            }
 
 			try {
 				$obj = $this->lookupQueue($consumerTag);
 
 				$result = $obj->cancel($consumerTag);
-
 			} catch (Exception $e) {
 				$this->clearConnection();
-				
+
 				throw new AMQPServerException(
 					$e->getMessage(),
 					$e->getCode(),
@@ -149,7 +150,7 @@
 				 * blocking function
 				 */
 				$obj->consume(
-					array($callback, 'handlePeclDelivery'),
+					[$callback, 'handlePeclDelivery'],
 					$autoAck
 						? AMQP_AUTOACK
 						: self::AMQP_NONE
@@ -190,10 +191,11 @@
 				);
 			}
 
-			if (!$message)
+			if (!$message) {
 				throw new ObjectNotFoundException(
 					"AMQP queue with name '{$queue}' is empty"
 				);
+            }
 
 			return AMQPPeclIncomingMessageAdapter::convert($message);
 		}
@@ -206,7 +208,9 @@
 		 * @return AMQPPeclChannel
 		 */
 		public function basicPublish(
-			$exchange, $routingKey, AMQPOutgoingMessage $msg
+			$exchange,
+            $routingKey,
+            AMQPOutgoingMessage $msg
 		) {
 			try {
 				$obj = $this->lookupExchange($exchange);
@@ -276,7 +280,7 @@
 		{
 			try {
 				$obj = $this->lookupExchange($destinationName);
-				
+
 				$result = $obj->bind(
 					$sourceName,
 					$routingKey
@@ -314,10 +318,11 @@
 		{
 			$this->checkConnection();
 
-			if (!$conf->getType() instanceof AMQPExchangeType)
+			if (!$conf->getType() instanceof AMQPExchangeType) {
 				throw new WrongArgumentException(
 					"AMQP exchange type is not set"
 				);
+            }
 
 			try {
 				$this->exchangeList[$name] =
@@ -356,12 +361,14 @@
 		 * @return AMQPChannelInterface
 		**/
 		public function exchangeDelete(
-			$name, $ifUnused = false
+			$name,
+            $ifUnused = false
 		) {
 			$bitmask = self::AMQP_NONE;
 
-			if ($ifUnused)
+			if ($ifUnused) {
 				$bitmask = $bitmask | AMQP_IFUNUSED;
+            }
 
 			try {
 				$obj = $this->lookupExchange($name);
@@ -422,9 +429,10 @@
 			$this->checkConnection();
 
 			try {
-				if (isset($this->queueList[$name]))
+				if (isset($this->queueList[$name])) {
 					unset($this->queueList[$name]);
-				
+                }
+
 				$this->queueList[$name] =
 					new AMQPQueue($this->getChannelLink());
 
@@ -434,7 +442,7 @@
 					$conf->getBitmask(new AMQPPeclQueueBitmask())
 				);
 				$obj->setArguments($conf->getArguments());
-				
+
 				$result = $obj->declare();
 			} catch (Exception $e) {
 				$this->clearConnection();
@@ -521,7 +529,7 @@
 				$result = $obj->unbind($exchange, $routingKey);
 			} catch (Exception $e) {
 				$this->clearConnection();
-				
+
 				throw new AMQPServerException(
 					$e->getMessage(),
 					$e->getCode(),
@@ -559,8 +567,9 @@
 		**/
 		protected function unsetExchange($name)
 		{
-			if (isset($this->exchangeList[$name]))
+			if (isset($this->exchangeList[$name])) {
 				unset($this->exchangeList[$name]);
+            }
 
 			return $this;
 		}
@@ -575,8 +584,9 @@
 
 			if (!isset($this->queueList[$name])) {
 				$this->queueList[$name] = new AMQPQueue($this->getChannelLink());
-				if ($name != self::NIL)
+				if ($name != self::NIL) {
 						$this->queueList[$name]->setName($name);
+                }
 			}
 
 			return $this->queueList[$name];
@@ -587,8 +597,9 @@
 		**/
 		protected function unsetQueue($name)
 		{
-			if (isset($this->queueList[$name]))
+			if (isset($this->queueList[$name])) {
 				unset($this->queueList[$name]);
+            }
 
 			return $this;
 		}
@@ -613,8 +624,8 @@
 			unset($this->link);
 			$this->link = null;
 
-			$this->exchangeList = array();
-			$this->queueList = array();
+			$this->exchangeList = [];
+			$this->queueList = [];
 
 			return $this;
 		}
@@ -639,4 +650,3 @@
 			return $this;
 		}
 	}
-?>

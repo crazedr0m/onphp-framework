@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,38 +12,36 @@
 
 	/**
 	 * @see Named
-	 * 
+	 *
 	 * @ingroup Base
 	 * @ingroup Module
 	**/
-	abstract class NamedObject
-		extends IdentifiableObject
-		implements Named, Stringable
+	abstract class NamedObject extends IdentifiableObject implements Named, Stringable
 	{
 		protected $name	= null;
-		
+
 		public static function compareNames(
-			Named $left, Named $right
-		)
-		{
+			Named $left,
+            Named $right
+		) {
 			return strcasecmp($left->getName(), $right->getName());
 		}
-		
+
 		public function getName()
 		{
 			return $this->name;
 		}
-		
+
 		/**
 		 * @return NamedObject
 		**/
 		public function setName($name)
 		{
 			$this->name = $name;
-			
+
 			return $this;
 		}
-		
+
 		public function __toString()
 		{
 			$this->toString();
@@ -53,4 +52,3 @@
 			return "[{$this->id}] {$this->name}";
 		}
 	}
-?>

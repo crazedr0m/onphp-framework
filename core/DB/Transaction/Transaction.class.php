@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Transaction's factory.
-	 * 
+	 *
 	 * @ingroup Transaction
 	**/
 	final class Transaction extends StaticFactory
@@ -23,7 +24,7 @@
 		{
 			return new DBTransaction($db);
 		}
-		
+
 		/**
 		 * @return TransactionQueue
 		**/
@@ -31,7 +32,7 @@
 		{
 			return new TransactionQueue($db);
 		}
-		
+
 		/**
 		 * @return FakeTransaction
 		**/
@@ -40,4 +41,3 @@
 			return new FakeTransaction($db);
 		}
 	}
-?>

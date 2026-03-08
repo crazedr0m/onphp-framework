@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Based on /etc/mime.types
-	 * 
+	 *
 	 * @ingroup Helpers
 	**/
 	final class MimeType extends Enum
@@ -19,7 +20,7 @@
 		/*
 		 * Mime Type map
 		 */
-		protected static $names = array(
+		protected static $names = [
 			1				=>	'application/andrew-inset',
 			2				=>	'application/annodex',
 			3				=>	'application/atom+xml',
@@ -395,12 +396,12 @@
 			373				=>	'x-epoc/x-sisx-app',
 			374				=>	'x-world/x-vrml',
 			375				=>	'image/jpeg',
-		);
+		];
 
 		/*
 		 * Extension map
 		 */
-		protected static $extensions	= array(
+		protected static $extensions	= [
 			1				=>	'ez',
 			2				=>	'anx',
 			3				=>	'atom',
@@ -776,7 +777,7 @@
 			373				=>	'sisx',
 			374				=>	'vrm',
 			375				=>	'jpg',
-		);
+		];
 
 		/**
 		 * @return MimeType
@@ -798,8 +799,9 @@
 			$list = static::getNameList();
 
 			$id = array_search(mb_strtolower($value), $list);
-			if ($id === false)
-				throw new MissingElementException('Can not find similar mime type "'.$value.'" !');
+			if ($id === false) {
+				throw new MissingElementException('Can not find similar mime type "' . $value . '" !');
+            }
 
 			return new self($id);
 		}
@@ -815,8 +817,9 @@
 			$list = static::getExtensionList();
 
 			$id = array_search(mb_strtolower($value), $list);
-			if ($id === false)
-				throw new MissingElementException('Can not find similar extension "'.$value.'" !');
+			if ($id === false) {
+				throw new MissingElementException('Can not find similar extension "' . $value . '" !');
+            }
 
 			return new self($id);
 		}
@@ -838,13 +841,14 @@
 		 */
 		public function getExtension()
 		{
-			if(
-				isset( static::$extensions[$this->id] )
-			)
+			if (
+				isset(static::$extensions[$this->id])
+			) {
 				return static::$extensions[$this->id];
+            }
 
 			throw new MissingElementException(
-				'Can not find "'.$this->id.'" in extensions map!'
+				'Can not find "' . $this->id . '" in extensions map!'
 			);
 		}
 
@@ -857,4 +861,3 @@
 			return $this->getName();
 		}
 	}
-?>

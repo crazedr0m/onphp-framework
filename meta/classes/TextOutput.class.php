@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -20,20 +21,20 @@
 		public function write($text)
 		{
 			echo $text;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TextOutput
 		**/
 		public function writeLine($text)
 		{
-			echo $text."\n";
-			
+			echo $text . "\n";
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TextOutput
 		**/
@@ -49,7 +50,7 @@
 		**/
 		public function writeErrLine($text)
 		{
-			fwrite(STDERR, $text .PHP_EOL);
+			fwrite(STDERR, $text . PHP_EOL);
 
 			return $this;
 		}
@@ -60,10 +61,10 @@
 		public function newLine()
 		{
 			echo "\n";
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TextOutput
 		**/
@@ -71,21 +72,19 @@
 			$attribute = ConsoleMode::ATTR_RESET_ALL,
 			$foreground = ConsoleMode::FG_WHITE,
 			$background = ConsoleMode::BG_BLACK
-		)
-		{
+		) {
 			// nop
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TextOutput
 		**/
 		public function resetAll()
 		{
 			// nop
-			
+
 			return $this;
 		}
 	}
-?>

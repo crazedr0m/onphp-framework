@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -25,28 +26,24 @@ namespace {$ns->buildFullName('dao', false)};
 
 EOT;
 			}
-			
+
 			$type = $class->getType();
-			
+
 			if ($type) {
 				switch ($type->getId()) {
-					
 					case MetaClassType::CLASS_ABSTRACT:
-					
 						$abstract = 'abstract ';
 						$notes = 'nothing here yet';
-						
+
 						break;
-					
+
 					case MetaClassType::CLASS_FINAL:
-					
 						$abstract = 'final ';
 						$notes = 'last chance for customization';
-						
+
 						break;
-					
+
 					default:
-						
 						throw new WrongStateException('unknown class type');
 				}
 			} else {
@@ -55,9 +52,9 @@ EOT;
 			}
 
 			$parentName = $ns
-				? $ns->buildFullName('dao', true).'\\'.$class->getName().'DAO'
-				: 'Auto'.$class->getName().'DAO';
-			
+				? $ns->buildFullName('dao', true) . '\\' . $class->getName() . 'DAO'
+				: 'Auto' . $class->getName() . 'DAO';
+
 			$out .= <<<EOT
 {$abstract}class {$class->getName()}DAO extends {$parentName}
 {
@@ -65,8 +62,7 @@ EOT;
 }
 
 EOT;
-			
-			return $out.self::getHeel();
+
+			return $out . self::getHeel();
 		}
 	}
-?>

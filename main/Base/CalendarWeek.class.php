@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,34 +12,33 @@
 
 	/**
 	 * Calendar week representation.
-	 * 
+	 *
 	 * @ingroup Calendar
 	**/
 	final class CalendarWeek
 	{
-		private $days = array();
-		
+		private $days = [];
+
 		/**
 		 * @return CalendarWeek
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function getDays()
 		{
 			return $this->days;
 		}
-		
+
 		/**
 		 * @return CalendarWeek
 		**/
 		public function addDay(CalendarDay $day)
 		{
 			$this->days[$day->toDate()] = $day;
-			
+
 			return $this;
 		}
 	}
-?>

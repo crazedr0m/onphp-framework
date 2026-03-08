@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,15 +19,14 @@
 		{
 			return $this;
 		}
-		
+
 		public function daoExists()
 		{
 			return false;
 		}
-		
+
 		public function tableExists()
 		{
 			return false;
 		}
 	}
-?>

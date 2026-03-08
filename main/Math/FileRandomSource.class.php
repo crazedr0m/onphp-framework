@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -15,24 +16,23 @@
 	final class FileRandomSource implements RandomSource
 	{
 		private $handle = null;
-		
+
 		public function __construct($filename)
 		{
 			Assert::isTrue(file_exists($filename) && is_readable($filename));
-			
+
 			$this->handle = fopen($filename, 'rb');
 		}
-		
+
 		public function __destruct()
 		{
 			fclose($this->handle);
 		}
-		
+
 		public function getBytes($numberOfBytes)
 		{
 			Assert::isPositiveInteger($numberOfBytes);
-			
+
 			return fread($this->handle, $numberOfBytes);
 		}
 	}
-?>

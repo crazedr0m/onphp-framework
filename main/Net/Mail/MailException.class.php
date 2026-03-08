@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -12,5 +13,7 @@
 	/**
 	 * @ingroup Exceptions
 	**/
-	class MailException extends BaseException {/*_*/};
-?>
+	class MailException extends BaseException
+    {
+/*_*/
+    };

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://tools.ietf.org/html/rfc2631
-	 * 
+	 *
 	 * @ingroup Crypto
 	**/
 	final class DiffieHellmanKeyPair implements KeyPair
@@ -19,12 +20,12 @@
 		private $private	= null;
 		private $public		= null;
 		private $parameters	= null;
-		
+
 		public function __construct(DiffieHellmanParameters $parameters)
 		{
 			$this->parameters = $parameters;
 		}
-		
+
 		/**
 		 * @return DiffieHellmanKeyPair
 		**/
@@ -32,32 +33,31 @@
 		{
 			return new self($parameters);
 		}
-		
+
 		/**
 		 * @return DiffieHellmanKeyPair
 		**/
 		public static function generate(
 			DiffieHellmanParameters $parameters,
 			RandomSource $randomSource
-		)
-		{
+		) {
 			$result = new self($parameters);
-			
+
 			$factory = $parameters->getModulus()->getFactory();
-			
+
 			$result->private = $factory->makeRandom(
 				$parameters->getModulus(),
 				$randomSource
 			);
-			
+
 			$result->public = $parameters->getGen()->modPow(
 				$result->private,
 				$parameters->getModulus()
 			);
-			
+
 			return $result;
 		}
-		
+
 		/**
 		 * @return DiffieHellmanKeyPair
 		**/
@@ -66,7 +66,7 @@
 			$this->private = $private;
 			return $this;
 		}
-		
+
 		/**
 		 * @return BigInteger
 		**/
@@ -74,7 +74,7 @@
 		{
 			return $this->private;
 		}
-		
+
 		/**
 		 * @return DiffieHellmanKeyPair
 		**/
@@ -83,7 +83,7 @@
 			$this->public = $public;
 			return $this;
 		}
-		
+
 		/**
 		 * @return BigInteger
 		**/
@@ -91,18 +91,17 @@
 		{
 			return $this->public;
 		}
-		
+
 		/**
 		 * @return BigInteger
 		**/
 		public function makeSharedKey(BigInteger $otherSitePublic)
 		{
 			Assert::brothers($this->private, $otherSitePublic);
-			
+
 			return $otherSitePublic->modPow(
 				$this->private,
 				$this->parameters->getModulus()
 			);
 		}
 	}
-?>

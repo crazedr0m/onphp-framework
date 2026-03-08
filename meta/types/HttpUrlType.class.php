@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -18,20 +19,19 @@
 		{
 			return 'httpUrl';
 		}
-		
+
 		public function isGeneric()
 		{
 			return true;
 		}
-		
+
 		public function isMeasurable()
 		{
 			return true;
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::VARCHAR)';
 		}
 	}
-?>

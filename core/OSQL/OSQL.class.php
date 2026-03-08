@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Factory for OSQL's queries.
-	 * 
+	 *
 	 * @ingroup OSQL
-	 * 
+	 *
 	 * @see http://onphp.org/examples.OSQL.en.html
 	**/
 	final class OSQL extends StaticFactory
@@ -25,7 +26,7 @@
 		{
 			return new SelectQuery();
 		}
-		
+
 		/**
 		 * @return InsertQuery
 		**/
@@ -33,7 +34,7 @@
 		{
 			return new InsertQuery();
 		}
-		
+
 		/**
 		 * @return UpdateQuery
 		**/
@@ -41,7 +42,7 @@
 		{
 			return new UpdateQuery($table);
 		}
-		
+
 		/**
 		 * @return DeleteQuery
 		**/
@@ -49,7 +50,7 @@
 		{
 			return new DeleteQuery();
 		}
-		
+
 		/**
 		 * @return TruncateQuery
 		**/
@@ -57,7 +58,7 @@
 		{
 			return new TruncateQuery($whom);
 		}
-		
+
 		/**
 		 * @return CreateTableQuery
 		**/
@@ -65,7 +66,7 @@
 		{
 			return new CreateTableQuery($table);
 		}
-		
+
 		/**
 		 * @return DropTableQuery
 		**/
@@ -74,4 +75,3 @@
 			return new DropTableQuery($name, $cascade);
 		}
 	}
-?>

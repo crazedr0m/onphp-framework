@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -8,15 +9,16 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	class AutoloaderClassNotFound implements Autoloader
 	{
 		private static $i = null;
-		
-		protected function __construct() {
+
+		protected function __construct()
+        {
 			/* you must'n create it outside */
 		}
-		
+
 		/**
 		 * @return AutoloaderClassNotFound
 		 */
@@ -25,40 +27,41 @@
 			return self::$i
 				?: (self::$i = new self());
 		}
-		
+
 		public function autoload($className)
 		{
-			static $checkMethods = array(
+			static $checkMethods = [
 				'class_exists',
 				'interface_exists',
 				'trait_exists',
-			);
-			
+			];
+
 			AutoloaderPool::autoloadWithRecache($className);
-			if (class_exists($className, false))
+			if (class_exists($className, false)) {
 				return;
+            }
 
 			foreach (debug_backtrace() as $call) {
 				if (
 					!empty($call['function'])
 					&& empty($call['class'])
 					&& in_array($call['function'], $checkMethods)
-				)
+				) {
 					return;
+                }
 			}
-			
-			throw new ClassNotFoundException('"'.$className.'"');
+
+			throw new ClassNotFoundException('"' . $className . '"');
 		}
-		
+
 		public function register()
 		{
 			$this->unregister();
-			spl_autoload_register(array($this, 'autoload'));
+			spl_autoload_register([$this, 'autoload']);
 		}
-		
+
 		public function unregister()
 		{
-			spl_autoload_unregister(array($this, 'autoload'));
+			spl_autoload_unregister([$this, 'autoload']);
 		}
 	}
-?>

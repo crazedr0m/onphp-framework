@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich, Konstantin V. Arkhipov *
  *                                                                          *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Full-text ranking. Mostly used in "ORDER BY".
-	 * 
+	 *
 	 * @ingroup OSQL
 	**/
 	final class FullTextRank extends FullText
@@ -26,4 +27,3 @@
 				);
 		}
 	}
-?>

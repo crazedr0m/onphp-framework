@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,8 +19,7 @@
 		/// @return plain array of possible primitive choices
 		public function getList();
 		public function setList($list);
-		
+
 		public function getChoiceValue();
 		public function getActualChoiceValue();
 	}
-?>

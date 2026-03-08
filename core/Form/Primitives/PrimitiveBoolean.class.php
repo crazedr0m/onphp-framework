@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -16,30 +17,31 @@
 	{
 		public function import($scope)
 		{
-			if (isset($scope[$this->name]))
+			if (isset($scope[$this->name])) {
 				$this->value = true;
-			else
-				$this->value = false;
-			
+			} else {
+$this->value = false;
+            }
+
 			return $this->imported = true;
 		}
-		
+
 		public function importValue($value)
 		{
 			if (
 				false === $value
 				|| null === $value
-			)
+			) {
 				$this->value = false;
-			else
-				$this->value = true;
-			
+			} else {
+$this->value = true;
+            }
+
 			return $this->imported = true;
 		}
-		
+
 		public function isImported()
 		{
 			return ($this->imported && $this->value);
 		}
 	}
-?>

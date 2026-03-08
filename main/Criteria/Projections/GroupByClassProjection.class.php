@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash                                *
  *                                                                         *
@@ -21,12 +22,11 @@
 		{
 			return new self($class);
 		}
-		
+
 		/* void */ protected function subProcess(
-			JoinCapableQuery $query, DBField $field
-		)
-		{
+			JoinCapableQuery $query,
+            DBField $field
+		) {
 			$query->groupBy($field);
 		}
 	}
-?>

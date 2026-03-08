@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	/**
 	 * NamespaceDirScanerOnPHP class to scan directories and save which class where
 	 */
@@ -18,16 +19,16 @@
 		{
 			$this->list[$this->dirCount] = $directory;
 
-			if ($paths = glob($directory.'*'.$this->classExtension, GLOB_NOSORT)) {
+			if ($paths = glob($directory . '*' . $this->classExtension, GLOB_NOSORT)) {
 				foreach ($paths as $path) {
 					$fullClassName = ($namespace ? ('\\' . $namespace) : '') . '\\'
-						.basename($path, $this->classExtension);
-					if (!isset($this->list[$fullClassName]))
+						. basename($path, $this->classExtension);
+					if (!isset($this->list[$fullClassName])) {
 						$this->list[$fullClassName] = $this->dirCount;
+                    }
 				}
 			}
 
 			++$this->dirCount;
 		}
 	}
-?>

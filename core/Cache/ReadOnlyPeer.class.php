@@ -1,4 +1,5 @@
 <?php
+
 	/***************************************************************************
 	 *   Copyright (C) 2011 by Alexander A. Klestov                            *
 	 *                                                                         *
@@ -80,10 +81,11 @@
 		}
 
 		protected function store(
-			$method, $index, $value, $expires = Cache::EXPIRES_MINIMUM
-		)
-		{
+			$method,
+            $index,
+            $value,
+            $expires = Cache::EXPIRES_MINIMUM
+		) {
 			throw new UnsupportedMethodException();
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -19,28 +20,28 @@
 		{
 			return 'hstore';
 		}
-		
+
 		public function isGeneric()
 		{
 			return true;
 		}
-		
+
 		public function isMeasurable()
 		{
 			return true;
 		}
-		
+
 		public function getDeclaration()
 		{
-			if ($this->hasDefault())
+			if ($this->hasDefault()) {
 				return "'{$this->default}'";
-		
+            }
+
 			return 'null';
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::TEXT)';
 		}
 	}
-?>

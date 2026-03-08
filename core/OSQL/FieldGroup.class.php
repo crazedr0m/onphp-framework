@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -14,29 +15,30 @@
 	**/
 	final class FieldGroup implements DialectString
 	{
-		private $list = array();
-		
+		private $list = [];
+
 		/**
 		 * @return FieldGroup
 		**/
 		public function add(Castable $field)
 		{
 			$this->list[] = $field;
-			
+
 			return $this;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
-			if (!$this->list)
+			if (!$this->list) {
 				return null;
-			
-			$out = array();
-			
-			foreach ($this->list as $field)
+            }
+
+			$out = [];
+
+			foreach ($this->list as $field) {
 				$out[] = $field->toDialectString($dialect);
-			
+            }
+
 			return implode(', ', $out);
 		}
 	}
-?>

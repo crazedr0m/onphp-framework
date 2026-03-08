@@ -97,7 +97,7 @@
 
 			$this->assertEquals(Cache::me()->get('test_integer'), 1);
 		}
-		
+
 		private function doTestMemcached(SelectivePeer $cache)
 		{
 			Cache::setPeer($cache);
@@ -105,24 +105,25 @@
 			if (!Cache::me()->isAlive()) {
 				return $this->markTestSkipped('memcached not available');
 			}
-			
+
 			for ($i = 0; $i < self::QUERIES; ++$i) {
 				$this->assertTrue(Cache::me()->mark('one')->set($i, $i));
 				$this->assertTrue(Cache::me()->mark('two')->set($i, $i));
 			}
-		
+
 			$oneHit = 0;
 			$twoHit = 0;
-		
+
 			for ($i = 0; $i < self::QUERIES; ++$i) {
-				if (Cache::me()->mark('one')->get($i) == $i)
+				if (Cache::me()->mark('one')->get($i) == $i) {
 					++$oneHit;
-				if (Cache::me()->mark('two')->get($i) == $i)
+                }
+				if (Cache::me()->mark('two')->get($i) == $i) {
 					++$twoHit;
+                }
 			}
-			
+
 			$this->assertEquals($oneHit, $twoHit);
 			$this->assertEquals($twoHit, self::QUERIES);
 		}
 	}
-?>

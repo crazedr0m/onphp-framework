@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -19,7 +20,7 @@
 				)->
 				setHeaderVar('User-Agent', 'onphp-test')->
 				setMethod(HttpMethod::get());
-			
+
 			try {
 				$response = CurlHttpClient::create()->
 					setTimeout(3)->
@@ -27,17 +28,17 @@
 			} catch (NetworkException $e) {
 				return $this->markTestSkipped('no network available');
 			}
-			
+
 			$this->assertEquals(
 				$response->getStatus()->getId(),
 				HttpStatus::CODE_200
 			);
-			
+
 			$this->assertContains(
 				'github',
 				$response->getBody()
 			);
-			
+
 			try {
 				$badResponse = CurlHttpClient::create()->
 					setTimeout(3)->
@@ -48,7 +49,7 @@
 				/* pass */
 			}
 		}
-		
+
 		public function testCurlException()
 		{
 			$request = HttpRequest::create()->
@@ -56,16 +57,15 @@
 					HttpUrl::create()->parse('http://nonexistentdomain.xyz')
 				)->
 				setMethod(HttpMethod::get());
-			
+
 			try {
 				$response = CurlHttpClient::create()->
 					setTimeout(3)->
 					send($request);
-				
+
 				$this->fail();
 			} catch (NetworkException $e) {
 				$this->assertContains('curl error', $e->getMessage());
 			}
 		}
 	}
-?>

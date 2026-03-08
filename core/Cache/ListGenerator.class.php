@@ -1,4 +1,5 @@
 <?php
+
 	/***************************************************************************
 	*   Copyright (C) 2012 by Artem Naumenko                                  *
 	*                                                                         *
@@ -10,11 +11,11 @@
 	***************************************************************************/
 
 	/**
-	 * @param string $key 
-	 * 
+	 * @param string $key
+	 *
 	 * @return Listable
 	 */
-	 
+
 	interface ListGenerator
 	{
 		public function fetchList($key);

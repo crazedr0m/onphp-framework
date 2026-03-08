@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -23,25 +24,26 @@
 				$this->makeSelectQuery()->
 				dropFields()->
 				get($this->container->getChildIdField());
-			
+
 			return $this->targetize($query);
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return OneToManyLinkedLazy
 		**/
-		public function sync($insert, $update = array(), $delete)
+		public function sync($insert, $update = [], $delete)
 		{
-			Assert::isTrue($update === array());
-			
+			Assert::isTrue($update === []);
+
 			$db = DBPool::getByDao($this->container->getDao());
-			
+
 			$uc = $this->container;
 			$dao = $uc->getDao();
 
-			if ($insert)
+			if ($insert) {
 				$db->queryNull($this->makeMassUpdateQuery($insert));
+            }
 
 			if ($delete) {
 				// unlink or drop
@@ -58,20 +60,20 @@
 								)
 							)
 						);
-				
+
 				$dao->uncacheByIds($delete);
 			}
 
 			return $this;
 		}
-		
+
 		/**
 		 * @return UpdateQuery
 		**/
 		private function makeMassUpdateQuery($ids)
 		{
 			$uc = $this->container;
-			
+
 			return
 				OSQL::update($uc->getDao()->getTable())->
 				set($uc->getParentIdField(), null)->
@@ -83,4 +85,3 @@
 				);
 		}
 	}
-?>

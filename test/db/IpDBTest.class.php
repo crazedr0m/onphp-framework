@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * @group ipdb
 	 */
@@ -7,18 +8,18 @@
 		public function testToDialect()
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$expression =
 				Expression::containsIp(
 					IpRange::create('127.0.0.1-127.0.0.5'),
 					IpAddress::create('127.0.0.3')
 				);
-			
+
 			$this->assertEquals(
 				"'127.0.0.3' <<= '127.0.0.1-127.0.0.5'",
 				$expression->toDialectString($dialect)
 			);
-			
+
 			$expression =
 				Expression::containsIp(
 					DBField::create('range'),
@@ -26,27 +27,29 @@
 				);
 			$this->assertEquals(
 				'\'192.168.1.1\' <<= "range"',
-				$expression->toDialectString($dialect)	
+				$expression->toDialectString($dialect)
 			);
 		}
-		
+
 		public function testWithObjects()
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$criteria =
 				Criteria::create(TestUser::dao())->
 				add(
 					Expression::containsIp(
-						IpRange::create('192.168.1.1-192.168.1.255'), 'ip')
+                        IpRange::create('192.168.1.1-192.168.1.255'),
+                        'ip'
+                    )
 				)->
 				addProjection(Projection::property('id'));
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString($dialect),
 				'SELECT "test_user"."id" FROM "test_user" WHERE "test_user"."ip" <<= \'192.168.1.1-192.168.1.255\''
 			);
-			
+
 			$criteria =
 				Criteria::create(TestInternetProvider::dao())->
 				add(
@@ -55,19 +58,18 @@
 						IpAddress::create('42.42.42.42')
 					)
 				)->addProjection(Projection::property('id'));
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString($dialect),
 				'SELECT "test_internet_provider"."id" FROM "test_internet_provider" WHERE \'42.42.42.42\' <<= "test_internet_provider"."range"'
-						
 			);
 		}
-		
+
 		public function testIpAddressProperty()
 		{
 			foreach (DBTestPool::me()->getPool() as $db) {
 				DBPool::me()->setDefault($db);
-				
+
 				$city =
 					TestCity::create()->
 					setName('Khimki');
@@ -111,12 +113,12 @@
 				$this->assertEquals($count, 1);
 			}
 		}
-		
+
 		public function testIpRangeProperty()
 		{
 			foreach (DBTestPool::me()->getPool() as $db) {
 				DBPool::me()->setDefault($db);
-				
+
 				$akado =
 					TestInternetProvider::create()->
 					setName('Akada')->
@@ -159,4 +161,3 @@
 			}
 		}
 	}
-?>

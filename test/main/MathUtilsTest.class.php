@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Evgeniy N. Sokolov                              *
  *                                                                         *
@@ -31,35 +32,36 @@
 
 		public function testMatrixMultiplication()
 		{
-			$left = array(
-				array(1, 2),
-				array(3, 5),
-				array(2, 4)
-			);
+			$left = [
+				[1, 2],
+				[3, 5],
+				[2, 4]
+			];
 
-			$right = array(
-				array(4, 7, 5),
-				array(3, 1, 4)
-			);
+			$right = [
+				[4, 7, 5],
+				[3, 1, 4]
+			];
 
 			$this->assertEquals(
 				MathUtils::getMmult($left, $right),
-				array(
-					array(10, 9, 13),
-					array(27, 26, 35),
-					array(20, 18, 26),
-				)
+				[
+					[10, 9, 13],
+					[27, 26, 35],
+					[20, 18, 26],
+				]
 			);
 
 			try {
-				MathUtils::getMmult(array(), $right);
+				MathUtils::getMmult([], $right);
 				$this->fail("Exception expected here");
-			} catch (WrongArgumentException $e) {}
+			} catch (WrongArgumentException $e) {
+            }
 
 			try {
-				MathUtils::getMmult($left, array());
+				MathUtils::getMmult($left, []);
 				$this->fail("Exception expected here");
-			} catch (WrongArgumentException $e) {}
+			} catch (WrongArgumentException $e) {
+            }
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,9 +16,9 @@
 	abstract class SelectivePeer extends CachePeer
 	{
 		const MARGINAL_VALUE = 'i_am_declassed_element'; // Yanka R.I.P.
-		
+
 		protected $className	= null;
-		
+
 		/**
 		 * @return SelectivePeer
 		**/
@@ -26,17 +27,17 @@
 			$this->className = $className;
 			return $this;
 		}
-		
+
 		protected function getClassName()
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				$class = self::MARGINAL_VALUE;
-			else
-				$class = $this->className;
-				
+			} else {
+$class = $this->className;
+            }
+
 			$this->className = null; // eat it after use
 
 			return $class;
 		}
 	}
-?>

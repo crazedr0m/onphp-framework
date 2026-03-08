@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -17,11 +18,10 @@
 	 * @ingroup Base
 	 * @ingroup Module
 	**/
-	abstract class Enum extends NamedObject
-		implements
-			Serializable
+	abstract class Enum extends NamedObject implements
+        Serializable
 	{
-		protected static $names = array(/* override me */);
+		protected static $names = [/* override me */];
 
 		/**
 		 * @param integer $id
@@ -47,10 +47,11 @@
 			if (isset(static::$names[$id])) {
 				$this->id = $id;
 				$this->name = static::$names[$id];
-			} else
-				throw new MissingElementException(
-					get_class($this) . ' knows nothing about such id == '.$id
-				);
+			} else {
+throw new MissingElementException(
+    get_class($this) . ' knows nothing about such id == ' . $id
+);
+            }
 
 			return $this;
 		}
@@ -78,9 +79,10 @@
 		 */
 		public static function getList()
 		{
-			$list = array();
-			foreach (array_keys(static::$names) as $id)
+			$list = [];
+			foreach (array_keys(static::$names) as $id) {
 				$list[] = static::create($id);
+            }
 
 			return $list;
 		}
@@ -141,4 +143,3 @@
 			throw new UnsupportedMethodException('You can not change id here, because it is politics for Enum!');
 		}
 	}
-?>

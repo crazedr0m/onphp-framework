@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -28,9 +29,8 @@
 				$scopedValue = urldecode($scope[$this->name]);
 				$this->raw = $scopedValue;
 
-				$names = ClassUtils::callStaticMethod($this->className.'::getNameList');
+				$names = ClassUtils::callStaticMethod($this->className . '::getNameList');
 				foreach ($names as $key => $value) {
-
 					if ($value == $scopedValue) {
 						try {
 							$this->value = new $this->className($key);
@@ -42,11 +42,10 @@
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
-			
+
 			return null;
 		}
 	}
-?>

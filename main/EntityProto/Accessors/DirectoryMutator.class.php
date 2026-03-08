@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,17 +13,17 @@
 	abstract class DirectoryMutator extends PrototypedSetter
 	{
 		private $getter = null;
-		
+
 		public function __construct(EntityProto $proto, &$object)
 		{
 			Assert::isTrue(
 				is_dir($object) && is_writable($object),
 				'object must be a writeble directory'
 			);
-			
+
 			return parent::__construct($proto, $object);
 		}
-		
+
 		/**
 		 * @return FormGetter
 		**/
@@ -31,8 +32,7 @@
 			if (!$this->getter) {
 				$this->getter = new DirectoryGetter($this->proto, $this->object);
 			}
-			
+
 			return $this->getter;
 		}
 	}
-?>

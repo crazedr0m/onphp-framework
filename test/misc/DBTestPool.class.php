@@ -1,8 +1,9 @@
 <?php
+
 	final class DBTestPool extends Singleton implements Instantiatable
 	{
-		private $pool = array();
-		
+		private $pool = [];
+
 		/**
 		 * @return DBTestPool
 		 */
@@ -10,11 +11,11 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
-		protected function __construct(array $dbs = array())
+
+		protected function __construct(array $dbs = [])
 		{
 			Assert::isArray($dbs);
-			
+
 			foreach ($dbs as $connector => $credentials) {
 				$this->pool[$connector] = DB::spawn(
 					$connector,
@@ -28,23 +29,23 @@
 				}
 			}
 		}
-		
+
 		public function disconnect()
 		{
-			foreach ($this->pool as $connector)
+			foreach ($this->pool as $connector) {
 				$connector->disconnect();
+            }
 		}
-		
+
 		public function connect($persistent = false)
 		{
 			foreach ($this->pool as $connector) {
 				$connector->setPersistent($persistent)->connect();
 			}
 		}
-		
+
 		public function getPool()
 		{
 			return $this->pool;
 		}
 	}
-?>

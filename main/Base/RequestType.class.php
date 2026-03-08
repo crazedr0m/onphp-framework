@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,8 +22,8 @@
 		const SESSION	= 5;
 		const ATTACHED	= 6;
 		const SERVER	= 7;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::GET		=> 'get',
 			self::POST		=> 'post',
 			self::FILES		=> 'files',
@@ -30,18 +31,18 @@
 			self::SESSION	=> 'session',
 			self::ATTACHED	=> 'attached',
 			self::SERVER	=> 'server'
-		);
-		
+		];
+
 		/**
 		 * @return RequestType
 		**/
 		public function setId($id)
 		{
 			Assert::isNull($this->id, 'i am immutable one!');
-			
+
 			return parent::setId($id);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -49,7 +50,7 @@
 		{
 			return self::getInstance(self::GET);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -57,7 +58,7 @@
 		{
 			return self::getInstance(self::POST);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -65,7 +66,7 @@
 		{
 			return self::getInstance(self::FILES);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -73,7 +74,7 @@
 		{
 			return self::getInstance(self::COOKIE);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -89,7 +90,7 @@
 		{
 			return self::getInstance(self::ATTACHED);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
@@ -97,18 +98,18 @@
 		{
 			return self::getInstance(self::SERVER);
 		}
-		
+
 		/**
 		 * @return RequestType
 		**/
 		private static function getInstance($id)
 		{
-			static $instances = array();
-			
-			if (!isset($instances[$id]))
+			static $instances = [];
+
+			if (!isset($instances[$id])) {
 				$instances[$id] = new self($id);
-			
+            }
+
 			return $instances[$id];
 		}
 	}
-?>

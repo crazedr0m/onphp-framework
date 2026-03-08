@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * DB-connector's implementation basis.
-	 * 
+	 *
 	 * @ingroup DB
 	**/
 	abstract class DB
@@ -23,7 +24,7 @@
 		protected $dialect		= null;
 
 		protected $persistent	= false;
-		
+
 		// credentials
 		protected $username	= null;
 		protected $password	= null;
@@ -31,7 +32,7 @@
 		protected $port		= null;
 		protected $basename	= null;
 		protected $encoding	= null;
-		
+
 		/**
 		 * flag to indicate whether we're in transaction
 		**/
@@ -39,19 +40,19 @@
 		/**
 		 * @var list of all started savepoints
 		 */
-		private $savepointList	= array();
-		
-		private $queue			= array();
+		private $savepointList	= [];
+
+		private $queue			= [];
 		private $toQueue		= false;
 		/**
 		 * @var UncachersPool
 		 */
 		private $uncacher		= null;
 		private $outOfTransactionCachePeer = null;
-		
+
 		abstract public function connect();
 		abstract public function disconnect();
-		
+
 		abstract public function getTableInfo($table);
 
 		abstract public function queryRaw($queryString);
@@ -60,10 +61,10 @@
 		abstract public function querySet(Query $query);
 		abstract public function queryColumn(Query $query);
 		abstract public function queryCount(Query $query);
-		
+
 		// actually set's encoding
 		abstract public function setDbEncoding();
-		
+
 		/**
 		 * @return Dialect
 		 */
@@ -72,32 +73,38 @@
 		public function __destruct()
 		{
 			if ($this->isConnected()) {
-				if ($this->transaction)
+				if ($this->transaction) {
 					$this->rollback();
+                }
 
-				if (!$this->persistent)
+				if (!$this->persistent) {
 					$this->disconnect();
+                }
 			}
 		}
-		
+
 		public function getDialect()
 		{
 			return $this->dialect = $this->dialect
 				?: ($this->spawnDialect()->setDB($this));
 		}
-		
+
 		/**
 		 * Shortcut.
-		 * 
+		 *
 		 * @return DB
 		**/
 		public static function spawn(
-			$connector, $user, $pass, $host,
-			$base = null, $persistent = false, $encoding = null
-		)
-		{
-			$db = new $connector;
-			
+			$connector,
+            $user,
+            $pass,
+            $host,
+			$base = null,
+            $persistent = false,
+            $encoding = null
+		) {
+			$db = new $connector();
+
 			$db->
 				setUsername($user)->
 				setPassword($pass)->
@@ -105,7 +112,7 @@
 				setBasename($base)->
 				setPersistent($persistent)->
 				setEncoding($encoding);
-			
+
 			return $db;
 		}
 
@@ -116,7 +123,7 @@
 		{
 			return $this->link;
 		}
-		
+
 		/**
 		 * transaction handling
 		 * @deprecated by Transaction class
@@ -128,73 +135,77 @@
 		public function begin(
 			/* IsolationLevel */ $level = null,
 			/* AccessMode */ $mode = null
-		)
-		{
+		) {
 			$begin = 'begin';
-			
-			if ($level && $level instanceof IsolationLevel)
-				$begin .= ' '.$level->toString();
-			
-			if ($mode && $mode instanceof AccessMode)
-				$begin .= ' '.$mode->toString();
 
-			if ($this->toQueue)
+			if ($level && $level instanceof IsolationLevel) {
+				$begin .= ' ' . $level->toString();
+            }
+
+			if ($mode && $mode instanceof AccessMode) {
+				$begin .= ' ' . $mode->toString();
+            }
+
+			if ($this->toQueue) {
 				$this->queue[] = $begin;
-			else
-				$this->queryRaw("{$begin};\n");
-			
+			} else {
+$this->queryRaw("{$begin};\n");
+            }
+
 			$this->transaction = true;
-			
+
 			$this->outOfTransactionCachePeer = Cache::me();
 			Cache::setPeer(Cache::me()->getRuntimeCopy());
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function commit()
 		{
-			if ($this->toQueue)
+			if ($this->toQueue) {
 				$this->queue[] = 'commit;';
-			else
-				$this->queryRaw("commit;\n");
-			
+			} else {
+$this->queryRaw("commit;\n");
+            }
+
 			$this->transaction = false;
-			$this->savepointList = array();
-			
+			$this->savepointList = [];
+
 			Cache::setPeer($this->outOfTransactionCachePeer);
 			$this->triggerUncacher();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function rollback()
 		{
-			if ($this->toQueue)
+			if ($this->toQueue) {
 				$this->queue[] = 'rollback;';
-			else
-				$this->queryRaw("rollback;\n");
-			
+			} else {
+$this->queryRaw("rollback;\n");
+            }
+
 			$this->transaction = false;
-			$this->savepointList = array();
-			
+			$this->savepointList = [];
+
 			Cache::setPeer($this->outOfTransactionCachePeer);
 			$this->triggerUncacher();
-			
+
 			return $this;
 		}
-		
+
 		public function inTransaction()
 		{
 			return $this->transaction;
 		}
 		//@}
-		
+
 		/**
 		 * queue handling
 		 * @deprecated by Queue class
@@ -205,116 +216,126 @@
 		**/
 		public function queueStart()
 		{
-			if ($this->hasQueue())
+			if ($this->hasQueue()) {
 				$this->toQueue = true;
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function queueStop()
 		{
 			$this->toQueue = false;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function queueDrop()
 		{
-			$this->queue = array();
-			
+			$this->queue = [];
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function queueFlush()
 		{
-			if ($this->queue)
+			if ($this->queue) {
 				$this->queryRaw(
 					implode(";\n", $this->queue)
 				);
-			
+            }
+
 			$this->toQueue = false;
-			
+
 			return $this->queueDrop();
 		}
-		
+
 		public function isQueueActive()
 		{
 			return $this->toQueue;
 		}
 		//@}
-		
+
 		/**
 		 * @param string $savepointName
-		 * @return DB 
+		 * @return DB
 		 */
 		public function savepointBegin($savepointName)
 		{
 			$this->assertSavePointName($savepointName);
-			if (!$this->inTransaction())
+			if (!$this->inTransaction()) {
 				throw new DatabaseException('To use savepoint begin transaction first');
-			
-			$query = 'savepoint '.$savepointName;
-			if ($this->toQueue)
+            }
+
+			$query = 'savepoint ' . $savepointName;
+			if ($this->toQueue) {
 				$this->queue[] = $query;
-			else
-				$this->queryRaw("{$query};\n");
-				
+			} else {
+$this->queryRaw("{$query};\n");
+            }
+
 			return $this->addSavepoint($savepointName);
 		}
-		
+
 		/**
 		 * @param string $savepointName
-		 * @return DB 
+		 * @return DB
 		 */
 		public function savepointRelease($savepointName)
 		{
 			$this->assertSavePointName($savepointName);
-			if (!$this->inTransaction())
+			if (!$this->inTransaction()) {
 				throw new DatabaseException('To release savepoint need first begin transaction');
-			
-			if (!$this->checkSavepointExist($savepointName))
+            }
+
+			if (!$this->checkSavepointExist($savepointName)) {
 				throw new DatabaseException("savepoint with name '{$savepointName}' nor registered");
-			
-			$query = 'release savepoint '.$savepointName;
-			if ($this->toQueue)
+            }
+
+			$query = 'release savepoint ' . $savepointName;
+			if ($this->toQueue) {
 				$this->queue[] = $query;
-			else
-				$this->queryRaw("{$query};\n");
-				
+			} else {
+$this->queryRaw("{$query};\n");
+            }
+
 			return $this->dropSavepoint($savepointName);
 		}
-		
+
 		/**
 		 * @param string $savepointName
-		 * @return DB 
+		 * @return DB
 		 */
 		public function savepointRollback($savepointName)
 		{
 			$this->assertSavePointName($savepointName);
-			if (!$this->inTransaction())
+			if (!$this->inTransaction()) {
 				throw new DatabaseException('To rollback savepoint need first begin transaction');
-			
-			if (!$this->checkSavepointExist($savepointName))
+            }
+
+			if (!$this->checkSavepointExist($savepointName)) {
 				throw new DatabaseException("savepoint with name '{$savepointName}' nor registered");
-			
-			$query = 'rollback to savepoint '.$savepointName;
-			if ($this->toQueue)
+            }
+
+			$query = 'rollback to savepoint ' . $savepointName;
+			if ($this->toQueue) {
 				$this->queue[] = $query;
-			else
-				$this->queryRaw("{$query};\n");
-				
+			} else {
+$this->queryRaw("{$query};\n");
+            }
+
 			return $this->dropSavepoint($savepointName);
 		}
-		
+
 		/**
 		 * base queries
 		**/
@@ -326,29 +347,31 @@
 
 		public function queryNull(Query $query)
 		{
-			if ($query instanceof SelectQuery)
+			if ($query instanceof SelectQuery) {
 				throw new WrongArgumentException(
 					'only non-select queries supported'
 				);
-			
+            }
+
 			if ($this->toQueue) {
 				$this->queue[] = $query->toDialectString($this->getDialect());
 				return true;
-			} else
-				return $this->query($query);
+			} else {
+return $this->query($query);
+            }
 		}
 		//@}
-		
+
 		public function isConnected()
 		{
 			return is_resource($this->link);
 		}
-		
+
 		public function hasSequences()
 		{
 			return false;
 		}
-		
+
 		public function hasQueue()
 		{
 			return true;
@@ -358,73 +381,74 @@
 		{
 			return $this->persistent;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setPersistent($really = false)
 		{
 			$this->persistent = ($really === true);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setUsername($name)
 		{
 			$this->username = $name;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setPassword($password)
 		{
 			$this->password = $password;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setHostname($host)
 		{
 			$port = null;
-			
-			if (strpos($host, ':') !== false)
+
+			if (strpos($host, ':') !== false) {
 				list($host, $port) = explode(':', $host, 2);
-			
+            }
+
 			$this->hostname = $host;
 			$this->port = $port;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setBasename($base)
 		{
 			$this->basename = $base;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return DB
 		**/
 		public function setEncoding($encoding)
 		{
 			$this->encoding = $encoding;
-			
+
 			return $this;
 		}
-		
+
 		public function registerUncacher(UncacherBase $uncacher)
 		{
 			$uncacher->uncache();
@@ -432,43 +456,45 @@
 				$this->getUncacher()->merge($uncacher);
 			}
 		}
-		
+
 		/**
-		 * @param string $savepointName 
+		 * @param string $savepointName
 		 * @return DB
 		 */
 		private function addSavepoint($savepointName)
 		{
-			if ($this->checkSavepointExist($savepointName))
+			if ($this->checkSavepointExist($savepointName)) {
 				throw new DatabaseException("savepoint with name '{$savepointName}' already marked");
-				
+            }
+
 			$this->savepointList[$savepointName] = true;
 			return $this;
 		}
-		
+
 		/**
-		 * @param string $savepointName 
+		 * @param string $savepointName
 		 * @return DB
 		 */
 		private function dropSavepoint($savepointName)
 		{
-			if (!$this->checkSavepointExist($savepointName))
+			if (!$this->checkSavepointExist($savepointName)) {
 				throw new DatabaseException("savepoint with name '{$savepointName}' nor registered");
-				
+            }
+
 			unset($this->savepointList[$savepointName]);
 			return $this;
 		}
-		
+
 		private function checkSavepointExist($savepointName)
 		{
 			return array_key_exists($savepointName, $this->savepointList);
 		}
-		
+
 		private function assertSavePointName($savepointName)
 		{
 			Assert::isEqual(1, preg_match('~^[A-Za-z][A-Za-z0-9]*$~iu', $savepointName));
 		}
-		
+
 		/**
 		 * @return UncachersPool
 		 */
@@ -476,7 +502,7 @@
 		{
 			return $this->uncacher = $this->uncacher ?: UncachersPool::create();
 		}
-		
+
 		private function triggerUncacher()
 		{
 			if ($this->uncacher) {
@@ -485,4 +511,3 @@
 			}
 		}
 	}
-?>

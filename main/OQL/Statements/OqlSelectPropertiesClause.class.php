@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,28 +16,27 @@
 	final class OqlSelectPropertiesClause extends OqlProjectionClause
 	{
 		private $distinct = false;
-		
+
 		/**
 		 * @return OqlSelectPropertiesClause
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function isDistinct()
 		{
 			return $this->distinct;
 		}
-		
+
 		/**
 		 * @return OqlSelectPropertiesClause
 		**/
 		public function setDistinct($orly = true)
 		{
 			$this->distinct = ($orly === true);
-			
+
 			return $this;
 		}
 	}
-?>

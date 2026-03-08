@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -13,4 +14,3 @@
 	{
 		public function compare($one, $two);
 	}
-?>

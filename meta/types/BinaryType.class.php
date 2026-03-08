@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -18,20 +19,19 @@
 		{
 			return 'binary';
 		}
-		
+
 		public function getDeclaration()
 		{
 			return 'null';
 		}
-		
+
 		public function toColumnType($length = null)
 		{
 			return 'DataType::create(DataType::BINARY)';
 		}
-		
+
 		public function isMeasurable()
 		{
 			return false;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -25,7 +26,7 @@
 		/**
 		 * @var array of AMQPChannelInterface instances
 		**/
-		protected $channels	= array();
+		protected $channels	= [];
 
 		/**
 		 * @return AMQP
@@ -36,7 +37,7 @@
 		 * @return AMQP
 		**/
 		abstract public function disconnect();
-		
+
 		/**
 		 * @return AMQP
 		**/
@@ -51,7 +52,7 @@
 		 * @return AMQPChannelInterface
 		 */
 		abstract public function spawnChannel($id, AMQPInterface $transport);
-		
+
 		public function __construct(AMQPCredentials $credentials)
 		{
 			$this->credentials = $credentials;
@@ -89,15 +90,17 @@
 		{
 			Assert::isInteger($id);
 
-			if (isset($this->channels[$id]))
+			if (isset($this->channels[$id])) {
 				throw new WrongArgumentException(
 					"AMQP channel with id '{$id}' already registered"
 				);
-			
-			if (!$this->isConnected())
+            }
+
+			if (!$this->isConnected()) {
 				$this->connect();
-			
-			$this->channels[$id] = 
+            }
+
+			$this->channels[$id] =
 				$this->spawnChannel($id, $this)->
 				open();
 
@@ -110,8 +113,9 @@
 		**/
 		public function getChannel($id)
 		{
-			if (isset($this->channels[$id]))
+			if (isset($this->channels[$id])) {
 				return $this->channels[$id];
+            }
 
 			throw new MissingElementException(
 				"Can't find AMQP channel with id '{$id}'"
@@ -133,10 +137,11 @@
 		**/
 		public function dropChannel($id)
 		{
-			if (!isset($this->channels[$id]))
+			if (!isset($this->channels[$id])) {
 				throw new MissingElementException(
 					"AMQP channel with id '{$id}' not found"
 				);
+            }
 
 			$this->channels[$id]->close();
 
@@ -171,7 +176,4 @@
 
 			return $this;
 		}
-
-
-	}
-?>
+    }

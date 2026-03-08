@@ -1,4 +1,5 @@
 <?php
+
 	final class CriteriaTest extends TestCase
 	{
 		public function testClassProjection()
@@ -13,37 +14,37 @@
 						Projection::group('id')
 					)
 				);
-			
+
 			$this->assertEquals(
 				$criteria->toSelectQuery()->getFieldsCount(),
 				count(TestUser::dao()->getFields())
 			);
 		}
-		
+
 		public function testAddProjection()
 		{
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertEquals(
 				$criteria->getProjection(),
 				Projection::chain()
 			);
-			
+
 			$criteria = Criteria::create(TestUser::dao())->
 				addProjection(
 					Projection::chain()
 				);
-			
+
 			$this->assertEquals(
 				$criteria->getProjection(),
 				Projection::chain()
 			);
-			
+
 			$criteria = Criteria::create(TestUser::dao())->
 				addProjection(
 					Projection::property('id')
 				);
-			
+
 			$this->assertEquals(
 				$criteria->getProjection(),
 				Projection::chain()->
@@ -52,7 +53,7 @@
 					)
 			);
 		}
-		
+
 		public function testSetProjection()
 		{
 			$criteria = Criteria::create(TestUser::dao())->
@@ -62,7 +63,7 @@
 							Projection::property('id')
 						)
 				);
-			
+
 			$this->assertEquals(
 				$criteria->getProjection(),
 				Projection::chain()->
@@ -70,12 +71,12 @@
 						Projection::property('id')
 					)
 			);
-			
+
 			$criteria = Criteria::create(TestUser::dao())->
 				setProjection(
 					Projection::property('id')
 				);
-			
+
 			$this->assertEquals(
 				$criteria->getProjection(),
 				Projection::chain()->
@@ -84,7 +85,7 @@
 					)
 			);
 		}
-		
+
 		/**
 		 * @dataProvider orderDataProvider
 		**/
@@ -95,10 +96,10 @@
 					Projection::property('id')
 				)->
 				addOrder($order);
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
-				'SELECT test_user.id FROM test_user ORDER BY '.$expectedString
+				'SELECT test_user.id FROM test_user ORDER BY ' . $expectedString
 			);
 		}
 
@@ -111,7 +112,7 @@
 				)->
 				add(
 					Expression::eq('contacts.city', 1)
-				);			
+				);
 
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
@@ -125,7 +126,7 @@
 				)->
 				add(
 					Expression::eq('contacts.city.name', 'Moscow')
-				);		
+				);
 
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
@@ -172,12 +173,12 @@
 				add(
 					Expression::gt('registered', Date::create('2011-01-01'))
 				);
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
 				'SELECT test_user.id FROM test_user WHERE (test_user.registered > 2011-01-01)'
 			);
-			
+
 			$criteria =
 				Criteria::create(TestUserWithContactExtended::dao())->
 				setProjection(
@@ -186,17 +187,17 @@
 				add(
 					Expression::eq('contactExt.city', TestCity::create()->setId(22))
 				);
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
 				'SELECT test_user_with_contact_extended.city_id AS cityId FROM test_user_with_contact_extended WHERE (test_user_with_contact_extended.city_id = 22)'
 			);
-			
-			$cityList = array(
+
+			$cityList = [
 				TestCity::create()->setId(3),
 				TestCity::create()->setId(44),
-			);
-			
+			];
+
 			$criteria =
 				Criteria::create(TestUser::dao())->
 				setProjection(
@@ -205,13 +206,13 @@
 				add(
 					Expression::in('city', $cityList)
 				);
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
 				'SELECT test_user.id FROM test_user WHERE (test_user.city_id IN (3, 44))'
 			);
 		}
-		
+
 		public function testSqlFunction()
 		{
 			$criteria = Criteria::create(TestCity::dao())->
@@ -238,81 +239,84 @@
 						setAlias('my_alias')
 					)
 				);
-			
+
 			$this->assertEquals(
 				$criteria->toDialectString(ImaginaryDialect::me()),
 				'SELECT count(DISTINCT substring(custom_table.name from M....w for #)) AS my_alias FROM custom_table'
 			);
 		}
-		
+
 		public function testSleepWithEmptyDao()
 		{
 			$baseCriteria =
 				Criteria::create()->
 				setLimit(10);
-			
+
 			$newBaseCriteria =
 				unserialize(serialize($baseCriteria));
-			
+
 			$this->assertEquals(
 				$newBaseCriteria->getLimit(),
 				$baseCriteria->getLimit()
 			);
-			
+
 			$this->assertEquals(
 				$newBaseCriteria->getDao(),
 				$baseCriteria->getDao()
 			);
 		}
-		
+
 		public function testForgottenDao()
 		{
 			$criteria =
 				Criteria::create()->
 				add(Expression::eq('id', 42));
-			
+
 			$listCriteria = clone $criteria;
-			
+
 			try {
 				$listCriteria->getList();
-				
+
 				$this->fail();
-			} catch (WrongStateException $e) {/*it's good*/}
-			
+			} catch (WrongStateException $e) {
+/*it's good*/
+            }
+
 			$customCriteria = clone $criteria;
-			
+
 			try {
 				$customCriteria->
 					addProjection(Projection::property('id'))->
 					getCustomList();
-				
+
 				$this->fail();
-			} catch (WrongStateException $e) {/*it's good*/}
+			} catch (WrongStateException $e) {
+/*it's good*/
+            }
 		}
 
 		public static function orderDataProvider()
 		{
-			return array(
-				array(OrderBy::create('id'), 'test_user.id'),
-				array(
+			return [
+				[OrderBy::create('id'), 'test_user.id'],
+				[
 					OrderChain::create()->
 						add(OrderBy::create('id')->asc())->
 						add(OrderBy::create('id')),
 					'test_user.id ASC, test_user.id'
-				),
-				array(OrderBy::create('id')->asc(), 'test_user.id ASC'),
-				array(OrderBy::create('id')->desc(), 'test_user.id DESC'),
-				array(OrderBy::create('id')->nullsFirst(), 'test_user.id NULLS FIRST'),
-				array(OrderBy::create('id')->nullsLast(), 'test_user.id NULLS LAST'),
-				array(OrderBy::create('id')->asc()->nullsLast(), 'test_user.id ASC NULLS LAST'),
-				array(OrderBy::create('id')->desc()->nullsFirst(), 'test_user.id DESC NULLS FIRST'),
-				array(
+				],
+				[OrderBy::create('id')->asc(), 'test_user.id ASC'],
+				[OrderBy::create('id')->desc(), 'test_user.id DESC'],
+				[OrderBy::create('id')->nullsFirst(), 'test_user.id NULLS FIRST'],
+				[OrderBy::create('id')->nullsLast(), 'test_user.id NULLS LAST'],
+				[OrderBy::create('id')->asc()->nullsLast(), 'test_user.id ASC NULLS LAST'],
+				[OrderBy::create('id')->desc()->nullsFirst(), 'test_user.id DESC NULLS FIRST'],
+				[
 					OrderBy::create(Expression::isNull('id'))->
 						asc()->
 						nullsFirst(),
 					'((test_user.id IS NULL)) ASC NULLS FIRST'
-				)
-			);
+				]
+			];
 		}
 	}
-?>

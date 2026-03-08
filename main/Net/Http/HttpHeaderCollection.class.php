@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2013 by Nikita V. Konstantinov                          *
  *                                                                         *
@@ -14,17 +15,18 @@
 	**/
 	class HttpHeaderCollection implements IteratorAggregate
 	{
-		private $headers = array();
+		private $headers = [];
 
-		public function __construct(array $headers = array())
+		public function __construct(array $headers = [])
 		{
-			foreach ($headers as $name => $value)
+			foreach ($headers as $name => $value) {
 				$this->set($name, $value);
+            }
 		}
 
 		public function set($name, $value)
 		{
-			$this->headers[$this->normalizeName($name)]=
+			$this->headers[$this->normalizeName($name)] =
 				array_values((array) $value);
 
 			return $this;
@@ -34,10 +36,11 @@
 		{
 			$name = $this->normalizeName($name);
 
-			if (array_key_exists($name, $this->headers))
+			if (array_key_exists($name, $this->headers)) {
 				$this->headers[$name][] = $value;
-			else
-				$this->set($name, $value);
+			} else {
+$this->set($name, $value);
+            }
 
 			return $this;
 		}
@@ -94,11 +97,13 @@
 
 		public function getIterator()
 		{
-			$headerList = array();
+			$headerList = [];
 
-			foreach ($this->headers as $header => $valueList)
-				foreach ($valueList as $value)
+			foreach ($this->headers as $header => $valueList) {
+				foreach ($valueList as $value) {
 					$headerList[] = sprintf('%s: %s', $header, $value);
+                }
+            }
 
 			return new ArrayIterator($headerList);
 		}
@@ -111,11 +116,10 @@
 					function ($match) {
 						return
 							strtoupper(substr($match['name'], 0, 1))
-							.strtolower(substr($match['name'], 1))
+							. strtolower(substr($match['name'], 1))
 						;
 					},
 					$name
 				);
 		}
 	}
-?>

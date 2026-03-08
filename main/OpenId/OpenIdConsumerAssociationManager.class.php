@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -18,12 +19,12 @@
 		 * @return OpenIdConsumerAssociation
 		**/
 		public function findByHandle($handle, $type);
-		
+
 		/**
 		 * @return OpenIdConsumerAssociation
 		**/
 		public function findByServer(HttpUrl $server);
-		
+
 		/**
 		 * @return OpenIdConsumerAssociation
 		**/
@@ -34,15 +35,14 @@
 			Timestamp $expires,
 			HttpUrl $server
 		);
-		
+
 		/**
 		 * @return OpenIdConsumerAssociationManager
 		**/
 		public function purgeExpired();
-		
+
 		/**
 		 * @return OpenIdConsumerAssociationManager
 		**/
 		public function purgeByHandle($handle);
 	}
-?>

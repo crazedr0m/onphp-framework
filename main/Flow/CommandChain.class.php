@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -14,26 +15,26 @@
 	**/
 	final class CommandChain implements EditorCommand
 	{
-		private $chain = array();
-		
+		private $chain = [];
+
 		/**
 		 * @return CommandChain
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return CommandChain
 		**/
 		public function add(EditorCommand $command)
 		{
 			$this->chain[] = $command;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @throws BaseException
 		 * @return ModelAndView
@@ -42,16 +43,15 @@
 		{
 			Assert::isTrue(
 				($size = count($this->chain)) > 0,
-				
 				'command chain is empty'
 			);
-			
+
 			for ($i = 0; $i < $size; ++$i) {
 				$command = &$this->chain[$i];
-				
+
 				try {
 					$mav = $command->run($subject, $form, $request);
-					
+
 					if ($mav->getView() == EditorController::COMMAND_FAILED) {
 						$this->rollback($i);
 						return $mav;
@@ -61,10 +61,10 @@
 					throw $e;
 				}
 			}
-			
+
 			return $mav;
 		}
-		
+
 		/**
 		 * @return CommandChain
 		**/
@@ -80,21 +80,21 @@
 					}
 				}
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return CommandChain
 		**/
 		private function commit()
 		{
 			for ($size = count($this->chain), $i = 0; $i < $size; --$i) {
-				if ($this->chain[$i] instanceof CarefulCommand)
+				if ($this->chain[$i] instanceof CarefulCommand) {
 					$this->chain[$i]->commit();
+                }
 			}
-			
+
 			return $this;
 		}
 	}
-?>

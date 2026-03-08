@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,13 +18,13 @@
 		/**
 		 * @return ManyToManyLinkedFull
 		**/
-		public function sync($insert, $update = array(), $delete)
+		public function sync($insert, $update = [], $delete)
 		{
 			$dao = $this->container->getDao();
-			
+
 			$db = DBPool::getByDao($dao);
-			
-			if ($insert)
+
+			if ($insert) {
 				for ($i = 0, $size = count($insert); $i < $size; ++$i) {
 					$db->queryNull(
 						$this->makeInsertQuery(
@@ -31,25 +32,29 @@
 						)
 					);
 				}
-			
-			if ($update)
-				for ($i = 0, $size = count($update); $i < $size; ++$i)
+            }
+
+			if ($update) {
+				for ($i = 0, $size = count($update); $i < $size; ++$i) {
 					$dao->save($update[$i]);
-			
+                }
+            }
+
 			if ($delete) {
-				$ids = array();
-				
-				foreach ($delete as $object)
+				$ids = [];
+
+				foreach ($delete as $object) {
 					$ids[] = $object->getId();
-				
+                }
+
 				$db->queryNull($this->makeDeleteQuery($ids));
-				
+
 				$dao->uncacheByIds($ids);
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -61,4 +66,3 @@
 				);
 		}
 	}
-?>

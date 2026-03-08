@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2013 by Nikita V. Konstantinov                          *
  *                                                                         *
@@ -15,7 +16,7 @@
 		{
 			$collection =
 				new HttpHeaderCollection(
-					array('Content-Length' => 42)
+					['Content-Length' => 42]
 				);
 
 			return $collection;
@@ -36,9 +37,9 @@
 		 */
 		public function testGetter(HttpHeaderCollection $collection)
 		{
-			$this->assertEquals(array(42), $collection->getRaw('content-LeNgTh'));
+			$this->assertEquals([42], $collection->getRaw('content-LeNgTh'));
 			$this->assertEquals(42, $collection->get('content-LeNgTh'));
-			$this->assertEquals(array('bar', 'baz'), $collection->getRaw('x-foo'));
+			$this->assertEquals(['bar', 'baz'], $collection->getRaw('x-foo'));
 			$this->assertEquals('baz', $collection->get('x-foo'));
 
 			return $collection;
@@ -49,11 +50,11 @@
 		 */
 		public function testIterator(HttpHeaderCollection $collection)
 		{
-			$headerList = array(
+			$headerList = [
 				'Content-Length: 42',
 				'X-Foo: bar',
 				'X-Foo: baz'
-			);
+			];
 
 			$this->assertEquals($headerList, iterator_to_array($collection));
 
@@ -81,4 +82,3 @@
 			return $collection;
 		}
 	}
-?>

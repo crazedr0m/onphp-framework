@@ -8,4 +8,4 @@ test/main/data/urls/parser.dump.new
 .idea
 test/onphp
 /nbproject/
-
+.php-cs-fixer.cache

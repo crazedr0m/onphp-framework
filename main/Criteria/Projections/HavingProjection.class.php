@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry E. Demidov                               *
  *                                                                         *
@@ -15,12 +16,12 @@
 	final class HavingProjection implements ObjectProjection
 	{
 		private $logic = null;
-		
+
 		public function __construct(LogicalObject $logic)
 		{
 			$this->logic = $logic;
 		}
-		
+
 		/**
 		 * @return JoinCapableQuery
 		**/
@@ -32,4 +33,3 @@
 				);
 		}
 	}
-?>

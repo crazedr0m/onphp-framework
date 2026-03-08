@@ -1,4 +1,5 @@
 <?php
+
 	final class CompatatorTest extends TestCase
 	{
 		/**
@@ -46,11 +47,11 @@
 			$modifiedObject->testVariable = 2;
 
 			return
-				array(
-					array($object, $object, 0),
-					array($object, $secondObject, 0),
-					array($object, $modifiedObject, -1)
-				);
+				[
+					[$object, $object, 0],
+					[$object, $secondObject, 0],
+					[$object, $modifiedObject, -1]
+				];
 		}
 
 		public static function immutableTestObjects()
@@ -68,22 +69,22 @@
 			$anotherModifiedObject->id = 3;
 
 			return
-				array(
-					array($object, $object, 0),
-					array($object, $secondObject, 0),
-					array($object, $modifiedObject, 0),
-					array($modifiedObject, $anotherModifiedObject, -1)
-				);
+				[
+					[$object, $object, 0],
+					[$object, $secondObject, 0],
+					[$object, $modifiedObject, 0],
+					[$modifiedObject, $anotherModifiedObject, -1]
+				];
 		}
 
 		public static function dateTestData()
 		{
 			return
-				array(
-					array(Date::makeToday(), Date::makeToday(), 0),
-					array(Date::makeToday(), Date::makeToday()->modify('-1 day'), 1),
-					array(Date::makeToday()->modify('-1 day'), Date::makeToday(), -1)
-				);
+				[
+					[Date::makeToday(), Date::makeToday(), 0],
+					[Date::makeToday(), Date::makeToday()->modify('-1 day'), 1],
+					[Date::makeToday()->modify('-1 day'), Date::makeToday(), -1]
+				];
 		}
 	}
 
@@ -93,4 +94,3 @@
 		public $testVariable	= null;
 		public $id = 1;
 	}
-?>

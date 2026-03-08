@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Dmitriy V. Snezhinskiy                          *
  *                                                                         *
@@ -21,7 +22,7 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		/**
@@ -35,7 +36,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_HEX_QUOT;
 			}
-			
+
 			return $this;
 		}
 
@@ -50,7 +51,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_HEX_TAG;
 			}
-			
+
 			return $this;
 		}
 
@@ -65,7 +66,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_HEX_AMP;
 			}
-			
+
 			return $this;
 		}
 
@@ -80,7 +81,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_HEX_APOS;
 			}
-			
+
 			return $this;
 		}
 
@@ -95,7 +96,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_FORCE_OBJECT;
 			}
-			
+
 			return $this;
 		}
 
@@ -110,7 +111,7 @@
 			} else {
 				$this->options = $this->options & ~JSON_NUMERIC_CHECK;
 			}
-			
+
 			return $this;
 		}
 
@@ -127,7 +128,7 @@
 					$this->options = $this->options & ~JSON_PRETTY_PRINT;
 				}
 			}
-			
+
 			return $this;
 		}
 
@@ -144,10 +145,10 @@
 					$this->options = $this->options & ~JSON_UNESCAPED_SLASHES;
 				}
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return JsonView
 		**/
@@ -157,12 +158,12 @@
 
 			return $this;
 		}
-		
+
 		public function __toString()
 		{
 			return $this->toString();
 		}
-		
+
 		/**
 		 * @param Model $model
 		 * @return string
@@ -171,10 +172,9 @@
 		{
 			Assert::isTrue($model === null || $model instanceof Model);
 			if ($this->options) {
-				return json_encode($model ? $model->getList() : array(), $this->options);
+				return json_encode($model ? $model->getList() : [], $this->options);
 			} else {
-				return json_encode($model ? $model->getList() : array());
+				return json_encode($model ? $model->getList() : []);
 			}
 		}
 	}
-?>

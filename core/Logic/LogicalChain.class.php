@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Wrapper around given childs of LogicalObject with custom logic-glue's.
-	 * 
+	 *
 	 * @ingroup Logic
 	**/
 	final class LogicalChain extends SQLChain
@@ -24,27 +25,27 @@
 			Assert::isTrue(
 				($logic == BinaryExpression::EXPRESSION_AND)
 				|| ($logic == BinaryExpression::EXPRESSION_OR),
-				
 				"unknown logic '{$logic}'"
 			);
-			
-			$logicalChain = new self;
-			
+
+			$logicalChain = new self();
+
 			foreach ($args as $arg) {
 				if (
 					!$arg instanceof LogicalObject
 					&& !$arg instanceof SelectQuery
-				)
+				) {
 					throw new WrongArgumentException(
-						'unsupported object type: '.get_class($arg)
+						'unsupported object type: ' . get_class($arg)
 					);
-				
+                }
+
 				$logicalChain->exp($arg, $logic);
 			}
-			
+
 			return $logicalChain;
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -52,7 +53,7 @@
 		{
 			return $this->exp($exp, BinaryExpression::EXPRESSION_AND);
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -60,22 +61,22 @@
 		{
 			return $this->exp($exp, BinaryExpression::EXPRESSION_OR);
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			$chain = &$this->chain;
-			
+
 			$size = count($chain);
-			
-			if (!$size)
+
+			if (!$size) {
 				throw new WrongArgumentException(
 					'empty chain can not be calculated'
 				);
-			elseif ($size == 1)
+			} elseif ($size == 1) {
 				return $chain[0]->toBoolean($form);
-			else { // size > 1
+			} else { // size > 1
 				$out = $chain[0]->toBoolean($form);
-				
+
 				for ($i = 1; $i < $size; ++$i) {
 					$out =
 						self::calculateBoolean(
@@ -84,13 +85,13 @@
 							$chain[$i]->toBoolean($form)
 						);
 				}
-				
+
 				return $out;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		private static function calculateBoolean($logic, $left, $right)
 		{
 			switch ($logic) {
@@ -109,4 +110,3 @@
 			Assert::isUnreachable();
 		}
 	}
-?>

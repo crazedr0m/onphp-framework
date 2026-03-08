@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,14 +13,14 @@
 	abstract class FormMutator extends PrototypedSetter
 	{
 		private $getter = null;
-		
+
 		public function __construct(EntityProto $proto, &$object)
 		{
 			Assert::isInstance($object, 'Form');
-			
+
 			return parent::__construct($proto, $object);
 		}
-		
+
 		/**
 		 * @return FormGetter
 		**/
@@ -28,8 +29,7 @@
 			if (!$this->getter) {
 				$this->getter = new FormGetter($this->proto, $this->object);
 			}
-			
+
 			return $this->getter;
 		}
 	}
-?>

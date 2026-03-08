@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                           *
  *                                                                          *
@@ -16,9 +17,10 @@
 	{
 		public function import($scope)
 		{
-			if (!BasePrimitive::import($scope))
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
+            }
+
 			if (
 				is_string($scope[$this->name])
 				&& (($length = strlen($scope[$this->name])) < 16)
@@ -26,11 +28,10 @@
 				&& (ip2long($scope[$this->name]) !== false)
 			) {
 				$this->value = $scope[$this->name];
-				
+
 				return true;
 			}
-			
+
 			return false;
 		}
 	}
-?>

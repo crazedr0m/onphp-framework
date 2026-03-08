@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,32 +12,32 @@
 
 	/**
 	 * @see UnifiedContainer
-	 * 
+	 *
 	 * @ingroup Containers
 	**/
 	abstract class UnifiedContainerWorker
 	{
 		protected $criteria		= null;
 		protected $container	= null;
-		
+
 		abstract public function makeFetchQuery();
-		abstract public function sync($insert, $update = array(), $delete);
-		
+		abstract public function sync($insert, $update = [], $delete);
+
 		public function __construct(UnifiedContainer $uc)
 		{
 			$this->container = $uc;
 		}
-		
+
 		/**
 		 * @return UnifiedContainerWorker
 		**/
 		public function setCriteria(Criteria $criteria)
 		{
 			$this->criteria = $criteria;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
@@ -44,14 +45,14 @@
 		{
 			return $this->criteria;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		public function makeCountQuery()
 		{
 			$query = $this->makeFetchQuery();
-			
+
 			if ($query->isDistinct()) {
 				$countFunction =
 					SQLFunction::create(
@@ -62,13 +63,12 @@
 						)
 					)->
 					setAggregateDistinct();
-				
+
 				$query->unDistinct();
-			
 			} else {
 				$countFunction = SQLFunction::create('count', DBValue::create('*'));
 			}
-			
+
 			return $query->
 				dropFields()->
 				dropOrder()->
@@ -77,11 +77,11 @@
 					$countFunction->setAlias('count')
 				);
 		}
-		
+
 		public function dropList()
 		{
 			$dao = $this->container->getDao();
-			
+
 			DBPool::getByDao($dao)->queryNull(
 				OSQL::delete()->from($this->container->getHelperTable())->
 				where(
@@ -91,21 +91,21 @@
 					)
 				)
 			);
-			
+
 			$dao->uncacheLists();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		protected function makeSelectQuery()
 		{
-			if ($this->criteria)
+			if ($this->criteria) {
 				return $this->criteria->toSelectQuery();
-			
+            }
+
 			return $this->container->getDao()->makeSelectHead();
 		}
 	}
-?>

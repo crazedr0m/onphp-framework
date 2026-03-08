@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,90 +18,101 @@
 		/// orders $objects list by $ids order
 		public static function regularizeList($ids, $objects)
 		{
-			if (!$objects)
-				return array();
-			
-			$result = array();
-			
+			if (!$objects) {
+				return [];
+            }
+
+			$result = [];
+
 			$objects = self::convertObjectList($objects);
-			
-			foreach ($ids as $id)
-				if (isset($objects[$id]))
+
+			foreach ($ids as $id) {
+				if (isset($objects[$id])) {
 					$result[] = $objects[$id];
-			
+                }
+            }
+
 			return $result;
 		}
-		
+
 		public static function convertObjectList($list = null, $getter = 'getId')
 		{
-			$out = array();
-			
-			if (!$list)
+			$out = [];
+
+			if (!$list) {
 				return $out;
-			
-			foreach ($list as $obj)
+            }
+
+			foreach ($list as $obj) {
 				$out[$obj->{$getter}()] = $obj;
-			
+            }
+
 			return $out;
 		}
-		
+
 		public static function getIdsArray($objectsList)
 		{
-			$out = array();
-			
-			if (!$objectsList)
+			$out = [];
+
+			if (!$objectsList) {
 				return $out;
-			
+            }
+
 			Assert::isInstance(
-				current($objectsList), 'Identifiable',
+				current($objectsList),
+                'Identifiable',
 				'only identifiable lists accepted'
 			);
 
 			/**@var Identifiable $object**/
-			foreach ($objectsList as $object)
+			foreach ($objectsList as $object) {
 				$out[] = $object->getId();
-			
+            }
+
 			return $out;
 		}
-		
+
 		public static function &convertToPlainList($list, $key)
 		{
-			$out = array();
-			
-			foreach ($list as $obj)
+			$out = [];
+
+			foreach ($list as $obj) {
 				$out[] = $obj[$key];
-			
+            }
+
 			return $out;
 		}
-		
+
 		public static function getArrayVar(&$array, $var)
 		{
 			if (isset($array[$var]) && !empty($array[$var])) {
 				$out = &$array[$var];
 				return $out;
 			}
-			
+
 			return null;
 		}
-		
+
 		public static function columnFromSet($column, $array)
 		{
 			Assert::isArray($array);
-			$result = array();
-			
-			foreach ($array as $row)
-				if (isset($row[$column]))
+			$result = [];
+
+			foreach ($array as $row) {
+				if (isset($row[$column])) {
 					$result[] = $row[$column];
-			
+                }
+            }
+
 			return $result;
 		}
-		
+
 		public static function mergeUnique(/* ... */)
 		{
 			$arguments = func_get_args();
-			
+
 			Assert::isArray(reset($arguments));
-			
+
 			return array_unique(
 				call_user_func_array(
 					'array_merge',
@@ -108,59 +120,65 @@
 				)
 			);
 		}
-		
+
 		public static function countNonemptyValues($array)
 		{
 			Assert::isArray($array);
 			$result = 0;
-			
-			foreach ($array as $value)
-				if (!empty($value))
+
+			foreach ($array as $value) {
+				if (!empty($value)) {
 					++$result;
-			
+                }
+            }
+
 			return $result;
 		}
-		
+
 		public static function isEmpty(array $array)
 		{
-			foreach ($array as $key => $value)
-				if ($value !== null)
+			foreach ($array as $key => $value) {
+				if ($value !== null) {
 					return false;
-			
+                }
+            }
+
 			return true;
 		}
-		
+
 		/**
 		 * in: array(1, 2, 3, 4)
 		 * out: array(1 => array(2 => array(3 => 4)))
 		**/
 		public static function flatToDimensional($array)
 		{
-			if (!$array)
+			if (!$array) {
 				return null;
-			
+            }
+
 			Assert::isArray($array);
-			
+
 			$first = array_shift($array);
-			
-			if (!$array)
+
+			if (!$array) {
 				return $first;
-			
-			return array($first => self::flatToDimensional($array));
+            }
+
+			return [$first => self::flatToDimensional($array)];
 		}
-		
+
 		public static function mergeRecursiveUnique($one, $two)
 		{
-			if (!$one)
+			if (!$one) {
 				return $two;
-			
+            }
+
 			Assert::isArray($one);
 			Assert::isArray($two);
-			
+
 			$result = $one;
-			
+
 			foreach ($two as $key => $value) {
-				
 				if (is_integer($key)) {
 					$result[] = $value;
 				} elseif (
@@ -173,28 +191,28 @@
 					$result[$key] = $value;
 				}
 			}
-			
+
 			return $result;
 		}
-		
+
 		/**
 		 * @deprecated by array_combine($array, $array)
 		**/
 		public static function getMirrorValues($array)
 		{
 			Assert::isArray($array);
-			
-			$result = array();
-			
+
+			$result = [];
+
 			foreach ($array as $value) {
 				Assert::isTrue(
 					is_integer($value) || is_string($value),
 					'only integer or string values accepted'
 				);
-				
+
 				$result[$value] = $value;
 			}
-			
+
 			return $result;
 		}
 
@@ -205,46 +223,50 @@
 			Comparator $comparator,
 			$compareValueGetter = null,
 			$limit = null
-		)
-		{
+		) {
 			$list1Size = count($list1);
 			$list2Size = count($list2);
 
 			$i = $j = $k = 0;
 
-			$newList = array();
+			$newList = [];
 
 			while ($i < $list1Size && $j < $list2Size) {
 				if (
 					$limit
 					&& $k == $limit
-				)
+				) {
 					return $newList;
+                }
 
-				if (!$compareValueGetter)
+				if (!$compareValueGetter) {
 					$compareResult = $comparator->compare(
-						$list1[$i], $list2[$j]
+						$list1[$i],
+                        $list2[$j]
 					);
-				else
-					$compareResult = $comparator->compare(
-						$list1[$i]->{$compareValueGetter}(),
-						$list2[$j]->{$compareValueGetter}()
-					);
-				
+				} else {
+$compareResult = $comparator->compare(
+    $list1[$i]->{$compareValueGetter}(),
+    $list2[$j]->{$compareValueGetter}()
+);
+                }
+
 				// list1 elt < list2 elt
-				if ($compareResult < 0)
+				if ($compareResult < 0) {
 					$newList[$k++] = $list2[$j++];
-				else
-					$newList[$k++] = $list1[$i++];
+				} else {
+$newList[$k++] = $list1[$i++];
+                }
 			}
 
 			while ($i < $list1Size) {
 				if (
 					$limit
 					&& $k == $limit
-				)
+				) {
 					return $newList;
-				
+                }
+
 				$newList[$k++] = $list1[$i++];
 			}
 
@@ -252,13 +274,13 @@
 				if (
 					$limit
 					&& $k == $limit
-				)
+				) {
 					return $newList;
-				
+                }
+
 				$newList[$k++] = $list2[$j++];
 			}
 
 			return $newList;
 		}
 	}
-?>

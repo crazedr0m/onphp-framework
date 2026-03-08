@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -23,28 +24,27 @@
 		const DIFFIE_HELLMAN_G = 2;
 		const ASSOCIATION_TYPE = 'HMAC-SHA1';
 		const NAMESPACE_2_0 = 'http://specs.openid.net/auth/2.0';
-		
-		private $extensions		= array();
-		
+
+		private $extensions		= [];
+
 		private $randomSource	= null;
 		private $numberFactory	= null;
-		
+
 		/**
 		 * @var HttpClient
 		**/
 		private $httpClient		= null;
-		
+
 		public function __construct(
 			RandomSource $randomSource,
 			BigNumberFactory $numberFactory,
 			HttpClient $httpClient
-		)
-		{
+		) {
 			$this->randomSource = $randomSource;
 			$this->numberFactory = $numberFactory;
 			$this->httpClient = $httpClient;
 		}
-		
+
 		/**
 		 * @return OpenIdConsumer
 		**/
@@ -52,11 +52,10 @@
 			RandomSource $randomSource,
 			BigNumberFactory $numberFactory,
 			HttpClient $httpClient
-		)
-		{
+		) {
 			return new self($randomSource, $numberFactory, $httpClient);
 		}
-		
+
 		/**
 		 * "associate" mode request
 		 *
@@ -67,23 +66,23 @@
 		public function associate(
 			HttpUrl $server,
 			OpenIdConsumerAssociationManager $manager
-		)
-		{
+		) {
 			Assert::isTrue($server->isValid());
-			
-			if ($association = $manager->findByServer($server))
+
+			if ($association = $manager->findByServer($server)) {
 				return $association;
-			
+            }
+
 			$dhParameters = new DiffieHellmanParameters(
 				$this->numberFactory->makeNumber(self::DIFFIE_HELLMAN_G),
 				$this->numberFactory->makeNumber(self::DIFFIE_HELLMAN_P)
 			);
-			
+
 			$keyPair = DiffieHellmanKeyPair::generate(
 				$dhParameters,
 				$this->randomSource
 			);
-			
+
 			$request = HttpRequest::create()->
 				setMethod(HttpMethod::post())->
 				setUrl($server)->
@@ -103,31 +102,35 @@
 					'openid.dh_consumer_public',
 					base64_encode($keyPair->getPublic()->toBinary())
 				);
-			
+
 			$response = $this->httpClient->
 				setFollowLocation(true)->
 				send($request);
-			
-			if ($response->getStatus()->getId() != HttpStatus::CODE_200)
+
+			if ($response->getStatus()->getId() != HttpStatus::CODE_200) {
 				throw new OpenIdException('bad response code from server');
-			
+            }
+
 			$result = $this->parseKeyValueFormat($response->getBody());
-			
-			if (empty($result['assoc_handle']))
+
+			if (empty($result['assoc_handle'])) {
 				throw new OpenIdException('can\t live without handle');
-			
+            }
+
 			if (
 				!isset($result['assoc_type'])
 				|| $result['assoc_type'] !== self::ASSOCIATION_TYPE
-			)
+			) {
 				throw new OpenIdException('bad association type');
-			
+            }
+
 			if (
 				!isset($result['expires_in'])
 				|| !is_numeric($result['expires_in'])
-			)
+			) {
 				throw new OpenIdException('bad expires');
-			
+            }
+
 			if (
 				isset($result['session_type'])
 				&& $result['session_type'] == 'DH-SHA1'
@@ -153,30 +156,29 @@
 			} else {
 				throw new OpenIdException('no secret in answer');
 			}
-			
+
 			return $manager->makeAndSave(
 				$result['assoc_handle'],
 				$result['assoc_type'],
 				$secret,
 				Timestamp::makeNow()->
-					modify('+ '.$result['expires_in'].' seconds'),
+					modify('+ ' . $result['expires_in'] . ' seconds'),
 				$server
 			);
 		}
-		
+
 		private function makeCheckIdRequest(
 			OpenIdCredentials $credentials,
 			HttpUrl $returnTo,
 			$trustRoot = null,
 			$association = null
-		)
-		{
+		) {
 			Assert::isTrue($returnTo->isValid());
-			
+
 			$view = RedirectView::create(
 				$credentials->getServer()->toString()
 			);
-			
+
 			$model = Model::create()->
 				set(
 					'openid.ns',
@@ -194,30 +196,30 @@
 					'openid.claimed_id',
 					$credentials->getRealId()->toString()
 				);
-			
+
 			foreach ($this->extensions as $extension) {
 				$extension->addParamsToModel($model);
 			}
-			
+
 			if ($association) {
 				Assert::isTrue(
 					$association instanceof OpenIdConsumerAssociation
 					&& $association->getServer()->toString()
 						== $credentials->getServer()->toString()
 				);
-				
+
 				$model->set(
 					'openid.assoc_handle',
 					$association->getHandle()
 				);
 			}
-			
+
 			if ($trustRoot) {
 				Assert::isTrue(
 					$trustRoot instanceof HttpUrl
 					&& $trustRoot->isValid()
 				);
-				
+
 				$model->
 					set(
 						'openid.trust_root',
@@ -228,10 +230,10 @@
 						$trustRoot->toString()
 					);
 			}
-			
+
 			return ModelAndView::create()->setModel($model)->setView($view);
 		}
-		
+
 		/**
 		 * "checkid_immediate" mode request
 		 *
@@ -246,21 +248,20 @@
 			HttpUrl $returnTo,
 			$trustRoot = null,
 			$association = null
-		)
-		{
+		) {
 			$mav = $this->makeCheckIdRequest(
 				$credentials,
 				$returnTo,
 				$trustRoot,
 				$association
 			);
-			
+
 			$mav->getModel()->
 				set('openid.mode', 'checkid_immediate');
-			
+
 			return $mav;
 		}
-		
+
 		/**
 		 * "checkid_setup" mode request
 		 *
@@ -275,21 +276,20 @@
 			HttpUrl $returnTo,
 			$trustRoot = null,
 			$association = null
-		)
-		{
+		) {
 			$mav = $this->makeCheckIdRequest(
 				$credentials,
 				$returnTo,
 				$trustRoot,
 				$association
 			);
-			
+
 			$mav->getModel()->
 				set('openid.mode', 'checkid_setup');
-			
+
 			return $mav;
 		}
-		
+
 		/**
 		 * proceed results of checkid_immediate and checkid_setup
 		 *
@@ -298,55 +298,61 @@
 		**/
 		public function doContinue(HttpRequest $request, $manager = null)
 		{
-			if ($manager)
+			if ($manager) {
 				Assert::isTrue($manager instanceof OpenIdConsumerAssociationManager);
-			
+            }
+
 			$parameters = $this->parseGetParameters($request->getGet());
-			
-			
+
+
 			foreach ($this->extensions as $extension) {
 				$extension->parseResponce($request, $parameters);
 			}
-			
-			if (!isset($parameters['openid.mode']))
+
+			if (!isset($parameters['openid.mode'])) {
 				throw new WrongArgumentException('not an openid request');
-			
+            }
+
 			if ($parameters['openid.mode'] == 'id_res') {
 				if (isset($parameters['openid.user_setup_url'])) {
 					$setupUrl = HttpUrl::create()->parse(
 						$parameters['openid.user_setup_url']
 					);
-					
+
 					Assert::isTrue($setupUrl->isValid());
-					
+
 					return new OpenIdConsumerSetupRequired($setupUrl);
 				}
 			} elseif ($parameters['openid.mode'] = 'cancel') {
 				return new OpenIdConsumerCancel();
 			}
-			
-			if (!isset($parameters['openid.assoc_handle']))
+
+			if (!isset($parameters['openid.assoc_handle'])) {
 				throw new WrongArgumentException('no association handle');
-			
-			if (!isset($parameters['openid.identity']))
+            }
+
+			if (!isset($parameters['openid.identity'])) {
 				throw new WrongArgumentException('no identity');
-			
+            }
+
 			$identity =
 				HttpUrl::create()->
 				parse($parameters['openid.identity']);
-			
+
 			Assert::isTrue($identity->isValid(), 'invalid identity');
 			$identity->makeComparable();
-			
-			$signedFields = array();
+
+			$signedFields = [];
 			if (isset($parameters['openid.signed'], $parameters['openid.sig'])) {
 				$signedFields = explode(',', $parameters['openid.signed']);
-				
-				if (!in_array('identity', $signedFields))
+
+				if (!in_array('identity', $signedFields)) {
 					throw new WrongArgumentException('identity must be signed');
-			} else
-				throw new WrongArgumentException('no signature in response');
-			
+                }
+			} else {
+throw new WrongArgumentException('no signature in response');
+            }
+
 			if (
 				$manager
 				&& (
@@ -361,11 +367,11 @@
 				foreach ($signedFields as $signedField) {
 					$tokenContents .=
 						$signedField
-						.':'
-						.$parameters['openid.'.strtr($signedField, '.', '_')]
-						."\n";
+						. ':'
+						. $parameters['openid.' . strtr($signedField, '.', '_')]
+						. "\n";
 				}
-				
+
 				if (
 					base64_encode(
 						CryptoFunctions::hmacsha1(
@@ -374,24 +380,25 @@
 						)
 					)
 					!= $parameters['openid.sig']
-				)
+				) {
 					throw new WrongArgumentException('signature mismatch');
-				
+                }
+
 				return new OpenIdConsumerPositive($identity);
-				
 			} elseif (
 				!$manager
 				|| isset($parameters['openid.invalidate_handle'])
 			) { // dumb or handle invalidation mode
-				if ($this->checkAuthentication($parameters, $manager))
+				if ($this->checkAuthentication($parameters, $manager)) {
 					return new OpenIdConsumerPositive($identity);
-				else
-					return new OpenIdConsumerFail();
+				} else {
+return new OpenIdConsumerFail();
+                }
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		/**
 		 * @param OpenIdExtension $extension
 		 * @return OpenIdConsumer
@@ -399,38 +406,38 @@
 		public function addExtension(OpenIdExtension $extension)
 		{
 			$this->extensions[] = $extension;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * check_authentication mode request
 		**/
 		private function checkAuthentication(
 			array $parameters,
 			$manager = null
-		)
-		{
+		) {
 			$credentials = new OpenIdCredentials(
 				HttpUrl::create()->parse($parameters['openid.identity']),
 				$this->httpClient
 			);
-			
+
 			$request = HttpRequest::create()->
 				setMethod(HttpMethod::post())->
 				setUrl($credentials->getServer());
-			
-			if (isset($parameters['openid.invalidate_handle']) && $manager)
+
+			if (isset($parameters['openid.invalidate_handle']) && $manager) {
 				$request->setPostVar(
 					'openid.invalidate_handle',
 					$parameters['openid.invalidate_handle']
 				);
-			
+            }
+
 			foreach (explode(',', $parameters['openid.signed']) as $key) {
-				$key = 'openid.'.$key;
+				$key = 'openid.' . $key;
 				$request->setPostVar($key, $parameters[$key]);
 			}
-			
+
 			$request->
 				setPostVar('openid.mode', 'check_authentication')->
 				setPostVar(
@@ -445,13 +452,14 @@
 					'openid.signed',
 					$parameters['openid.signed']
 				);
-			
+
 			$response = $this->httpClient->send($request);
-			if ($response->getStatus()->getId() != HttpStatus::CODE_200)
+			if ($response->getStatus()->getId() != HttpStatus::CODE_200) {
 				throw new OpenIdException('bad response code from server');
-			
+            }
+
 			$result = $this->parseKeyValueFormat($response->getBody());
-			
+
 			if (
 				!isset($result['is_valid'])
 				|| (
@@ -459,47 +467,48 @@
 					&&
 					$result['is_valid'] !== 'false'
 				)
-			)
+			) {
 				throw new OpenIdException('strange response given');
-			
+            }
+
 			if ($result['is_valid'] === 'true') {
 				if (isset($result['invalidate_handle']) && $manager) {
 					$manager->purgeByHandle($result['invalidate_handle']);
 				}
-				
+
 				return true;
-			} elseif ($result['is_valid'] === 'false')
+			} elseif ($result['is_valid'] === 'false') {
 				return false;
-			
+            }
+
 			Assert::isUnreachable();
 		}
-		
+
 		private function parseKeyValueFormat($raw)
 		{
-			$result = array();
+			$result = [];
 			$lines = explode("\n", $raw);
-			
+
 			foreach ($lines as $line) {
 				if (!empty($line) && strpos($line, ':') !== false) {
 					list($key, $value) = explode(':', $line, 2);
 					$result[trim($key)] = trim($value);
 				}
 			}
-			
+
 			return $result;
 		}
-		
+
 		private function parseGetParameters(array $get)
 		{
-			$result = array();
+			$result = [];
 			foreach ($get as $key => $value) {
 				if (strpos($key, 'openid') === 0) {
 					$key = preg_replace('/^openid_/', 'openid.', $key);
 					$result[$key] = $value;
 				}
 			}
-			
+
 			return $result;
 		}
 	}
-?>

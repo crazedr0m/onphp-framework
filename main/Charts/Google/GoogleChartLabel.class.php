@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -15,47 +16,46 @@
 	class GoogleChartLabel extends BaseGoogleChartParameter
 	{
 		protected $name = 'chl';
-		
-		protected $labels = array();
-		
+
+		protected $labels = [];
+
 		/**
 		 * @return GoogleChartLabel
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleChartLabel
 		**/
 		public function addLabel($label)
 		{
 			$this->labels[] = $label;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleChartLabel
 		**/
 		public function setLabels($labels)
 		{
 			$this->labels = $labels;
-			
+
 			return $this;
 		}
-		
+
 		public function getCount()
 		{
 			return count($this->labels);
 		}
-		
+
 		public function toString()
 		{
 			$labels = implode('|', $this->labels);
-			
-			return $this->name.'='.$labels;
+
+			return $this->name . '=' . $labels;
 		}
 	}
-?>

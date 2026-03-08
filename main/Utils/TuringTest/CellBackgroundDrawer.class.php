@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Dmitry E. Demidov                          *
  *                                                                         *
@@ -15,12 +16,12 @@
 	final class CellBackgroundDrawer extends BackgroundDrawer
 	{
 		private $step = null;
-	
+
 		public function __construct($step)
 		{
 			$this->step = $step;
 		}
-		
+
 		/**
 		 * @return CellBackgroundDrawer
 		**/
@@ -28,7 +29,7 @@
 		{
 			$x = mt_rand(-$this->step, $this->step);
 			$width = $this->getTuringImage()->getWidth();
-			
+
 			while ($x < $width) {
 				$color = $this->makeColor();
 				$colorId = $this->getTuringImage()->getColorIdentifier($color);
@@ -41,13 +42,13 @@
 					$this->getTuringImage()->getHeight(),
 					$colorId
 				);
-				
+
 				$x += $this->step;
 			}
-	
+
 			$y = mt_rand(-$this->step, $this->step);
 			$height = $this->getTuringImage()->getHeight();
-			
+
 			while ($y < $height) {
 				$color = $this->makeColor();
 				$colorId = $this->getTuringImage()->getColorIdentifier($color);
@@ -60,11 +61,10 @@
 					$y,
 					$colorId
 				);
-				
+
 				$y += $this->step;
 			}
-			
+
 			return $this;
 		}
 	}
-?>

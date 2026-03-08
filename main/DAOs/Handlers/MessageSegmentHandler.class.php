@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,12 +16,12 @@
 	final class MessageSegmentHandler implements SegmentHandler
 	{
 		private $id = null;
-		
+
 		public function __construct($segmentId)
 		{
 			$this->id = $segmentId;
 		}
-		
+
 		public function touch($key)
 		{
 			try {
@@ -29,17 +30,17 @@
 				// race
 				return false;
 			}
-			
+
 			try {
 				return msg_send($q, $key, 1, false, false);
 			} catch (BaseException $e) {
 				// queue is full, rotate it.
 				return msg_remove_queue($q);
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function unlink($key)
 		{
 			try {
@@ -48,12 +49,12 @@
 				// race
 				return false;
 			}
-			
+
 			$type = $msg = null;
-			
+
 			return msg_receive($q, $key, $type, 2, $msg, false, MSG_IPC_NOWAIT);
 		}
-		
+
 		public function ping($key)
 		{
 			try {
@@ -62,21 +63,23 @@
 				// race
 				return false;
 			}
-			
+
 			$type = $msg = null;
-			
+
 			// YANETUT
 			if (msg_receive($q, $key, $type, 2, $msg, false, MSG_IPC_NOWAIT)) {
 				try {
 					msg_send($q, $key, 1, false, false);
-				} catch (BaseException $e) {/* lost key due to race */}
-				
+				} catch (BaseException $e) {
+/* lost key due to race */
+                }
+
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function drop()
 		{
 			try {
@@ -85,17 +88,16 @@
 				// removed in race
 				return true;
 			}
-			
+
 			if (!msg_remove_queue($q)) {
 				// trying to flush manually
 				$type = $msg = null;
-				
+
 				while (msg_receive($q, 0, $type, 2, $msg, false, MSG_IPC_NOWAIT)) {
 					// do nothing
 				}
 			}
-			
+
 			return true;
 		}
 	}
-?>

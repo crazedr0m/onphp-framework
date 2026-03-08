@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,25 +16,25 @@
 	final class GoogleGridedLineChart extends GoogleNormalizedLineChart
 	{
 		private $grid = null;
-		
+
 		/**
 		 * @return GoogleGridedLineChart
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleGridedLineChart
 		**/
 		public function setGrid(GoogleChartGrid $grid)
 		{
 			$this->grid = $grid;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleChartGrid
 		**/
@@ -41,31 +42,33 @@
 		{
 			return $this->grid;
 		}
-		
+
 		public function toString()
 		{
-			if (!$this->grid)
+			if (!$this->grid) {
 				$this->createDefault();
-			
+            }
+
 			$string = parent::toString();
-			
-			$string .= '&'.$this->grid->toString();
-			
+
+			$string .= '&' . $this->grid->toString();
+
 			return $string;
 		}
-		
+
 		/**
 		 * @return GoogleGridedLineChart
 		**/
 		private function createDefault()
 		{
 			$this->grid = GoogleChartGrid::create();
-			
+
 			$maxSteps = $this->getData()->getMaxSteps();
-			
-			if ($maxSteps > 0)
+
+			if ($maxSteps > 0) {
 				$this->grid->setVerticalStepSize(round(100 / $maxSteps, 1));
-			
+            }
+
 			if (
 				(
 					$axis = $this->axesCollection->getAxisByTypeId(
@@ -73,12 +76,12 @@
 					)
 				) && ($label = $axis->getLabel())
 				&& ($label->getCount() > 1)
-			)
+			) {
 				$this->grid->setHorizontalStepSize(
 					round(100 / ($label->getCount() - 1), 2)
 				);
-			
+            }
+
 			return $this;
 		}
 	}
-?>

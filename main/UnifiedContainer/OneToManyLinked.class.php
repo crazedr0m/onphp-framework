@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,19 +16,20 @@
 	abstract class OneToManyLinked extends UnifiedContainer
 	{
 		public function __construct(
-			Identifiable $parent, GenericDAO $dao, $lazy = true
-		)
-		{
+			Identifiable $parent,
+            GenericDAO $dao,
+            $lazy = true
+		) {
 			parent::__construct($parent, $dao, $lazy);
-			
+
 			$worker =
 				$lazy
 					? 'OneToManyLinkedLazy'
 					: 'OneToManyLinkedFull';
-			
+
 			$this->worker = new $worker($this);
 		}
-		
+
 		public function getChildIdField()
 		{
 			return 'id';
@@ -37,10 +39,9 @@
 		{
 			return false;
 		}
-		
+
 		public function getHelperTable()
 		{
 			return $this->dao->getTable();
 		}
 	}
-?>

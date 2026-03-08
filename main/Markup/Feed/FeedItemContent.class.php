@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash                                *
  *                                                                         *
@@ -16,15 +17,15 @@
 	{
 		private $type = null;
 		private $body = null;
-		
+
 		/**
 		 * @return FeedItemContent
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return FeedItemContentType
 		**/
@@ -32,30 +33,29 @@
 		{
 			return $this->type;
 		}
-		
+
 		/**
 		 * @return FeedItemContent
 		**/
 		public function setType(FeedItemContentType $type)
 		{
 			$this->type = $type;
-			
+
 			return $this;
 		}
-		
+
 		public function getBody()
 		{
 			return $this->body;
 		}
-		
+
 		/**
 		 * @return FeedItemContent
 		**/
 		public function setBody($body)
 		{
 			$this->body = $body;
-			
+
 			return $this;
 		}
 	}
-?>

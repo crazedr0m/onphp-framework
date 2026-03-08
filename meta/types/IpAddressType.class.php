@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Evgeny V. Kokovikhin                            *
  *                                                                         *
@@ -18,20 +19,19 @@
 		{
 			return 'ipAddress';
 		}
-		
+
 		public function isGeneric()
 		{
 			return true;
 		}
-		
+
 		public function isMeasurable()
 		{
 			return true;
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::IP)';
 		}
 	}
-?>

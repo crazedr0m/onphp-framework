@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -16,20 +17,19 @@
 	class SgmlToken
 	{
 		private $value	= null;
-		
+
 		/**
 		 * @return SgmlToken
 		**/
 		public function setValue($value)
 		{
 			$this->value = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function getValue()
 		{
 			return $this->value;
 		}
 	}
-?>

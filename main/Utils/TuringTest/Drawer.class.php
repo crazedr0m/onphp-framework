@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Dmitry E. Demidov                          *
  *                                                                         *
@@ -15,17 +16,17 @@
 	abstract class Drawer
 	{
 		private	$turingImage	= null;
-		
+
 		/**
 		 * @return Drawer
 		**/
 		public function setTuringImage(TuringImage $turingImage)
 		{
 			$this->turingImage = $turingImage;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TuringImage
 		**/
@@ -34,4 +35,3 @@
 			return $this->turingImage;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -19,7 +20,6 @@
 		 * @return BaseUncacher (this)
 		 */
 		public function merge(UncacherBase $uncacher);
-		
+
 		public function uncache();
 	}
-?>

@@ -139,4 +139,3 @@
 			$this->assertContains('class AutoCredentials', $content, 'Auto business class should have Auto prefix');
 		}
 	}
-?>

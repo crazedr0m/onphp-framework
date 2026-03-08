@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2010 by Alexandr S. Krotov                              *
  *                                                                         *
@@ -17,7 +18,7 @@
 	{
 		const  YANDEX_NAMESPACE_URI		= 'http://news.yandex.ru';
 		const  YANDEX_NAMESPACE_PREFIX	= 'yandex';
-		
+
 		/**
 		 * @return YandexRssFeedFormat
 		**/
@@ -25,7 +26,7 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return RssChannelWorker
 		**/
@@ -33,7 +34,7 @@
 		{
 			return RssChannelWorker::me();
 		}
-		
+
 		/**
 		 * @return YandexRssItemWorker
 		**/
@@ -41,7 +42,7 @@
 		{
 			return YandexRssItemWorker::me();
 		}
-		
+
 		public function isAcceptable(SimpleXMLElement $xmlFeed)
 		{
 			return (
@@ -55,4 +56,3 @@
 			);
 		}
 	}
-?>

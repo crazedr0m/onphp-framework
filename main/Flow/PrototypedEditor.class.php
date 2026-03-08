@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2007-2008 by Anton E. Lebedevich                         *
  *                                                                          *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                        *
  *                                                                          *
  ****************************************************************************/
-	
+
 	/**
 	 * @ingroup Flow
 	**/
@@ -16,10 +17,10 @@
 	{
 		const COMMAND_SUCCEEDED	= 'success';
 		const COMMAND_FAILED	= 'error';
-		
+
 		protected $subject = null;
 		protected $map = null;
-		
+
 		public function __construct(Prototyped $subject)
 		{
 			$this->subject = $subject;
@@ -29,17 +30,17 @@
 				)->
 				addSource('id', RequestType::get())->
 				setDefaultType(RequestType::post());
-				
+
 			$this->
 				setMethodMapping('drop', 'doDrop')->
 				setMethodMapping('take', 'doTake')->
 				setMethodMapping('save', 'doSave')->
 				setMethodMapping('edit', 'doEdit')->
 				setMethodMapping('add', 'doAdd');
-				
+
 			$this->setDefaultAction('edit');
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -47,22 +48,19 @@
 		{
 			$this->map->import($request);
 			$form = $this->getForm();
-			
+
 			if ($object = $form->getValue('id')) {
 				if ($object instanceof Identifiable) {
-					
 					$this->dropObject($request, $form, $object);
-					
+
 					return ModelAndView::create()->setModel(
 						Model::create()->
 						set('editorResult', self::COMMAND_SUCCEEDED)
 					);
-					
 				} else {
-					
 					// already deleted
 					$form->markMissing('id');
-					
+
 					return ModelAndView::create()->setModel(
 						Model::create()->
 						set('editorResult', self::COMMAND_FAILED)->
@@ -76,15 +74,15 @@
 					set('form', $form)
 				);
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		protected function dropObject(HttpRequest $request, Form $form, Identifiable $object)
 		{
 			$object->dao()->drop($object);
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -92,28 +90,25 @@
 		{
 			$this->map->import($request);
 			$form = $this->getForm();
-			
+
 			if (!$form->getRawValue('id')) {
-				
 				$isAdd = true;
 				$form->markGood('id');
 				$object = clone $this->subject;
-				
 			} else {
-				
 				$object = $form->getValue('id');
 				$isAdd = false;
 			}
-			
+
 			if (!$form->getErrors()) {
 				$object = $isAdd
 					? $this->addObject($request, $form, $object)
 					: $this->saveObject($request, $form, $object);
-				
+
 				$editorResult = $form->getErrors()
 					? self::COMMAND_FAILED
 					: self::COMMAND_SUCCEEDED;
-					
+
 				return
 					ModelAndView::create()->
 					setModel(
@@ -128,16 +123,17 @@
 					Model::create()->
 					set('form', $form)->
 					set('editorResult', self::COMMAND_FAILED);
-				
-				if ($object)
+
+				if ($object) {
 					$model->set('subject', $object);
-				
+                }
+
 				return ModelAndView::create()->setModel($model);
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -145,17 +141,16 @@
 		{
 			$this->map->import($request);
 			$form = $this->getForm();
-			
+
 			$object = $form->getValue('id');
-			
+
 			if (!$form->getErrors()) {
-				
 				$object = $this->saveObject($request, $form, $object);
-				
+
 				$editorResult = $form->getErrors()
 					? self::COMMAND_FAILED
 					: self::COMMAND_SUCCEEDED;
-					
+
 				return
 					ModelAndView::create()->
 					setModel(
@@ -170,22 +165,23 @@
 					Model::create()->
 					set('form', $form)->
 					set('editorResult', self::COMMAND_FAILED);
-				
-				if ($object)
+
+				if ($object) {
 					$model->set('subject', $object);
-				
+                }
+
 				return ModelAndView::create()->setModel($model);
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		protected function saveObject(HttpRequest $request, Form $form, Identifiable $object)
 		{
 			FormUtils::form2object($form, $object, false);
 			return $object->dao()->save($object);
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -193,23 +189,24 @@
 		{
 			$this->map->import($request);
 			$form = $this->getForm();
-			
-			if ($form->getValue('id'))
+
+			if ($form->getValue('id')) {
 				$object = $form->getValue('id');
-			else
-				$object = clone $this->subject;
-			
+			} else {
+$object = clone $this->subject;
+            }
+
 			FormUtils::object2form($object, $form);
-			
+
 			$form->dropAllErrors();
-			
+
 			return ModelAndView::create()->setModel(
 				Model::create()->
 				set('subject', $object)->
 				set('form', $form)
 			);
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -217,18 +214,17 @@
 		{
 			$this->map->import($request);
 			$form = $this->getForm();
-			
+
 			$form->markGood('id');
 			$object = clone $this->subject;
-			
+
 			if (!$form->getErrors()) {
-				
 				$object = $this->addObject($request, $form, $object);
-				
+
 				$editorResult = $form->getErrors()
 					? self::COMMAND_FAILED
 					: self::COMMAND_SUCCEEDED;
-				
+
 				return
 					ModelAndView::create()->
 					setModel(
@@ -248,10 +244,10 @@
 						set('editorResult', self::COMMAND_FAILED)
 					);
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		/**
 		 * @return Form
 		**/
@@ -259,11 +255,10 @@
 		{
 			return $this->map->getForm();
 		}
-		
+
 		protected function addObject(HttpRequest $request, Form $form, Identifiable $object)
 		{
 			FormUtils::form2object($form, $object);
 			return $object->dao()->add($object);
 		}
 	}
-?>

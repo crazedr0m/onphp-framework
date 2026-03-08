@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2008 by Anton E. Lebedevich, Konstantin V. Arkhipov *
  *                                                                          *
@@ -11,33 +12,32 @@
 
 	/**
 	 * Base for all full-text stuff.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
-	abstract class FullText
-		implements DialectString, MappableObject, LogicalObject
+	abstract class FullText implements DialectString, MappableObject, LogicalObject
 	{
 		protected $logic = null;
 		protected $field = null;
 		protected $words = null;
-		
+
 		public function __construct($field, $words, $logic)
 		{
 			Assert::isArray($words);
-			
+
 			$this->field = $field;
 			$this->words = $words;
 			$this->logic = $logic;
 		}
-		
+
 		/**
 		 * @return FullText
 		**/
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
 			if (is_array($this->field)) {
-				$mappedField = array();
+				$mappedField = [];
 				foreach ($this->field as $item) {
 					$mappedField[] = $dao->guessAtom($item, $query, $dao->getTable());
 				}
@@ -51,10 +51,9 @@
 				$this->logic
 			);
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			throw new UnsupportedMethodException();
 		}
 	}
-?>

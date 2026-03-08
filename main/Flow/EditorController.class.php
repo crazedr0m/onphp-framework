@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	/**
 	 * @ingroup Flow
 	**/
@@ -21,30 +22,33 @@
 			$this->commandMap['save'] = new SaveCommand();
 			$this->commandMap['edit'] = new EditCommand();
 			$this->commandMap['add'] = new AddCommand();
-			
+
 			parent::__construct($subject);
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
 		public function handleRequest(HttpRequest $request)
 		{
 			$this->map->import($request);
-			
+
 			$form = $this->getForm();
-			
-			if (!$command = $form->getValue('action'))
+
+			if (!$command = $form->getValue('action')) {
 				$command = $form->get('action')->getDefault();
-			
+            }
+
 			if ($command) {
 				$mav = $this->commandMap[$command]->run(
-					$this->subject, $form, $request
+					$this->subject,
+                    $form,
+                    $request
 				);
-			} else
-				$mav = ModelAndView::create();
-			
+			} else {
+$mav = ModelAndView::create();
+            }
+
 			return $this->postHandleRequest($mav, $request);
 		}
 	}
-?>

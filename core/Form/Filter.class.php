@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Factory for Filtrator implementations.
-	 * 
+	 *
 	 * @ingroup Form
 	**/
 	final class Filter extends StaticFactory
@@ -26,7 +27,7 @@
 					add(Filter::stripTags())->
 					add(Filter::trim());
 		}
-		
+
 		/**
 		 * @return FilterChain
 		**/
@@ -34,7 +35,7 @@
 		{
 			return new FilterChain();
 		}
-		
+
 		/**
 		 * @return HashFilter
 		**/
@@ -42,7 +43,7 @@
 		{
 			return HashFilter::create($binary);
 		}
-		
+
 		/**
 		 * @return PCREFilter
 		**/
@@ -50,7 +51,7 @@
 		{
 			return PCREFilter::create();
 		}
-		
+
 		/**
 		 * @return TrimFilter
 		**/
@@ -58,7 +59,7 @@
 		{
 			return TrimFilter::create();
 		}
-		
+
 		/**
 		 * @return CropFilter
 		**/
@@ -66,7 +67,7 @@
 		{
 			return CropFilter::create();
 		}
-		
+
 		/**
 		 * @return StripTagsFilter
 		**/
@@ -74,7 +75,7 @@
 		{
 			return StripTagsFilter::create();
 		}
-		
+
 		/**
 		 * @return LowerCaseFilter
 		**/
@@ -82,7 +83,7 @@
 		{
 			return Singleton::getInstance('LowerCaseFilter');
 		}
-		
+
 		/**
 		 * @return UpperCaseFilter
 		**/
@@ -90,7 +91,7 @@
 		{
 			return Singleton::getInstance('UpperCaseFilter');
 		}
-		
+
 		/**
 		 * @return HtmlSpecialCharsFilter
 		**/
@@ -98,7 +99,7 @@
 		{
 			return Singleton::getInstance('HtmlSpecialCharsFilter');
 		}
-		
+
 		/**
 		 * @return NewLinesToBreaks
 		**/
@@ -106,7 +107,7 @@
 		{
 			return Singleton::getInstance('NewLinesToBreaks');
 		}
-		
+
 		/**
 		 * @return UrlEncodeFilter
 		**/
@@ -114,7 +115,7 @@
 		{
 			return Singleton::getInstance('UrlEncodeFilter');
 		}
-		
+
 		/**
 		 * @return UrlDecodeFilter
 		**/
@@ -122,7 +123,7 @@
 		{
 			return Singleton::getInstance('UrlDecodeFilter');
 		}
-		
+
 		/**
 		 * @return UnixToUnixDecode
 		**/
@@ -130,7 +131,7 @@
 		{
 			return Singleton::getInstance('UnixToUnixDecode');
 		}
-		
+
 		/**
 		 * @return UnixToUnixEncode
 		**/
@@ -138,7 +139,7 @@
 		{
 			return Singleton::getInstance('UnixToUnixEncode');
 		}
-		
+
 		/**
 		 * @return StringReplaceFilter
 		**/
@@ -146,7 +147,7 @@
 		{
 			return StringReplaceFilter::create($search, $replace);
 		}
-		
+
 		/**
 		 * @return SafeUtf8Filter
 		**/
@@ -155,4 +156,3 @@
 			return Singleton::getInstance('SafeUtf8Filter');
 		}
 	}
-?>

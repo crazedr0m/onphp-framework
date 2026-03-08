@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @ingroup MetaBase
  **/

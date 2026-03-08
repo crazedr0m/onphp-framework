@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -17,13 +18,13 @@
 		const CHART_AREA		= 0x1;
 		const BACKGROUND		= 0x2;
 		const TRANSPARENCY		= 0x3;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::CHART_AREA 	=> 'c',
 			self::BACKGROUND	=> 'bg',
 			self::TRANSPARENCY	=> 'a'
-		);
-		
+		];
+
 		/**
 		 * @return GoogleChartSolidFillType
 		**/
@@ -31,10 +32,9 @@
 		{
 			return new self($id);
 		}
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Unserialize string
-	 * 
+	 *
 	 * @ingroup Filters
 	 * @deprecated Because of the potential security problem.
 	**/
@@ -24,10 +25,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return unserialize($value);
 		}
 	}
-?>

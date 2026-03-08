@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -19,4 +20,3 @@
 			return parent::baseToString($dialect, 'RIGHT ');
 		}
 	}
-?>

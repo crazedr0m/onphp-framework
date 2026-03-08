@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -15,10 +16,9 @@
 	interface View
 	{
 		const ERROR_VIEW = 'error';
-		
+
 		/**
 		 * @param $model null or Model
 		**/
 		public function render($model = null);
 	}
-?>

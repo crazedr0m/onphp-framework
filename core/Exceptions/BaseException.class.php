@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -18,8 +19,7 @@
 		public function __toString()
 		{
 			return
-				"[$this->message] in: \n".
+				"[$this->message] in: \n" .
 				$this->getTraceAsString();
 		}
 	}
-?>

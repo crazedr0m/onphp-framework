@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Vladimir A. Altuchov                            *
  *                                                                         *
@@ -16,12 +17,12 @@
 	final class IpNetwork implements SingleRange
 	{
 		const MASK_MAX_SIZE = 31;
-		
+
 		private $ip			= null;
 		private $end 		= null;
 		private $mask 		= null;
 		private $longMask 	= null;
-		
+
 		/**
 		 * @return IpNetwork
 		**/
@@ -29,29 +30,31 @@
 		{
 			return new self($ip, $mask);
 		}
-		
+
 		public function __construct(IpAddress $ip, $mask)
 		{
 			Assert::isInteger($mask);
-			
-			if ($mask == 0 || self::MASK_MAX_SIZE < $mask)
+
+			if ($mask == 0 || self::MASK_MAX_SIZE < $mask) {
 				throw new WrongArgumentException('wrong mask given');
-			
+            }
+
 			$this->longMask =
 				(int) (pow(2, (32 - $mask)) * (pow(2, $mask) - 1));
-			
-			if (($ip->getLongIp() & $this->longMask) != $ip->getLongIp())
+
+			if (($ip->getLongIp() & $this->longMask) != $ip->getLongIp()) {
 				throw new WrongArgumentException('wrong ip network given');
-			
+            }
+
 			$this->ip = $ip;
 			$this->mask = $mask;
 		}
-		
+
 		public function getMask()
 		{
 			return $this->mask;
 		}
-		
+
 		/**
 		 * @return IpAddress
 		**/
@@ -59,7 +62,7 @@
 		{
 			return $this->ip;
 		}
-		
+
 		/**
 		 * @return IpAddress
 		**/
@@ -71,17 +74,16 @@
 						long2ip($this->ip->getLongIp() | ~$this->longMask)
 					);
 			}
-			
+
 			return $this->end;
 		}
-		
+
 		public function contains(/* IpAddress */ $probe)
 		{
 			Assert::isInstance($probe, 'IpAddress');
-			
+
 			return
 				($probe->getLongIp() & $this->longMask)
 				== $this->ip->getLongIp();
 		}
 	}
-?>

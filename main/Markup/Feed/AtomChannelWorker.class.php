@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -21,26 +22,27 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return FeedChannel
 		**/
 		public function makeChannel(SimpleXMLElement $xmlFeed)
 		{
 			$feedChannel = FeedChannel::create((string) $xmlFeed->title);
-			
-			if (isset($xmlFeed->link))
-				if (is_array($xmlFeed->link))
+
+			if (isset($xmlFeed->link)) {
+				if (is_array($xmlFeed->link)) {
 					$feedChannel->setLink((string) $xmlFeed->link[0]);
-				else
-					$feedChannel->setLink((string) $xmlFeed->link);
-			
+				} else {
+$feedChannel->setLink((string) $xmlFeed->link);
+                }
+            }
+
 			return $feedChannel;
 		}
-		
+
 		public function toXml(FeedChannel $channel, $itemsXml)
 		{
 			throw new UnimplementedFeatureException('implement me!');
 		}
 	}
-?>

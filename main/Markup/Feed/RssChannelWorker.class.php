@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -21,7 +22,7 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return FeedChannel
 		**/
@@ -30,42 +31,43 @@
 			if (
 				(!isset($xmlFeed->channel))
 				|| (!isset($xmlFeed->channel->title))
-			)
+			) {
 				throw new WrongStateException(
 					'there are no channels in given rss'
 				);
-			
+            }
+
 			$feedChannel =
 				FeedChannel::create((string) $xmlFeed->channel->title);
-			
-			if (isset($xmlFeed->channel->link))
+
+			if (isset($xmlFeed->channel->link)) {
 				$feedChannel->setLink((string) $xmlFeed->channel->link);
-			
+            }
+
 			return $feedChannel;
 		}
-		
+
 		public function toXml(FeedChannel $channel, $itemsXml)
 		{
 			return
-				'<rss version="'.RssFeedFormat::VERSION.'">'
-					.'<channel>'
-						.'<title>'.$channel->getTitle().'</title>'
-						.(
+				'<rss version="' . RssFeedFormat::VERSION . '">'
+					. '<channel>'
+						. '<title>' . $channel->getTitle() . '</title>'
+						. (
 							$channel->getLink()
-								? '<link>'.$channel->getLink().'</link>'
+								? '<link>' . $channel->getLink() . '</link>'
 								: null
 						)
-						.(
+						. (
 							$channel->getDescription()
 								?
 									'<description>'
-									.$channel->getDescription()
-									.'</description>'
+									. $channel->getDescription()
+									. '</description>'
 								: null
 						)
-						.$itemsXml
-					.'</channel>'
-				.'</rss>';
+						. $itemsXml
+					. '</channel>'
+				. '</rss>';
 		}
 	}
-?>

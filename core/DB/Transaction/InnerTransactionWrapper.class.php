@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Alexey S. Denisov                               *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Utility to wrap function into transaction
-	 * 
+	 *
 	 * @ingroup Transaction
 	**/
 	final class InnerTransactionWrapper
@@ -34,15 +35,15 @@
 		 * @var AccessMode
 		 */
 		private $mode = null;
-		
+
 		/**
 		 * @return InnerTransactionWrapper
 		 */
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @param DB $db
 		 * @return InnerTransactionWrapper
@@ -52,7 +53,7 @@
 			$this->db = $db;
 			return $this;
 		}
-		
+
 		/**
 		 * @param StorableDAO $dao
 		 * @return InnerTransactionWrapper
@@ -62,7 +63,7 @@
 			$this->dao = $dao;
 			return $this;
 		}
-		
+
 		/**
 		 * @param collable $function
 		 * @return InnerTransactionWrapper
@@ -73,7 +74,7 @@
 			$this->function = $function;
 			return $this;
 		}
-		
+
 		/**
 		 * @param collable $function
 		 * @return InnerTransactionWrapper
@@ -104,18 +105,18 @@
 			$this->mode = $mode;
 			return $this;
 		}
-		
+
 		public function run()
 		{
 			Assert::isTrue(!is_null($this->dao) || !is_null($this->db), 'set first dao or db');
 			Assert::isNotNull($this->function, 'set first function');
-			
+
 			$transaction = InnerTransaction::begin(
 				$this->dao ?: $this->db,
 				$this->level,
 				$this->mode
 			);
-			
+
 			try {
 				$result = call_user_func_array($this->function, func_get_args());
 				$transaction->commit();
@@ -131,4 +132,3 @@
 			}
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -16,9 +17,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return OqlWhereClause
 		**/
@@ -26,18 +27,18 @@
 		{
 			return OqlWhereClause::create();
 		}
-		
+
 		protected function handleState()
 		{
 			if ($this->state == self::INITIAL_STATE) {
 				$argument = $this->getLogicExpression();
-				if ($argument instanceof OqlQueryExpression)
+				if ($argument instanceof OqlQueryExpression) {
 					$this->oqlObject->setExpression($argument);
-				else
-					$this->error("expecting 'where' expression");
+				} else {
+$this->error("expecting 'where' expression");
+                }
 			}
-			
+
 			return self::FINAL_STATE;
 		}
 	}
-?>

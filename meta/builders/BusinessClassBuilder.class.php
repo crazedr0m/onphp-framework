@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -25,24 +26,25 @@ namespace {$ns->buildFullName('business', false)};
 
 EOT;
 			}
-			
-			if ($type = $class->getType())
-				$typeName = $type->toString().' ';
-			else
-				$typeName = null;
-			
+
+			if ($type = $class->getType()) {
+				$typeName = $type->toString() . ' ';
+			} else {
+$typeName = null;
+            }
+
 			$interfaces = ' implements \\Prototyped';
-			
+
 			if (
 				$class->getPattern()->daoExists()
 				&& (!$class->getPattern() instanceof AbstractClassPattern)
 			) {
 				$interfaces .= ', \\DAOConnected';
-				
+
 				if ($ns) {
-					$daoFullName = $ns->buildFullName('dao', false).'\\'.$class->getName().'DAO';
+					$daoFullName = $ns->buildFullName('dao', false) . '\\' . $class->getName() . 'DAO';
 				} else {
-					$daoFullName = $class->getName().'DAO';
+					$daoFullName = $class->getName() . 'DAO';
 				}
 				$dao = <<<EOT
 	/**
@@ -54,13 +56,14 @@ EOT;
 	}
 
 EOT;
-			} else
-				$dao = null;
+			} else {
+$dao = null;
+            }
 
 			$parentName = $ns
-				? $ns->buildFullName('business', true).'\\'.$class->getName()
-				: 'Auto'.$class->getName();
-			
+				? $ns->buildFullName('business', true) . '\\' . $class->getName()
+				: 'Auto' . $class->getName();
+
 			$out .= <<<EOT
 {$typeName}class {$class->getName()} extends {$parentName}{$interfaces}
 {
@@ -68,16 +71,16 @@ EOT;
 
 			if (!$type || $type->getId() !== MetaClassType::CLASS_ABSTRACT) {
 				$customCreate = null;
-				
+
 				if (
 					$class->getFinalParent()->getPattern()
 						instanceof InternalClassPattern
 				) {
 					$parent = $class;
-					
+
 					while ($parent = $parent->getParent()) {
 						$info = new ReflectionClass($parent->getName());
-						
+
 						if (
 							$info->hasMethod('create')
 							&& ($info->getMethod('create')->getParameters() > 0)
@@ -87,26 +90,26 @@ EOT;
 						}
 					}
 				}
-				
+
 				if ($customCreate) {
 					$creator = $info->getMethod('create');
-					
-					$declaration = array();
-					
+
+					$declaration = [];
+
 					foreach ($creator->getParameters() as $parameter) {
 						$declaration[] =
-							'$'.$parameter->getName()
+							'$' . $parameter->getName()
 							// no one can live without default value @ ::create
-							.' = '
-							.(
+							. ' = '
+							. (
 								$parameter->getDefaultValue()
 									? $parameter->getDefaultValue()
 									: 'null'
 							);
 					}
-					
+
 					$declaration = implode(', ', $declaration);
-					
+
 					$out .= <<<EOT
 
 	/**
@@ -131,13 +134,13 @@ EOT;
 		
 EOT;
 				}
-				
+
 				if ($ns) {
-					$protoFullName = $ns->buildFullName('proto', false).'\\'.$class->getName();
+					$protoFullName = $ns->buildFullName('proto', false) . '\\' . $class->getName();
 				} else {
-					$protoFullName = 'Proto'.$class->getName();
+					$protoFullName = 'Proto' . $class->getName();
 				}
-			
+
 				$out .= <<<EOT
 
 {$dao}
@@ -150,16 +153,15 @@ EOT;
 	}
 
 EOT;
-
 			}
-			
+
 			$out .= <<<EOT
 
 	// your brilliant stuff goes here
 }
 
+
 EOT;
-			return $out.self::getHeel();
+			return $out . self::getHeel();
 		}
 	}
-?>

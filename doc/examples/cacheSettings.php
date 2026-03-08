@@ -1,6 +1,6 @@
 <?php
 
-	require dirname(__FILE__).'/../../global.inc.php.tpl';
+	require dirname(__FILE__) . '/../../global.inc.php.tpl';
 
 	// set up default cache peer
 
@@ -9,7 +9,7 @@
 	);
 
 	// or even several aggregated peers
-	
+
 	Cache::setPeer(
 		AggregateCache::create()->
 		addPeer(
@@ -36,8 +36,6 @@
 			echo "got from cache:\n";
 			print_r($cached);
 		}
-
 	} else {
 		echo "failed to store object in cache\n";
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,7 +19,7 @@
 		{
 			return false;
 		}
-		
+
 		/**
 		 * @return ValueObjectPattern
 		**/
@@ -29,4 +30,3 @@
 				buildProto($class);
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2008 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -16,34 +17,35 @@
 	{
 		/**
 		 * Fetching strategy for incoming containers:
-		 * 
+		 *
 		 * null - do nothing;
 		 * true - lazy fetch;
 		 * false - full fetch.
 		**/
 		private $fetchMode = null;
-		
+
 		/**
 		 * @return PrimitiveArray
 		**/
 		public function setFetchMode($ternary)
 		{
 			Assert::isTernaryBase($ternary);
-			
+
 			$this->fetchMode = $ternary;
-			
+
 			return $this;
 		}
-		
+
 		public function import($scope)
 		{
-			if (!BasePrimitive::import($scope))
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
+            }
+
 			$this->value = $scope[$this->name];
-			
+
 			$this->selfFilter();
-			
+
 			if (
 				is_array($this->value)
 				&& !($this->min && count($this->value) < $this->min)
@@ -53,10 +55,10 @@
 			} else {
 				$this->value = null;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function importValue($value)
 		{
 			if ($value instanceof UnifiedContainer) {
@@ -68,22 +70,23 @@
 						$value = $value->getList();
 					} else {
 						$className = get_class($value);
-						
+
 						$containter = new $className(
 							$value->getParentObject(),
 							$this->fetchMode
 						);
-						
+
 						$value = $containter->getList();
 					}
-				} elseif (!$value->isFetched())
+				} elseif (!$value->isFetched()) {
 					return null;
+                }
 			}
-			
-			if (is_array($value))
-				return $this->import(array($this->getName() => $value));
-			
+
+			if (is_array($value)) {
+				return $this->import([$this->getName() => $value]);
+            }
+
 			return false;
 		}
 	}
-?>

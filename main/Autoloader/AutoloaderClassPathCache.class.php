@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Konstantin V. Arkhipov                     *
  *                      2012 by Alexey S. Denisov                          *
@@ -9,30 +10,30 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	class AutoloaderClassPathCache implements AutoloaderRecachable, AutoloaderWithNamespace
 	{
 		const ONPHP_CLASS_CACHE_CHECKSUM = '__occc';
-		
+
 		/**
 		 * @var NamespaceResolver
 		 */
 		private $namespaceResolver = null;
-		
+
 		// numeric indexes for directories, literal indexes for classes
 		private $cache = null;
 		private $pathHash = null;
 		private $checksum = null;
 		private $classCachePath = ONPHP_CLASS_CACHE;
-		
+
 		/**
 		 * @return AutoloaderClassPathCache
 		 */
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @param NamespaceResolver $namespaceResolver
 		 * @return AutoloaderClassPathCache
@@ -42,7 +43,7 @@
 			$this->namespaceResolver = $namespaceResolver;
 			return $this;
 		}
-		
+
 		/**
 		 * @return NamespaceResolver
 		 */
@@ -50,7 +51,7 @@
 		{
 			return $this->namespaceResolver;
 		}
-		
+
 		/**
 		 * @param string $path
 		 * @return AutoloaderClassPathCache
@@ -58,10 +59,10 @@
 		public function addPath($path, $namespace = null)
 		{
 			$this->namespaceResolver->addPath($path, $namespace);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @param array $paths
 		 * @return AutoloaderClassPathCache
@@ -69,10 +70,10 @@
 		public function addPaths(array $paths, $namespace = null)
 		{
 			$this->namespaceResolver->addPaths($paths, $namespace);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @param string $path
 		 * @return AutoloaderClassPathCache
@@ -80,30 +81,31 @@
 		public function setClassCachePath($path)
 		{
 			$this->classCachePath = rtrim($path, DIRECTORY_SEPARATOR)
-				.DIRECTORY_SEPARATOR;
+				. DIRECTORY_SEPARATOR;
 			return $this;
 		}
-		
-		public function autoloadWithRecache($className) {
+
+		public function autoloadWithRecache($className)
+        {
 			return $this->autoload($className, true);
 		}
-		
+
 		public function autoload($className, $recache = false)
 		{
 			if (strpos($className, "\0") !== false) {
 				// we can not avoid fatal error in this case
 				return /* void */;
 			}
-			
+
 			$currentPath = serialize($this->namespaceResolver->getPaths());
-			
+
 			if ($currentPath != $this->pathHash) {
-				$this->checksum = crc32($currentPath.ONPHP_VERSION);
+				$this->checksum = crc32($currentPath . ONPHP_VERSION);
 				$this->pathHash = $currentPath;
 			}
-			
-			$cacheFile = $this->classCachePath.$this->checksum.'.occ';
-			
+
+			$cacheFile = $this->classCachePath . $this->checksum . '.occ';
+
 			if (
 				!$recache
 				&& $this->cache
@@ -136,15 +138,16 @@
 				$this->cache = $this->namespaceResolver->getClassPathList();
 
 				$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = $this->checksum;
-				
+
 				if (
 					is_writable(dirname($cacheFile))
 					&& (
 						!file_exists($cacheFile)
 						|| is_writable($cacheFile)
 					)
-				)
+				) {
 					file_put_contents($cacheFile, serialize($this->cache));
+                }
 			}
 
 			$fileName = $this->getFileName($className);
@@ -156,31 +159,31 @@
 			try {
 				return $this->includeFile($fileName);
 			} catch (BaseException $e) {
-				if (is_readable($fileName) || $recache)
+				if (is_readable($fileName) || $recache) {
 					// class compiling failed
 					throw $e;
-				else {
+				} else {
 					// cache is not actual
 					$this->cache[self::ONPHP_CLASS_CACHE_CHECKSUM] = null;
 					$this->autoload($className, true);
 				}
 			}
 		}
-		
+
 		public function register()
 		{
 			$this->unregister();
-			spl_autoload_register(array($this, 'autoload'));
+			spl_autoload_register([$this, 'autoload']);
 			AutoloaderPool::registerRecache($this);
 			AutoloaderClassNotFound::me()->register();
 		}
-		
+
 		public function unregister()
 		{
 			AutoloaderPool::unregisterRecache($this);
-			spl_autoload_unregister(array($this, 'autoload'));
+			spl_autoload_unregister([$this, 'autoload']);
 		}
-		
+
 		/**
 		 * moved to separate method to allow mock it for tests
 		 * @param string $fileName
@@ -189,18 +192,18 @@
 		{
 			include $fileName;
 		}
-		
+
 		private function getFileName($className)
 		{
-			$className = '\\'.ltrim($className, '\\');
-			if (!isset($this->cache[$className]))
+			$className = '\\' . ltrim($className, '\\');
+			if (!isset($this->cache[$className])) {
 				return;
-			
+            }
+
 			$classParts = explode('\\', $className);
 			$onlyClassName = $classParts[count($classParts) - 1];
 
-			return $this->cache[$this->cache[$className]].$onlyClassName
-				.$this->namespaceResolver->getClassExtension();
+			return $this->cache[$this->cache[$className]] . $onlyClassName
+				. $this->namespaceResolver->getClassExtension();
 		}
 	}
-?>

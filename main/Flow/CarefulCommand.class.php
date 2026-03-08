@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,4 +18,3 @@
 		public function commit();
 		public function rollback();
 	}
-?>

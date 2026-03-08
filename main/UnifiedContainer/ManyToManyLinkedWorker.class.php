@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -20,7 +21,7 @@
 		protected function makeInsertQuery($childId)
 		{
 			$uc = $this->container;
-			
+
 			return
 				OSQL::insert()->into($uc->getHelperTable())->
 				set(
@@ -29,16 +30,16 @@
 				)->
 				set($uc->getChildIdField(), $childId);
 		}
-		
+
 		/**
 		 * only unlinking, we don't want to drop original object
-		 * 
+		 *
 		 * @return DeleteQuery
 		**/
 		protected function makeDeleteQuery($delete)
 		{
 			$uc = $this->container;
-			
+
 			return
 				OSQL::delete()->from($uc->getHelperTable())->
 				where(
@@ -54,15 +55,15 @@
 					)
 				);
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
 		protected function joinHelperTable(SelectQuery $query)
 		{
 			$uc = $this->container;
-			
-			if (!$query->hasJoinedTable($uc->getHelperTable()))
+
+			if (!$query->hasJoinedTable($uc->getHelperTable())) {
 				$query->
 					join(
 						$uc->getHelperTable(),
@@ -77,7 +78,8 @@
 							)
 						)
 					);
-			
+            }
+
 			return
 				$query->
 					andWhere(
@@ -91,4 +93,3 @@
 					);
 		}
 	}
-?>

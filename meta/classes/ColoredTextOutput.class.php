@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,24 +22,23 @@
 			$attribute = ConsoleMode::ATTR_RESET_ALL,
 			$foreground = ConsoleMode::FG_WHITE,
 			$background = ConsoleMode::BG_BLACK
-		)
-		{
+		) {
 			echo
 				chr(0x1B)
-				.'['.$attribute.';'
-				.$foreground.';'
-				.$background.'m';
-			
+				. '[' . $attribute . ';'
+				. $foreground . ';'
+				. $background . 'm';
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return ColoredTextOutput
 		**/
 		public function resetAll()
 		{
-			echo chr(0x1B).'[0m';
-			
+			echo chr(0x1B) . '[0m';
+
 			return $this;
 		}
 
@@ -50,14 +50,13 @@
 			$attribute = ConsoleMode::ATTR_RESET_ALL,
 			$foreground = ConsoleMode::FG_WHITE,
 			$background = ConsoleMode::BG_BLACK
-		)
-		{
+		) {
 			return
 				chr(0x1B)
-				.'['.$attribute.';'
-				.$foreground .';'
-				.$background .'m'
-				.$text
-				.chr(0x1B) .'[0m';
+				. '[' . $attribute . ';'
+				. $foreground . ';'
+				. $background . 'm'
+				. $text
+				. chr(0x1B) . '[0m';
 		}
 	}

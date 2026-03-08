@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,23 +16,22 @@
 	abstract class BaseGoogleChartData extends BaseGoogleChartParameter
 	{
 		protected $encoding = null;
-		
+
 		/**
 		 * @return BaseGoogleChartData
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return BaseGoogleChartData
 		**/
 		public function setEncoding(GoogleChartDataEncoding $encoding)
 		{
 			$this->encoding = $encoding;
-			
+
 			return $this;
 		}
 	}
-?>

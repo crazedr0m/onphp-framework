@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2013 by Vyacheslav Yu. Tsyrulnik                        *
 *                                                                         *
@@ -8,37 +9,35 @@
 *   License, or (at your option) any later version.                       *
 *                                                                         *
 ***************************************************************************/
-	
+
 	final class PrimitiveHttpUrlTest extends TestCase
 	{
 		private $urlWithPrivilegedPort = "https://path.to.some.com:444/hey.html";
-		
+
 		/**
 		 * @test
 		 */
 		public function privilegedPortIsOkByDefault()
 		{
 			$form = Form::create()->add(Primitive::httpUrl("url"));
-			
-			$form->import(array('url' => $this->urlWithPrivilegedPort));
+
+			$form->import(['url' => $this->urlWithPrivilegedPort]);
 			$errors = $form->getErrors();
-			
+
 			$this->assertFalse(isset($errors["url"]));
 		}
-		
+
 		/**
 		 * @test
 		 */
 		public function privilegedPortInvalid()
 		{
 			$form = Form::create()->add(Primitive::httpUrl("url")->setCheckPrivilegedPorts());
-			
-			$form->import(array('url' => $this->urlWithPrivilegedPort));
+
+			$form->import(['url' => $this->urlWithPrivilegedPort]);
 			$errors = $form->getErrors();
-			
+
 			$this->assertTrue(isset($errors["url"]));
 			$this->assertEquals(Form::WRONG, $errors["url"]);
 		}
-		
-	}
-?>
+    }

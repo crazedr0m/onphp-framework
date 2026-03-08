@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	/**
 	 * @ingroup Logic
 	 * @see http://www.postgresql.org/docs/8.3/interactive/hstore.html
@@ -19,7 +20,7 @@
 		const GET_VALUE		= '->';
 		const LEFT_CONTAIN	= '@>';
 		const CONCAT		= '||';
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -27,7 +28,7 @@
 		{
 			return new BinaryExpression($field, $key, self::CONTAIN);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -35,7 +36,7 @@
 		{
 			return new BinaryExpression($field, $key, self::GET_VALUE);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -43,7 +44,7 @@
 		{
 			return new BinaryExpression($field, "{$key}=>{$value}", self::LEFT_CONTAIN);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -51,7 +52,7 @@
 		{
 			return new BinaryExpression($field, $value, self::CONCAT);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -59,7 +60,7 @@
 		{
 			return new BinaryExpression($field, $hstore->toString(), self::LEFT_CONTAIN);
 		}
-		
+
 		public static function containValueList($field, array $list)
 		{
 			return
@@ -69,4 +70,3 @@
 				);
 		}
 	}
-?>

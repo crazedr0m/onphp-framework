@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -17,67 +18,66 @@
 		const LEFT	= 'l';
 		const RIGHT	= 'r';
 		const BOTH	= null;
-		
+
 		private $charlist	= null;
 		private $direction	= self::BOTH;
-		
+
 		/**
 		 * @return TrimFilter
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return TrimFilter
 		**/
 		public function setLeft()
 		{
 			$this->direction = self::LEFT;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TrimFilter
 		**/
 		public function setRight()
 		{
 			$this->direction = self::RIGHT;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return TrimFilter
 		**/
 		public function setBoth()
 		{
 			$this->direction = self::BOTH;
-			
+
 			return $this;
 		}
-		
+
 		public function apply($value)
 		{
-			$function = $this->direction.'trim';
-			
+			$function = $this->direction . 'trim';
+
 			return (
 				$this->charlist
 					? $function($value, $this->charlist)
 					: $function($value)
 				);
 		}
-		
+
 		/**
 		 * @return TrimFilter
 		**/
 		public function setCharlist($charlist)
 		{
 			$this->charlist = $charlist;
-			
+
 			return $this;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -24,7 +25,7 @@
 		 * @return AMQPInterface
 		**/
 		public function disconnect();
-		
+
 		/**
 		 * @return AMQPInterface
 		**/
@@ -86,4 +87,3 @@
 		 */
 		//public function setAlive($alive);
 	}
-?>

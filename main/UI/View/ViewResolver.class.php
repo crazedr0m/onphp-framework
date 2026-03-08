@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -21,4 +22,3 @@
 		**/
 		public function resolveViewName($viewName);
 	}
-?>

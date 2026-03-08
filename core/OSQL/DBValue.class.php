@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,14 +12,14 @@
 
 	/**
 	 * Container for passing values into OSQL queries.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
 	class DBValue extends Castable
 	{
 		private $value = null;
-		
+
 		/**
 		 * @return DBValue
 		**/
@@ -26,25 +27,24 @@
 		{
 			return new self($value);
 		}
-		
+
 		public function __construct($value)
 		{
 			$this->value = $value;
 		}
-		
+
 		public function getValue()
 		{
 			return $this->value;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$out = $dialect->quoteValue($this->value);
-			
+
 			return
 				$this->cast
 					? $dialect->toCasted($out, $this->cast)
 					: $out;
 		}
 	}
-?>

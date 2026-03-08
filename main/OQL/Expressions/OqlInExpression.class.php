@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,18 +16,19 @@
 	final class OqlInExpression extends OqlQueryExpression
 	{
 		private $logic = null;
-		
+
 		public function __construct(
-			OqlQueryParameter $left, OqlQueryParameter $right, $logic
-		)
-		{
+			OqlQueryParameter $left,
+            OqlQueryParameter $right,
+            $logic
+		) {
 			$this->
 				addParameter($left)->
 				addParameter($right);
-			
+
 			$this->logic = $logic;
 		}
-		
+
 		/**
 		 * @return InExpression
 		**/
@@ -38,13 +40,13 @@
 						$this->getParameter(0)->evaluate($values),
 						$this->getParameter(1)->evaluate($values)
 					);
-				
+
 				case InExpression::NOT_IN:
 					return Expression::notIn(
 						$this->getParameter(0)->evaluate($values),
 						$this->getParameter(1)->evaluate($values)
 					);
-				
+
 				default:
 					throw new UnsupportedMethodException(
 						"'{$this->logic}' doesn't supported yet"
@@ -52,4 +54,3 @@
 			}
 		}
 	}
-?>

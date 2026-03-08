@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -20,11 +21,10 @@
 		public function process(Criteria $criteria, JoinCapableQuery $query)
 		{
 			Assert::isNotNull($this->property);
-			
+
 			return $query->get(
 				$criteria->getDao()->guessAtom($this->property, $query),
 				$this->alias
 			);
 		}
 	}
-?>

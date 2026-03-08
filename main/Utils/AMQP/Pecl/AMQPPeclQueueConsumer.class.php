@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Evgeniya Tekalin                                *
  *                                                                         *
@@ -47,8 +48,9 @@
 		{
 			$this->count++;
 
-			if ($this->limit && $this->count >= $this->limit)
+			if ($this->limit && $this->count >= $this->limit) {
 				$this->setCancel(true);
+            }
 
 			return $this->handleDelivery(
 				AMQPPeclIncomingMessageAdapter::convert($delivery)
@@ -63,4 +65,3 @@
 			}
 		}
 	}
-?>

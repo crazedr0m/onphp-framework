@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,37 +12,37 @@
 
 	/**
 	 * @see RegulatedPrimitive::addImportFilter()
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class StripTagsFilter implements Filtrator
 	{
 		private $exclude = null;
-		
+
 		/**
 		 * @return StripTagsFilter
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return StripTagsFilter
 		**/
 		public function setAllowableTags($exclude)
 		{
-			if (null !== $exclude)
+			if (null !== $exclude) {
 				Assert::isString($exclude);
-			
+            }
+
 			$this->exclude = $exclude;
-			
+
 			return $this;
 		}
-		
+
 		public function apply($value)
 		{
 			return strip_tags($value, $this->exclude);
 		}
 	}
-?>

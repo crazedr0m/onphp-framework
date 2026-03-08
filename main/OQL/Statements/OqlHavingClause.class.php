@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return HavingProjection
 		**/
@@ -29,10 +30,9 @@
 		{
 			return $this->toLogic();
 		}
-		
+
 		protected static function checkExpression(OqlQueryExpression $expression)
 		{
 			Assert::isInstance($expression->getClassName(), 'HavingProjection');
 		}
 	}
-?>

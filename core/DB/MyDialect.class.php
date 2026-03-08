@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -20,105 +21,107 @@
 	class MyDialect extends Dialect
 	{
 		const IN_BOOLEAN_MODE = 1;
-		
+
 		public function quoteValue($value)
 		{
 			/// @see Sequenceless for this convention
-			
-			if ($value instanceof Identifier && !$value->isFinalized())
+
+			if ($value instanceof Identifier && !$value->isFinalized()) {
 				return "''"; // instead of 'null', to be compatible with v. 4
-			
+            }
+
 			return "'" . mysql_real_escape_string($value, $this->getLink()) . "'";
 		}
-		
+
 		public function quoteField($field)
 		{
-			if (strpos($field, '.') !== false)
+			if (strpos($field, '.') !== false) {
 				throw new WrongArgumentException();
-			elseif (strpos($field, '::') !== false)
+			} elseif (strpos($field, '::') !== false) {
 				throw new WrongArgumentException();
-			
+            }
+
 			return "`{$field}`";
 		}
-		
+
 		public function quoteTable($table)
 		{
 			return "`{$table}`";
 		}
-		
+
 		public static function dropTableMode($cascade = false)
 		{
 			return null;
 		}
-		
+
 		public static function timeZone($exist = false)
 		{
 			return null;
 		}
-		
+
 		public function quoteBinary($data)
 		{
-			return "'".mysql_real_escape_string($data)."'";
+			return "'" . mysql_real_escape_string($data) . "'";
 		}
-		
+
 		public function typeToString(DataType $type)
 		{
-			if ($type->getId() == DataType::BINARY)
+			if ($type->getId() == DataType::BINARY) {
 				return 'BLOB';
-			
+            }
+
 			return parent::typeToString($type);
 		}
-		
+
 		public function hasTruncate()
 		{
 			return true;
 		}
-		
+
 		public function hasMultipleTruncate()
 		{
 			return false;
 		}
-		
+
 		public function hasReturning()
 		{
 			return false;
 		}
-		
+
 		public function preAutoincrement(DBColumn $column)
 		{
 			$column->setDefault(null);
-			
+
 			return null;
 		}
-		
+
 		public function postAutoincrement(DBColumn $column)
 		{
 			return 'AUTO_INCREMENT';
 		}
-		
+
 		public function fullTextSearch($fields, $words, $logic)
 		{
 			if (is_array($fields)) {
-				$match = implode(', ', array_map(array($this, 'fieldToString'), $fields));
+				$match = implode(', ', array_map([$this, 'fieldToString'], $fields));
 			} else {
 				$match = $this->fieldToString($fields);
 			}
 
-			return ' (MATCH ('.$match.') AGAINST ('
-				.$this->prepareFullText($words, $logic).'))';
+			return ' (MATCH (' . $match . ') AGAINST ('
+				. $this->prepareFullText($words, $logic) . '))';
 		}
-		
+
 		private function prepareFullText($words, $logic)
 		{
 			Assert::isArray($words);
-			
+
 			$retval = $this->quoteValue(implode(' ', $words));
-			
+
 			if (self::IN_BOOLEAN_MODE === $logic) {
-				return addcslashes($retval, '+-<>()~*"').' '.'IN BOOLEAN MODE';
+				return addcslashes($retval, '+-<>()~*"') . ' ' . 'IN BOOLEAN MODE';
 			} else {
 				return $retval;
 			}
 		}
 	}
-?>

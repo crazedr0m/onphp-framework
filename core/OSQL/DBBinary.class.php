@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Container for passing binary values into OSQL queries.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
@@ -24,10 +25,9 @@
 		{
 			return new self($value);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return $dialect->quoteBinary($this->getValue());
 		}
 	}
-?>

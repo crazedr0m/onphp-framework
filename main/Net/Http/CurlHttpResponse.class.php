@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -19,39 +20,40 @@
 		private $status				= null;
 		private $maxFileSize		= null;
 		private $currentFileSize	= null;
-		
+
 		public function __construct()
 		{
 			$this->headerParser = HeaderParser::create();
 			$this->currentFileSize = 0;
 		}
-		
+
 		/**
 		 * @return CurlHttpResponse
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * internal use only, callback for curl client
 		**/
 		public function writeHeader($resource, $line)
 		{
 			$this->headerParser->doLine($line);
-			
+
 			if (
 				$this->maxFileSize !== null
 				&& $this->headerParser->hasHeader('Content-Length')
 				&& $this->headerParser->getHeader('Content-Length')
 					> $this->maxFileSize
-			)
+			) {
 				return -1; // see http://curl.haxx.se/libcurl/c/curl_easy_setopt.html CURLOPT_HEADERFUNCTION
-			else
-				return strlen($line);
+			} else {
+return strlen($line);
+            }
 		}
-		
+
 		/**
 		 * internal use only, callback for curl client
 		**/
@@ -59,7 +61,7 @@
 		{
 			$this->body .= $body;
 			$obtained = strlen($body);
-			
+
 			if (
 				$this->maxFileSize !== null
 				&& $this->currentFileSize + $obtained > $this->maxFileSize
@@ -70,7 +72,7 @@
 				return $obtained;
 			}
 		}
-		
+
 		/**
 		 * internal use only for curl client
 		 * @return CurlHttpResponse
@@ -80,7 +82,7 @@
 			$this->maxFileSize = $maxFileSize;
 			return $this;
 		}
-		
+
 		/**
 		 * @return CurlHttpResponse
 		**/
@@ -89,7 +91,7 @@
 			$this->status = $status;
 			return $this;
 		}
-		
+
 		/**
 		 * @return HttpStatus
 		**/
@@ -97,12 +99,12 @@
 		{
 			return $this->status;
 		}
-		
+
 		public function getReasonPhrase()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		/**
 		 * @return array
 		**/
@@ -110,20 +112,19 @@
 		{
 			return $this->headerParser->getHeaders();
 		}
-		
+
 		public function hasHeader($name)
 		{
 			return $this->headerParser->hasHeader($name);
 		}
-		
+
 		public function getHeader($name)
 		{
 			return $this->headerParser->getHeader($name);
 		}
-		
+
 		public function getBody()
 		{
 			return $this->body;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return EmptyView
 		**/
@@ -29,7 +30,7 @@
 		{
 			return $this;
 		}
-		
+
 		public function __toString()
 		{
 			return $this->toString();
@@ -40,4 +41,3 @@
 			return null;
 		}
 	}
-?>

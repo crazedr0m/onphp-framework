@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2008 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -18,26 +19,27 @@
 		{
 			throw new UnsupportedMethodException('get rid of useless interface');
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
 		public static function block($args, $logic)
 		{
-			$queryChain = new self;
-			
+			$queryChain = new self();
+
 			foreach ($args as $arg) {
-				if (!$arg instanceof SelectQuery)
+				if (!$arg instanceof SelectQuery) {
 					throw new WrongArgumentException(
-						'unsupported object type: '.get_class($arg)
+						'unsupported object type: ' . get_class($arg)
 					);
-				
+                }
+
 				$queryChain->exp($arg, $logic);
 			}
-			
+
 			return $queryChain;
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -45,7 +47,7 @@
 		{
 			return $this->exp($query, CombineQuery::UNION);
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -53,7 +55,7 @@
 		{
 			return $this->exp($query, CombineQuery::UNION_ALL);
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -61,7 +63,7 @@
 		{
 			return $this->exp($query, CombineQuery::INTERSECT);
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -69,7 +71,7 @@
 		{
 			return $this->exp($query, CombineQuery::INTERSECT_ALL);
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -77,7 +79,7 @@
 		{
 			return $this->exp($query, CombineQuery::EXCEPT);
 		}
-		
+
 		/**
 		 * @return QueryChain
 		**/
@@ -86,4 +88,3 @@
 			return $this->exp($query, CombineQuery::EXCEPT_ALL);
 		}
 	}
-?>

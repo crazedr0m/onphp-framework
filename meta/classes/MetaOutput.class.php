@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,12 +16,12 @@
 	final class MetaOutput
 	{
 		private $out = null;
-		
+
 		public function __construct(TextOutput $out)
 		{
 			$this->out = $out;
 		}
-		
+
 		/**
 		 * @return TextOutput
 		**/
@@ -28,17 +29,17 @@
 		{
 			return $this->out;
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
 		public function newLine()
 		{
 			$this->out->newLine();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -46,7 +47,7 @@
 		{
 			return $this->defaultText($text, ConsoleMode::FG_WHITE, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -54,7 +55,7 @@
 		{
 			return $this->defaultTextLine($text, ConsoleMode::FG_WHITE, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -62,7 +63,7 @@
 		{
 			return $this->defaultText($text, ConsoleMode::FG_GREEN, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -70,7 +71,7 @@
 		{
 			return $this->defaultTextLine($text, ConsoleMode::FG_GREEN, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -78,7 +79,7 @@
 		{
 			return $this->defaultText($text, ConsoleMode::FG_BROWN, true);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -86,7 +87,7 @@
 		{
 			return $this->defaultTextLine($text, ConsoleMode::FG_BROWN, true);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -94,7 +95,7 @@
 		{
 			return $this->errorText($text, ConsoleMode::FG_RED, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -102,7 +103,7 @@
 		{
 			return $this->errorTextLine($text, ConsoleMode::FG_RED, $bold);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -110,7 +111,7 @@
 		{
 			return $this->defaultText($text, ConsoleMode::FG_BLUE, true);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -118,7 +119,7 @@
 		{
 			return $this->defaultTextLine($text, ConsoleMode::FG_BLUE, true);
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -131,13 +132,14 @@
 					ConsoleMode::BG_BLACK
 				)->
 				write($text);
-			
-			if ($this->out instanceof ColoredTextOutput)
+
+			if ($this->out instanceof ColoredTextOutput) {
 				$this->out->resetAll();
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaOutput
 		**/
@@ -150,10 +152,11 @@
 					ConsoleMode::BG_BLACK
 				)->
 				writeLine($text);
-			
-			if ($this->out instanceof ColoredTextOutput)
+
+			if ($this->out instanceof ColoredTextOutput) {
 				$this->out->resetAll();
-			
+            }
+
 			return $this;
 		}
 
@@ -162,8 +165,9 @@
 		**/
 		private function errorText($text, $color, $bold)
 		{
-			if ($this->out instanceof ColoredTextOutput)
+			if ($this->out instanceof ColoredTextOutput) {
 				$text = $this->out->wrapString($text);
+            }
 
 			$this->out->writeErr($text);
 
@@ -175,8 +179,9 @@
 		**/
 		private function errorTextLine($text, $color, $bold)
 		{
-			if ($this->out instanceof ColoredTextOutput)
+			if ($this->out instanceof ColoredTextOutput) {
 				$text = $this->out->wrapString($text);
+            }
 
 			$this->out->writeErrLine($text);
 

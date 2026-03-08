@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -15,10 +16,9 @@
 		 * @return Message
 		**/
 		public function receive($uTimeout = null);
-		
+
 		/**
 		 * @return MessageQueue
 		**/
 		public function getQueue();
 	}
-?>

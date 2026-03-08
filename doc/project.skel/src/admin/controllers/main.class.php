@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006 by Unknown Hero                                    *
  *   non.existent.login@forgotten.host                                     *
@@ -8,10 +9,10 @@
 	{
 		public function handleRequest(HttpRequest $request)
 		{
-			if (1 === 1)
+			if (1 === 1) {
 				return ModelAndView::create()->setView('main');
-			else
-				throw new WrongStateException('everything is b0rked');
+			} else {
+throw new WrongStateException('everything is b0rked');
+            }
 		}
 	}
-?>

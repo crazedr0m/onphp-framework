@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * GNU Tar wrapper.
-	 * 
+	 *
 	 * @see http://www.gnu.org/software/tar/
 	 *
 	 * @ingroup Utils
@@ -20,28 +21,29 @@
 	{
 		public function __construct($cmdBinPath = '/bin/tar')
 		{
-			if ($cmdBinPath === null)
+			if ($cmdBinPath === null) {
 				throw
 					new UnimplementedFeatureException(
 						'no built-in support for GNU Tar'
 					);
+            }
 
 			parent::__construct($cmdBinPath);
 		}
 
 		public function readFile($fileName)
 		{
-			if (!$this->sourceFile)
+			if (!$this->sourceFile) {
 				throw
 					new WrongStateException(
 						'dude, open an archive first.'
 					);
-			
+            }
+
 			$options = '--extract --to-stdout'
-				.' --file '.escapeshellarg($this->sourceFile)
-				.' '.escapeshellarg($fileName);
+				. ' --file ' . escapeshellarg($this->sourceFile)
+				. ' ' . escapeshellarg($fileName);
 
 			return $this->execStdoutOptions($options);
 		}
 	}
-?>

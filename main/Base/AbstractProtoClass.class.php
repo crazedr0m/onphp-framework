@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,7 +22,7 @@
 		protected $byClassExpandedLists = [];
 
 		abstract protected function makePropertyList();
-		
+
 		/**
 		 * @return AbstractProtoClass
 		**/
@@ -29,69 +30,77 @@
 		{
 			$this->storage[++$this->depth] = [];
 			$this->skipList[$this->depth] = [];
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return AbstractProtoClass
 		**/
 		public function skipObjectPrefetching(Identifiable $object)
 		{
 			if ($this->depth) {
-				if (!isset($this->skipList[$this->depth][$object->getId()]))
+				if (!isset($this->skipList[$this->depth][$object->getId()])) {
 					$this->skipList[$this->depth][$object->getId()] = 1;
-				else
-					++$this->skipList[$this->depth][$object->getId()];
+				} else {
+++$this->skipList[$this->depth][$object->getId()];
+                }
 			}
-			
+
 			return $this;
 		}
-		
+
 		public function endPrefetch(array $objectList)
 		{
-			if (!$this->depth)
+			if (!$this->depth) {
 				throw new WrongStateException('prefetch mode is already off');
-			
+            }
+
 			foreach ($this->storage[$this->depth] as $setter => $innerList) {
 				Assert::isEqual(
 					count($objectList),
 					count($innerList) + array_sum($this->skipList[$this->depth])
 				);
-				
-				$ids = array();
-				
-				foreach ($innerList as $inner)
-					if ($inner)
+
+				$ids = [];
+
+				foreach ($innerList as $inner) {
+					if ($inner) {
 						$ids[] = $inner->getId();
-				
+                    }
+                }
+
 				// finding first available inner object
-				foreach ($innerList as $inner)
-					if ($inner)
+				foreach ($innerList as $inner) {
+					if ($inner) {
 						break;
-				
-				if (!$inner)
+                    }
+                }
+
+				if (!$inner) {
 					continue;
-				
+                }
+
 				// put yet unmapped objects into dao's identityMap
 				$inner->dao()->getListByIds($ids);
-				
+
 				$skippedMap = $this->skipList[$this->depth];
-				
+
 				$i = $j = 0;
-				
+
 				foreach ($objectList as $object) {
 					$objectId = $object->getId();
-					
+
 					if (isset($skippedMap[$objectId])) {
-						if ($skippedMap[$objectId] == 1)
+						if ($skippedMap[$objectId] == 1) {
 							unset($skippedMap[$objectId]);
-						else
-							--$skippedMap[$objectId];
+						} else {
+--$skippedMap[$objectId];
+                        }
 						++$j;
 						continue;
 					}
-					
+
 					if ($innerList[$i]) {
 						try {
 							// avoid dao "caching" here
@@ -104,30 +113,30 @@
 							);
 						} catch (ObjectNotFoundException $e) {
 							throw new WrongStateException(
-								'possible corruption found: '.$e->getMessage()
+								'possible corruption found: ' . $e->getMessage()
 							);
 						}
 					}
-					
+
 					++$i;
 				}
-				
+
 				Assert::isEqual(
 					$i,
 					count($objectList) - $j
 				);
 			}
-			
+
 			unset($this->skipList[$this->depth], $this->storage[$this->depth--]);
-			
+
 			return $objectList;
 		}
-		
+
 		public static function makeOnlyObject($className, $array, $prefix = null, ProtoDAO $parentDao = null)
 		{
-			return self::assemblyObject(new $className, $array, $prefix, $parentDao);
+			return self::assemblyObject(new $className(), $array, $prefix, $parentDao);
 		}
-		
+
 		public static function completeObject(Prototyped $object)
 		{
 			return self::fetchEncapsulants($object);
@@ -139,14 +148,14 @@
 		final public function getPropertyList()
 		{
 			$className = get_class($this);
-			
+
 			if (!isset($this->byClassLists[$className])) {
 				$this->byClassLists[$className] = $this->makePropertyList();
 			}
-			
+
 			return $this->byClassLists[$className];
 		}
-		
+
 		final public function getExpandedPropertyList($prefix = null)
 		{
 			$className = get_class($this);
@@ -158,52 +167,53 @@
 							array_merge(
 								$this->byClassExpandedLists[$className],
 								$property->getProto()->getExpandedPropertyList(
-									$property->getName().':'
+									$property->getName() . ':'
 								)
 							);
 					} else {
-						$key = $prefix.$property->getName();
+						$key = $prefix . $property->getName();
 						$this->byClassExpandedLists[$className][$key] = $property;
 					}
 				}
 			}
-			
+
 			return $this->byClassExpandedLists[$className];
 		}
-		
+
 		/**
 		 * @return LightMetaProperty
 		 * @throws MissingElementException
 		**/
 		public function getPropertyByName($name)
 		{
-			if ($property = $this->safePropertyGet($name))
+			if ($property = $this->safePropertyGet($name)) {
 				return $property;
-			
+            }
+
 			throw new MissingElementException(
 				get_class($this) . ": unknown property requested by name '{$name}'"
 			);
 		}
-		
+
 		public function isPropertyExists($name)
 		{
 			return $this->safePropertyGet($name) !== null;
 		}
-		
+
 		/**
 		 * @return Form
 		**/
 		public function makeForm($prefix = null)
 		{
 			$form = Form::create();
-			
+
 			foreach ($this->getPropertyList() as $property) {
 				$property->fillForm($form, $prefix);
 			}
-			
+
 			return $form;
 		}
-		
+
 		/**
 		 * @return InsertOrUpdateQuery
 		**/
@@ -211,14 +221,14 @@
 			InsertOrUpdateQuery $query,
 			Prototyped $object,
 			Prototyped $old = null
-		)
-		{
+		) {
 			if ($old) {
 				if ($object instanceof Identifiable) {
 					Assert::isNotNull($object->getId());
 
 					Assert::isTypelessEqual(
-						$object->getId(), $old->getId(),
+						$object->getId(),
+                        $old->getId(),
 						'cannot merge different objects'
 					);
 				}
@@ -229,43 +239,46 @@
 			foreach ($this->getPropertyList() as $property) {
 				$property->fillQuery($query, $object, $old);
 			}
-			
+
 			return $query;
 		}
-		
+
 		public function getMapping()
 		{
-			static $mappings = array();
-			
+			static $mappings = [];
+
 			$className = get_class($this);
-			
+
 			if (!isset($mappings[$className])) {
-				$mapping = array();
+				$mapping = [];
 				foreach ($this->getPropertyList() as $property) {
 					$mapping = $property->fillMapping($mapping);
 				}
 				$mappings[$className] = $mapping;
 			}
-			
+
 			return $mappings[$className];
 		}
-		
+
 		public function importPrimitive(
 			$path,
 			Form $form,
 			BasePrimitive $prm,
 			/* Prototyped */ $object,
 			$ignoreNull = true
-		)
-		{
+		) {
 			if (strpos($path, ':') !== false) {
 				return $this->forwardPrimitive(
-					$path, $form, $prm, $object, $ignoreNull
+					$path,
+                    $form,
+                    $prm,
+                    $object,
+                    $ignoreNull
 				);
 			} else {
 				$property = $this->getPropertyByName($path);
 				$getter = $property->getGetter();
-				
+
 				if ($path == 'id' && $prm instanceof PrimitiveIdentifier) {
 					$form->importValue($prm->getName(), $object);
 					return $object;
@@ -274,46 +287,49 @@
 				if (
 					!$property->isFormless()
 					&& ($property->getFetchStrategyId() == FetchStrategy::LAZY)
-					&& !$object->{$getter.'Id'}()
+					&& !$object->{$getter . 'Id'}()
 				) {
 					return $object;
 				}
-				
+
 				$value = $object->$getter();
-				
+
 				if (!$ignoreNull || ($value !== null)) {
 					$form->importValue($prm->getName(), $value);
 				}
 			}
-			
+
 			return $object;
 		}
-		
+
 		public function exportPrimitive(
 			$path,
 			BasePrimitive $prm,
 			/* Prototyped */ $object,
 			$ignoreNull = true
-		)
-		{
+		) {
 			if (strpos($path, ':') !== false) {
 				return $this->forwardPrimitive(
-					$path, null, $prm, $object, $ignoreNull
+					$path,
+                    null,
+                    $prm,
+                    $object,
+                    $ignoreNull
 				);
 			} else {
 				$property = $this->getPropertyByName($path);
 				$setter = $property->getSetter();
 				$value = $prm->getValue();
-				
+
 				if (
 					!$ignoreNull || ($value !== null)
 				) {
 					if ($property->isIdentifier()) {
 						$value = $value->getId();
 					}
-					
+
 					$dropper = $property->getDropper();
-					
+
 					if (
 						($value === null)
 							&& method_exists($object, $dropper)
@@ -326,7 +342,7 @@
 							)
 					) {
 						$object->$dropper();
-						
+
 						return $object;
 					} elseif (
 						(
@@ -337,26 +353,27 @@
 							== MetaRelation::MANY_TO_MANY
 						)
 					) {
-						if ($value === null)
-							$value = array();
-						
+						if ($value === null) {
+							$value = [];
+                        }
+
 						$getter = $property->getGetter();
 						$object->$getter()->setList($value);
-						
+
 						return $object;
 					}
-					
+
 					$object->$setter($value);
 				}
 			}
-			
+
 			return $object;
 		}
-		
+
 		private static function fetchEncapsulants(Prototyped $object)
 		{
 			$proto = $object->proto();
-			
+
 			foreach ($proto->getPropertyList() as $property) {
 				if (
 					$property->getRelationId() == MetaRelation::ONE_TO_ONE
@@ -364,42 +381,47 @@
 				) {
 					$getter = $property->getGetter();
 					$setter = $property->getSetter();
-					
+
 					if (($inner = $object->$getter()) instanceof DAOConnected) {
-						if ($proto->depth)
+						if ($proto->depth) {
 							$proto->storage[$proto->depth][$setter][] = $inner;
-						else
-							$object->$setter(
-								$inner->dao()->getById(
-									$inner->getId()
-								)
-							);
+						} else {
+$object->$setter(
+    $inner->dao()->getById(
+        $inner->getId()
+    )
+);
+                        }
 					} elseif (
 						$proto->depth
 						// emulating 'instanceof DAOConnected'
 						&& method_exists($property->getClassName(), 'dao')
-					)
+					) {
 						$proto->storage[$proto->depth][$setter][] = null;
+                    }
 				}
 			}
-			
+
 			return $object;
 		}
-		
+
 		private static function assemblyObject(
-			Prototyped $object, $array, $prefix = null, ProtoDAO $parentDao = null
-		)
-		{
-			if ($object instanceof DAOConnected)
+			Prototyped $object,
+            $array,
+            $prefix = null,
+            ProtoDAO $parentDao = null
+		) {
+			if ($object instanceof DAOConnected) {
 				$dao = $object->dao();
-			else
-				$dao = $parentDao ?: null;
-			
+			} else {
+$dao = $parentDao ?: null;
+            }
+
 			$proto = $object->proto();
-			
+
 			foreach ($proto->getPropertyList() as $property) {
 				$setter = $property->getSetter();
-				
+
 				if ($property instanceof InnerMetaProperty) {
 					$object->$setter(
 						$property->toValue($dao, $array, $prefix)
@@ -410,56 +432,63 @@
 							$property->getFetchStrategyId()
 							== FetchStrategy::LAZY
 						) {
-							$columnName = $prefix.$property->getColumnName();
-							
+							$columnName = $prefix . $property->getColumnName();
+
 							$object->
-								{$setter.'Id'}($array[$columnName]);
-							
+								{$setter . 'Id'}($array[$columnName]);
+
 							continue;
 						}
 					}
-					
+
 					$object->$setter($property->toValue($dao, $array, $prefix));
 				}
 			}
-			
+
 			return $object;
 		}
-		
+
 		private function forwardPrimitive(
 			$path,
 			Form $form = null,
 			BasePrimitive $prm,
 			/* Prototyped */ $object,
 			$ignoreNull = true
-		)
-		{
+		) {
 			list($propertyName, $path) = explode(':', $path, 2);
-			
+
 			$property = $this->getPropertyByName($propertyName);
-			
+
 			Assert::isTrue($property instanceof InnerMetaProperty);
-			
+
 			$getter = $property->getGetter();
-			
-			if ($form)
+
+			if ($form) {
 				return $property->getProto()->importPrimitive(
-					$path, $form, $prm, $object->$getter(), $ignoreNull
+					$path,
+                    $form,
+                    $prm,
+                    $object->$getter(),
+                    $ignoreNull
 				);
-			else
-				return $property->getProto()->exportPrimitive(
-					$path, $prm, $object->$getter(), $ignoreNull
-				);
+			} else {
+return $property->getProto()->exportPrimitive(
+    $path,
+    $prm,
+    $object->$getter(),
+    $ignoreNull
+);
+            }
 		}
-		
+
 		private function safePropertyGet($name)
 		{
 			$list = $this->getPropertyList();
-			
-			if (isset($list[$name]))
+
+			if (isset($list[$name])) {
 				return $list[$name];
-			
+            }
+
 			return null;
 		}
 	}
-?>

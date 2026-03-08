@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -17,40 +18,40 @@
 		private $title	= null;
 		private $color	= null;
 		private $value	= null;
-		
+
 		/**
 		 * @return GoogleChartPiece
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleChartPiece
 		**/
 		public function setTitle($title)
 		{
 			$this->title = $title;
-			
+
 			return $this;
 		}
-		
+
 		public function getTitle()
 		{
 			return $this->title;
 		}
-		
+
 		/**
 		 * @return GoogleChartPiece
 		**/
 		public function setColor(Color $color)
 		{
 			$this->color = $color;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Color
 		**/
@@ -58,20 +59,19 @@
 		{
 			return $this->color;
 		}
-		
+
 		/**
 		 * @return GoogleChartPiece
 		**/
 		public function setValue($value)
 		{
 			$this->value = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function getValue()
 		{
 			return $this->value;
 		}
 	}
-?>

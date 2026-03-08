@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2009 by Ivan Y. Khvostishkov                       *
  *                                                                         *
@@ -15,19 +16,19 @@
 	final class FileOutputStream extends OutputStream
 	{
 		private $fd = null;
-		
+
 		public function __construct($nameOrFd, $append = false)
 		{
 			if (is_resource($nameOrFd)) {
-				if (get_resource_type($nameOrFd) !== 'stream')
+				if (get_resource_type($nameOrFd) !== 'stream') {
 					throw new IOException('not a file resource');
-				
+                }
+
 				$this->fd = $nameOrFd;
-				
 			} else {
 				try {
-					$this->fd = fopen($nameOrFd, ($append ? 'a' : 'w').'b');
-					
+					$this->fd = fopen($nameOrFd, ($append ? 'a' : 'w') . 'b');
+
 					Assert::isNotFalse(
 						$this->fd,
 						"File {$nameOrFd} must be exist"
@@ -37,7 +38,7 @@
 				}
 			}
 		}
-		
+
 		public function __destruct()
 		{
 			try {
@@ -46,7 +47,7 @@
 				// boo.
 			}
 		}
-		
+
 		/**
 		 * @return FileOutputStream
 		**/
@@ -54,27 +55,29 @@
 		{
 			return new self($nameOrFd, $append);
 		}
-		
+
 		/**
 		 * @return FileOutputStream
 		**/
 		public function write($buffer)
 		{
-			if (!$this->fd || $buffer === null)
+			if (!$this->fd || $buffer === null) {
 				return $this;
-			
+            }
+
 			try {
 				$written = fwrite($this->fd, $buffer);
 			} catch (BaseException $e) {
 				throw new IOException($e->getMessage());
 			}
-			
-			if (!$written || $written < strlen($buffer))
+
+			if (!$written || $written < strlen($buffer)) {
 				throw new IOException('disk full and/or buffer too large?');
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FileOutputStream
 		**/
@@ -85,10 +88,9 @@
 			}
 
 			fclose($this->fd);
-			
+
 			$this->fd = null;
-			
+
 			return $this;
 		}
 	}
-?>

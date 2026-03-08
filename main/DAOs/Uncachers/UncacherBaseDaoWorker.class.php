@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -14,8 +15,8 @@
 	**/
 	class UncacherBaseDaoWorker implements UncacherBase
 	{
-		private $classNameMap = array();
-		
+		private $classNameMap = [];
+
 		/**
 		 * @return UncacherBaseDaoWorker
 		 */
@@ -23,17 +24,17 @@
 		{
 			return new self($className, $idKey);
 		}
-		
+
 		public function __construct($className, $idKey)
 		{
-			$this->classNameMap[$className] = array($idKey);
+			$this->classNameMap[$className] = [$idKey];
 		}
-		
+
 		public function getClassNameMap()
 		{
 			return $this->classNameMap;
 		}
-		
+
 		/**
 		 * @param $uncacher UncacherNullDaoWorker same as self class
 		 * @return BaseUncacher (this)
@@ -43,7 +44,7 @@
 			Assert::isInstance($uncacher, get_class($this));
 			return $this->mergeSelf($uncacher);
 		}
-		
+
 		public function uncache()
 		{
 			foreach ($this->classNameMap as $className => $idKeys) {
@@ -52,13 +53,14 @@
 				}
 			}
 		}
-		
-		protected function uncacheClassName($className, $idKeys) {
+
+		protected function uncacheClassName($className, $idKeys)
+        {
 			foreach ($idKeys as $key) {
 				Cache::me()->mark($className)->delete($key);
 			}
 		}
-		
+
 		/**
 		 * @param UncacherBaseDaoWorker $uncacher
 		 * @return UncacherBaseDaoWorker
@@ -78,4 +80,3 @@
 			return $this;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -16,7 +17,7 @@
 
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function setFileName($fileName)
@@ -43,4 +44,3 @@
 			return $this->offset;
 		}
 	}
-?>

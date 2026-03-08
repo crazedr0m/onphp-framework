@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -62,6 +63,5 @@
 			$this->internal = $internal;
 
 			return $this;
-		}		
+		}
 	}
-?>

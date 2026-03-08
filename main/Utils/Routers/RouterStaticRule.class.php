@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -12,7 +13,7 @@
 	final class RouterStaticRule extends RouterBaseRule
 	{
 		protected $route	= null;
-		
+
 		/**
 		 * @return RouterStaticRule
 		**/
@@ -20,31 +21,30 @@
 		{
 			return new self($route);
 		}
-		
+
 		public function __construct($route)
 		{
 			// FIXME: rtrim. probably?
 			$this->route = trim($route, '/');
 		}
-		
+
 		public function match(HttpRequest $request)
 		{
 			$path = $this->processPath($request)->toString();
-			
+
 			// FIXME: rtrim, probably?
-			if (trim(urldecode($path), '/') == $this->route)
+			if (trim(urldecode($path), '/') == $this->route) {
 				return $this->defaults;
-			
+            }
+
 			return false;
 		}
-		
+
 		public function assembly(
-			array $data = array(),
+			array $data = [],
 			$reset = false,
 			$encode = false
-		)
-		{
+		) {
 			return $this->route;
 		}
 	}
-?>

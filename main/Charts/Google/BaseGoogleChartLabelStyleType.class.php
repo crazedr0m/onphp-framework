@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -10,17 +11,16 @@
  ***************************************************************************/
 
 	// TODO: support for other types
-	
+
 	/**
 	 * @ingroup GoogleChart
 	**/
 	abstract class BaseGoogleChartLabelStyleType
 	{
 		protected $name = null;
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

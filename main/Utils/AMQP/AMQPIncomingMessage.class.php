@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -27,9 +28,9 @@
 		protected $redelivered = null;
 		protected $consumerTag = null;
 
-		protected static $mandatoryFields = array(
+		protected static $mandatoryFields = [
 			self::ROUTING_KEY, self::DELIVERY_TAG, self::EXCHANGE
-		);
+		];
 
 		/**
 		 * @return AMQPIncomingMessage
@@ -44,7 +45,7 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function getRedelivered()
@@ -194,11 +195,12 @@
 		{
 			foreach (self::$mandatoryFields as $field) {
 				Assert::isIndexExists(
-					$assoc, $field, "Mandatory field '{$field}' not found"
+					$assoc,
+                    $field,
+                    "Mandatory field '{$field}' not found"
 				);
 			}
 
 			return $this;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 	final class ArrayUtilsTest extends TestCase
 	{
 		/**
@@ -23,104 +24,104 @@
 			$today = Date::makeToday();
 
 			return
-				array(
-					array(
-						array(
+				[
+					[
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
-						array(
+						],
+						[
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day'))
-						),
+						],
 						'getDate',
-						array(
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
+						],
 						null
-					),
-					array(
-						array(
+					],
+					[
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
-						array(
+						],
+						[
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day')),
-						),
+						],
 						'getDate',
-						array(
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-2 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
+						],
 						null
-					),
-					array(
-						array(
+					],
+					[
+						[
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
-						array(
+						],
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-4 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-6 day')),
-						),
+						],
 						'getDate',
-						array(
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-4 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-6 day'))
-						),
+						],
 						null
-					),
-					array(
-						array(
+					],
+					[
+						[
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-3 day'))
-						),
-						array(
+						],
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-4 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-6 day')),
-						),
+						],
 						'getDate',
-						array(
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
-						),
+						],
 						2
-					),
-					array(
-						array(
+					],
+					[
+						[
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
-						),
-						array(
+						],
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-4 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-6 day')),
-						),
+						],
 						'getDate',
-						array(
+						[
 							SortableObjectForTheTest::create()->setDate($today),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-1 day')),
 							SortableObjectForTheTest::create()->setDate($today->spawn('-4 day'))
-						),
+						],
 						3
-					)
-				);
+					]
+				];
 		}
-		
+
 		/**
 		 * @dataProvider textDataSortedLists
 		**/
@@ -137,45 +138,44 @@
 				)
 			);
 		}
-		
+
 		public function testConvertObjectList()
 		{
 			$list =
-				array(
+				[
 					TestCity::create()->setId(42)->setName('Beldyazki'),
 					TestCity::create()->setId(666)->setName('Moscow')
-				);
-			
-			$this->assertEquals(array(42, 666), array_keys(ArrayUtils::convertObjectList($list)));
-			$this->assertEquals(array('Beldyazki', 'Moscow'), array_keys(ArrayUtils::convertObjectList($list, 'getName')));
-			
+				];
+
+			$this->assertEquals([42, 666], array_keys(ArrayUtils::convertObjectList($list)));
+			$this->assertEquals(['Beldyazki', 'Moscow'], array_keys(ArrayUtils::convertObjectList($list, 'getName')));
 		}
 
 		public static function textDataSortedLists()
 		{
 			return
-				array(
-					array(
-						array(
+				[
+					[
+						[
 							SortableTextDataObjectForTheTest::create()->setData('SIBN'),
 							SortableTextDataObjectForTheTest::create()->setData('SBER03'),
 							SortableTextDataObjectForTheTest::create()->setData('HYDR')
-						),
-						array(
+						],
+						[
 							SortableTextDataObjectForTheTest::create()->setData('MTSI'),
 							SortableTextDataObjectForTheTest::create()->setData('GAZP')
-						),
+						],
 						'getData',
-						array(
+						[
 							SortableTextDataObjectForTheTest::create()->setData('SIBN'),
 							SortableTextDataObjectForTheTest::create()->setData('SBER03'),
 							SortableTextDataObjectForTheTest::create()->setData('MTSI'),
 							SortableTextDataObjectForTheTest::create()->setData('HYDR'),
 							SortableTextDataObjectForTheTest::create()->setData('GAZP')
-						),
+						],
 						null
-					)
-				);
+					]
+				];
 		}
 	}
 
@@ -186,13 +186,13 @@
 
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function setDate(Date $date)
 		{
 			$this->date = $date;
-			
+
 			return $this;
 		}
 
@@ -201,20 +201,20 @@
 			return $this->date;
 		}
 	}
-	
+
 	final class SortableTextDataObjectForTheTest
 	{
 		private $data = null;
 
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 
 		public function setData($data)
 		{
 			$this->data = $data;
-			
+
 			return $this;
 		}
 
@@ -223,4 +223,3 @@
 			return $this->data;
 		}
 	}
-?>

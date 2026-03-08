@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2008 by Anton E. Lebedevich, Konstantin V. Arkhipov *
  *                                                                          *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Basis for Primitives which can be filtered.
-	 * 
+	 *
 	 * @ingroup Primitives
 	 * @ingroup Module
 	**/
@@ -23,7 +24,7 @@
 		public function __construct($name)
 		{
 			parent::__construct($name);
-			
+
 			$this->displayFilter = new FilterChain();
 			$this->importFilter = new FilterChain();
 		}
@@ -34,17 +35,17 @@
 		public function setDisplayFilter(FilterChain $chain)
 		{
 			$this->displayFilter = $chain;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FiltrablePrimitive
 		**/
 		public function addDisplayFilter(Filtrator $filter)
 		{
 			$this->displayFilter->add($filter);
-			
+
 			return $this;
 		}
 
@@ -54,39 +55,40 @@
 		public function dropDisplayFilters()
 		{
 			$this->displayFilter = new FilterChain();
-			
+
 			return $this;
 		}
-		
+
 		public function getDisplayValue()
 		{
 			if (is_array($value = $this->getActualValue())) {
-				foreach ($value as &$element)
+				foreach ($value as &$element) {
 					$element = $this->displayFilter->apply($element);
-				
+                }
+
 				return $value;
 			}
-			
+
 			return $this->displayFilter->apply($value);
 		}
-		
+
 		/**
 		 * @return FiltrablePrimitive
 		**/
 		public function setImportFilter(FilterChain $chain)
 		{
 			$this->importFilter = $chain;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FiltrablePrimitive
 		**/
 		public function addImportFilter(Filtrator $filter)
 		{
 			$this->importFilter->add($filter);
-			
+
 			return $this;
 		}
 
@@ -96,10 +98,10 @@
 		public function dropImportFilters()
 		{
 			$this->importFilter = new FilterChain();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FilterChain
 		**/
@@ -121,13 +123,14 @@
 		**/
 		protected function selfFilter()
 		{
-			if (is_array($this->value))
-				foreach ($this->value as &$value)
+			if (is_array($this->value)) {
+				foreach ($this->value as &$value) {
 					$value = $this->importFilter->apply($value);
-			else
-				$this->value = $this->importFilter->apply($this->value);
+			    }
+            } else {
+$this->value = $this->importFilter->apply($this->value);
+            }
 
 			return $this;
 		}
 	}
-?>

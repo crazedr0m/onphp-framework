@@ -1,41 +1,39 @@
 <?php
-	
+
 	final class OqlSelectClauseTest extends TestCaseDB
 	{
 		public function testEmpty()
 		{
-			$clauses = array(
+			$clauses = [
 				'select', 'properties', 'where', 'groupBy', 'orderBy', 'having'
-			);
-			
+			];
+
 			foreach ($clauses as $clauseName) {
 				try {
-					call_user_func(array('OQL', $clauseName), null);
+					call_user_func(['OQL', $clauseName], null);
 					$this->fail();
-				
 				} catch (WrongArgumentException $e) {
 					// pass
 				}
 			}
-			
+
 			foreach ($clauses as $clauseName) {
 				try {
-					call_user_func(array('OQL', $clauseName), '');
+					call_user_func(['OQL', $clauseName], '');
 					$this->fail();
-				
 				} catch (SyntaxErrorException $e) {
 					// pass
 				}
 			}
 		}
-		
+
 		public function testProperties()
 		{
 			$query = OQL::select('from TestUser');
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertCriteria($query, $criteria);
-			
+
 			$this->assertCriteria(
 				$query->addProperties(
 					OQL::properties('id, count(id) as count')
@@ -44,7 +42,7 @@
 					addProjection(Projection::property('id'))->
 					addProjection(Projection::count('id', 'count'))
 			);
-			
+
 			$this->assertCriteria(
 				$query->addProperties(
 					OQL::properties('city.id')
@@ -53,7 +51,7 @@
 					Projection::property('city.id')
 				)
 			);
-			
+
 			$properties = OQL::properties('id');
 			$this->assertFalse($properties->isDistinct());
 			$this->assertEquals(
@@ -62,7 +60,7 @@
 					Projection::property('id')
 				)
 			);
-			
+
 			$properties = OQL::properties('id, distinct name');
 			$this->assertTrue($properties->isDistinct());
 			$this->assertEquals(
@@ -75,7 +73,7 @@
 						Projection::property('name')
 					)
 			);
-			
+
 			$properties = OQL::properties('$1')->
 				bind(1, 'foo');
 			$this->assertEquals(
@@ -84,7 +82,7 @@
 					Projection::property('foo')
 				)
 			);
-			
+
 			$properties->bind(1, 'bar');
 			$this->assertEquals(
 				$properties->toProjection(),
@@ -92,7 +90,7 @@
 					Projection::property('bar')
 				)
 			);
-			
+
 			$this->assertCriteria(
 				OQL::select('from TestUser')->
 					addProperties(
@@ -104,15 +102,15 @@
 						Projection::property('bar')		// not foo!
 					)
 			);
-			
+
 			$properties =
 				OQL::properties(
 					'id, count(distinct city.id + $0), avg(some) as someAverage, '
-					.'name not like "%Ы%", foo and (bar or baz), $1 / $2, '
-					.'a in ($3, $0)'
+					. 'name not like "%Ы%", foo and (bar or baz), $1 / $2, '
+					. 'a in ($3, $0)'
 				)->
 				bindAll(
-					array(1, 2, 'num', 'test')
+					[1, 2, 'num', 'test']
 				);
 			$this->assertFalse($properties->isDistinct());
 			$this->assertEquals(
@@ -149,17 +147,17 @@
 					)->
 					add(
 						Projection::property(
-							Expression::in('a', array('test', 1))
+							Expression::in('a', ['test', 1])
 						)
 					)
 			);
 		}
-		
+
 		public function testWhere()
 		{
 			$query = OQL::select('from TestUser');
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertCriteria(
 				$query->andWhere(
 					OQL::where('id = 1')
@@ -168,7 +166,7 @@
 					Expression::eq('id', 1)
 				)
 			);
-			
+
 			$this->assertCriteria(
 				$query->orWhere(
 					OQL::where('id = 2 and city.id is not null')
@@ -183,7 +181,7 @@
 					)
 				)
 			);
-			
+
 			$this->assertEquals(
 				OQL::where('name similar to "test" and not $1')->
 					bindNext('name')->
@@ -193,7 +191,7 @@
 					Expression::not('name')
 				)
 			);
-			
+
 			$this->assertCriteria(
 				OQL::select('from TestUser')->
 					where(
@@ -207,12 +205,12 @@
 					)
 			);
 		}
-		
+
 		public function testGroupBy()
 		{
 			$query = OQL::select('from TestUser');
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertCriteria(
 				$query->addGroupBy(
 					OQL::groupBy('id')
@@ -221,7 +219,7 @@
 					Projection::group('id')
 				)
 			);
-			
+
 			$this->assertCriteria(
 				$query->addGroupBy(
 					OQL::groupBy('-name')
@@ -232,7 +230,7 @@
 					)
 				)
 			);
-			
+
 			$this->assertEquals(
 				OQL::groupBy('id, name')->
 					toProjection(),
@@ -244,7 +242,7 @@
 						Projection::group('name')
 					)
 			);
-			
+
 			$this->assertEquals(
 				OQL::groupBy('id + 2')->
 					toProjection(),
@@ -255,7 +253,7 @@
 						)
 					)
 			);
-			
+
 			$this->assertEquals(
 				OQL::groupBy('id > 2')->
 					toProjection(),
@@ -266,7 +264,7 @@
 						)
 					)
 			);
-			
+
 			$this->assertEquals(
 				OQL::groupBy('$1')->
 					bindNext('id')->
@@ -276,7 +274,7 @@
 						Projection::group('id')
 					)
 			);
-			
+
 			$this->assertEquals(
 				OQL::groupBy('$1, $2 + 3')->
 					bindNext('name')->
@@ -293,12 +291,12 @@
 					)
 			);
 		}
-		
+
 		public function testOrderBy()
 		{
 			$query = OQL::select('from TestUser');
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertCriteria(
 				$query->addOrderBy(
 					OQL::orderBy('id')
@@ -307,7 +305,7 @@
 					OrderBy::create('id')
 				)
 			);
-			
+
 			$this->assertCriteria(
 				$query->addOrderBy(
 					OQL::orderBy('name asc, city.id desc')
@@ -320,7 +318,7 @@
 						OrderBy::create('city.id')->desc()
 					)
 			);
-			
+
 			$this->assertEquals(
 				OQL::orderBy('id + city.id desc, name')->
 					toOrder(),
@@ -335,7 +333,7 @@
 						OrderBy::create('name')
 					)
 			);
-			
+
 			$order = OQL::orderBy('name ilike $1')->
 				bindNext('%ЙЦуК');
 			$this->assertEquals(
@@ -347,7 +345,7 @@
 						)
 					)
 			);
-			
+
 			$this->assertCriteria(
 				OQL::select('from TestUser')->
 					addOrderBy($order)->
@@ -360,12 +358,12 @@
 					)
 			);
 		}
-		
+
 		public function testHaving()
 		{
 			$query = OQL::select('from TestUser');
 			$criteria = Criteria::create(TestUser::dao());
-			
+
 			$this->assertCriteria(
 				$query->addHaving(
 					OQL::having('id > 0')
@@ -376,7 +374,7 @@
 					)
 				)
 			);
-			
+
 			$this->assertCriteria(
 				$query->addHaving(
 					OQL::having('name is not null and (id <> $1 or id != $2)')->
@@ -395,7 +393,7 @@
 					)
 				)
 			);
-			
+
 			$this->assertEquals(
 				OQL::having('id + $15')->
 					bind(15, 16)->
@@ -404,7 +402,7 @@
 					Expression::add('id', 16)
 				)
 			);
-			
+
 			$this->assertCriteria(
 				OQL::select('from TestUser')->
 					addHaving(
@@ -420,20 +418,19 @@
 					)
 			);
 		}
-		
+
 		/**
 		 * @return OqlSelectClauseTest
 		**/
 		private function assertCriteria(OqlQuery $query, Criteria $criteria)
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$this->assertEquals(
 				$query->toCriteria()->toDialectString($dialect),
 				$criteria->toDialectString($dialect)
 			);
-			
+
 			return $this;
 		}
 	}
-?>

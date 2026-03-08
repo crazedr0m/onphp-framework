@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash                                *
  *                                                                         *
@@ -17,11 +18,10 @@
 		const TEXT		= 1;
 		const HTML		= 2;
 		const XHTML		= 3;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::TEXT		=> 'text',
 			self::HTML		=> 'html',
 			self::XHTML		=> 'xhtml'
-		);
+		];
 	}
-?>

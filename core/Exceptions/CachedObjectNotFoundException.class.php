@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Konstantin V. Arkhipov                           *
  *                                                                          *
@@ -12,5 +13,7 @@
 	/**
 	 * @ingroup Exceptions
 	**/
-	class CachedObjectNotFoundException extends ObjectNotFoundException {/*_*/}
-?>
+	class CachedObjectNotFoundException extends ObjectNotFoundException
+    {
+/*_*/
+    }

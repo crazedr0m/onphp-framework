@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,44 +12,44 @@
 
 	/**
 	 * Image uploads helper.
-	 * 
+	 *
 	 * @ingroup Primitives
 	**/
 	final class PrimitiveImage extends PrimitiveFile
 	{
 		private $width		= null;
 		private $height		= null;
-		
+
 		private $maxWidth	= null;
 		private $minWidth	= null;
-		
+
 		private $maxHeight	= null;
 		private $minHeight	= null;
-		
+
 		private $type		= null;
-		
+
 		/**
 		 * @return PrimitiveImage
 		**/
 		public function clean()
 		{
 			$this->width = $this->height = null;
-			
+
 			$this->type = null;
-			
+
 			return parent::clean();
 		}
-		
+
 		public function getWidth()
 		{
 			return $this->width;
 		}
-		
+
 		public function getHeight()
 		{
 			return $this->height;
 		}
-		
+
 		public function getType()
 		{
 			return $this->type;
@@ -60,77 +61,78 @@
 		public function setMaxWidth($max)
 		{
 			$this->maxWidth = $max;
-			
+
 			return $this;
 		}
-		
+
 		public function getMaxWidth()
 		{
 			return $this->maxWidth;
 		}
-		
+
 		/**
 		 * @return PrimitiveImage
 		**/
 		public function setMinWidth($min)
 		{
 			$this->minWidth = $min;
-			
+
 			return $this;
 		}
-		
+
 		public function getMinWidth()
 		{
 			return $this->minWidth;
 		}
-		
+
 		/**
 		 * @return PrimitiveImage
 		**/
 		public function setMaxHeight($max)
 		{
 			$this->maxHeight = $max;
-			
+
 			return $this;
 		}
-		
+
 		public function getMaxHeight()
 		{
 			return $this->maxHeight;
 		}
-		
+
 		/**
 		 * @return PrimitiveImage
 		**/
 		public function setMinHeight($min)
 		{
 			$this->minHeight = $min;
-			
+
 			return $this;
 		}
-		
+
 		public function getMinHeight()
 		{
 			return $this->minHeight;
 		}
-		
+
 		public function import($scope)
 		{
-			if (!$result = parent::import($scope))
+			if (!$result = parent::import($scope)) {
 				return $result;
-			
+            }
+
 			try {
 				list($width, $height, $type) = getimagesize($this->value);
 			} catch (BaseException $e) {
 				// bad luck
 				return false;
 			}
-			
+
 			if (!$width || !$height || !$type) {
 				$this->value = null;
 				return false;
 			}
-			
+
 			if (
 				!($this->maxWidth && ($width > $this->maxWidth))
 				&& !($this->minWidth && ($width < $this->minWidth))
@@ -140,11 +142,10 @@
 				$this->type = new ImageType($type);
 				$this->width = $width;
 				$this->height = $height;
-				
+
 				return true;
 			}
-			
+
 			return false;
 		}
 	}
-?>

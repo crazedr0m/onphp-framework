@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html
-	 * 
+	 *
 	 * @ingroup Criteria
 	**/
 	final class Criteria extends QueryIdentification
@@ -25,17 +26,17 @@
 		private $order		= null;
 		private $strategy	= null;
 		private $projection	= null;
-		
+
 		private $distinct	= false;
-		
+
 		private $limit	= null;
 		private $offset	= null;
-		
-		private $collections = array();
-		
+
+		private $collections = [];
+
 		// dao-like behaviour: will throw ObjectNotFoundException when 'false'
 		private $silent = true;
-		
+
 		/**
 		 * @return Criteria
 		**/
@@ -43,19 +44,20 @@
 		{
 			return new self($dao);
 		}
-		
+
 		public function __construct(/* ProtoDAO */ $dao = null)
 		{
-			if ($dao)
+			if ($dao) {
 				Assert::isTrue($dao instanceof ProtoDAO);
-			
+            }
+
 			$this->dao = $dao;
 			$this->logic = Expression::andBlock();
 			$this->order = new OrderChain();
 			$this->strategy = FetchStrategy::join();
 			$this->projection = Projection::chain();
 		}
-		
+
 		public function __clone()
 		{
 			$this->logic = clone $this->logic;
@@ -63,25 +65,26 @@
 			$this->strategy = clone $this->strategy;
 			$this->projection = clone $this->projection;
 		}
-		
+
 		public function __sleep()
 		{
 			$this->daoClass =
 				$this->getDao()
 					? get_class($this->dao)
 					: null;
-			
+
 			$vars = get_object_vars($this);
 			unset($vars['dao']);
 			return array_keys($vars);
 		}
-		
+
 		public function __wakeup()
 		{
-			if ($this->daoClass)
+			if ($this->daoClass) {
 				$this->dao = Singleton::getInstance($this->daoClass);
+            }
 		}
-		
+
 		/**
 		 * @return ProtoDAO
 		**/
@@ -89,26 +92,27 @@
 		{
 			return $this->dao;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setDao(ProtoDAO $dao)
 		{
 			$this->dao = $dao;
-			
+
 			return $this;
 		}
 
 		/***/
 		public function checkAndGetDao()
 		{
-			if (!$this->dao)
+			if (!$this->dao) {
 				throw new WrongStateException('You forgot to set dao');
-			
+            }
+
 			return $this->dao;
 		}
-		
+
 		/**
 		 * @return LogicalChain
 		**/
@@ -116,17 +120,17 @@
 		{
 			return $this->logic;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function add(LogicalObject $logic)
 		{
 			$this->logic->expAnd($logic);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OrderChain
 		**/
@@ -134,73 +138,75 @@
 		{
 			return $this->order;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function addOrder(/* MapableObject */ $order)
 		{
-			if (!$order instanceof MappableObject)
+			if (!$order instanceof MappableObject) {
 				$order = new OrderBy($order);
-			
+            }
+
 			$this->order->add($order);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function prependOrder(/* MapableObject */ $order)
 		{
-			if (!$order instanceof MappableObject)
+			if (!$order instanceof MappableObject) {
 				$order = new OrderBy($order);
-			
+            }
+
 			$this->order->prepend($order);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function dropOrder()
 		{
 			$this->order = new OrderChain();
-			
+
 			return $this;
 		}
-		
+
 		public function getLimit()
 		{
 			return $this->limit;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setLimit($limit)
 		{
 			$this->limit = $limit;
-			
+
 			return $this;
 		}
-		
+
 		public function getOffset()
 		{
 			return $this->offset;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setOffset($offset)
 		{
 			$this->offset = $offset;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
@@ -208,30 +214,31 @@
 		{
 			return $this->strategy;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setFetchStrategy(FetchStrategy $strategy)
 		{
 			$this->strategy = $strategy;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setProjection(ObjectProjection $chain)
 		{
-			if ($chain instanceof ProjectionChain)
+			if ($chain instanceof ProjectionChain) {
 				$this->projection = $chain;
-			else
-				$this->projection = Projection::chain()->add($chain);
-			
+			} else {
+$this->projection = Projection::chain()->add($chain);
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
@@ -240,12 +247,13 @@
 			if (
 				!$projection instanceof ProjectionChain
 				|| !$projection->isEmpty()
-			)
+			) {
 				$this->projection->add($projection);
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return ProjectionChain
 		**/
@@ -253,49 +261,49 @@
 		{
 			return $this->projection;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function dropProjection()
 		{
 			$this->projection = Projection::chain();
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setDistinct($orly = true)
 		{
 			$this->distinct = ($orly === true);
-			
+
 			return $this;
 		}
-		
+
 		public function isDistinct()
 		{
 			return $this->distinct;
 		}
-		
+
 		public function isSilent()
 		{
 			return $this->silent;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function setSilent($silent)
 		{
 			Assert::isBoolean($silent);
-			
+
 			$this->silent = $silent;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
@@ -303,14 +311,13 @@
 			$path, // to collection
 			$lazy = false, // fetching mode
 			/* Criteria */ $criteria = null
-		)
-		{
+		) {
 			Assert::isBoolean($lazy);
 			Assert::isTrue(
 				($criteria === null)
 				|| ($criteria instanceof Criteria)
 			);
-			
+
 			$this->collections[$path]['lazy'] = $lazy;
 			$this->collections[$path]['criteria'] = $criteria;
 			$this->collections[$path]['propertyPath']
@@ -318,56 +325,59 @@
 					$this->checkAndGetDao()->getObjectName(),
 					$path
 				);
-			
+
 			return $this;
 		}
-		
+
 		public function get()
 		{
 			try {
-				$list = array(
+				$list = [
 					$this->checkAndGetDao()->
 						getByQuery($this->toSelectQuery())
-				);
+				];
 			} catch (ObjectNotFoundException $e) {
-				if (!$this->isSilent())
+				if (!$this->isSilent()) {
 					throw $e;
-				
+                }
+
 				return null;
 			}
-			
-			if (!$this->collections || !$list)
+
+			if (!$this->collections || !$list) {
 				return reset($list);
-			
+            }
+
 			$list =
 				$this->checkAndGetDao()->
 				fetchCollections($this->collections, $list);
-			
+
 			return reset($list);
 		}
-		
+
 		public function getList()
 		{
 			try {
 				$list =
 					$this->checkAndGetDao()->
 					getListByQuery($this->toSelectQuery());
-				
 			} catch (ObjectNotFoundException $e) {
-				if (!$this->isSilent())
+				if (!$this->isSilent()) {
 					throw $e;
-				
-				return array();
+                }
+
+				return [];
 			}
-			
-			if (!$this->collections || !$list)
+
+			if (!$this->collections || !$list) {
 				return $list;
-			
+            }
+
 			return
 				$this->checkAndGetDao()->
 				fetchCollections($this->collections, $list);
 		}
-		
+
 		/**
 		 * @return QueryResult
 		**/
@@ -376,10 +386,11 @@
 			$result =
 				$this->checkAndGetDao()->
 				getQueryResult($this->toSelectQuery());
-			
-			if (!$this->collections || !$result->getCount())
+
+			if (!$this->collections || !$result->getCount()) {
 				return $result;
-			
+            }
+
 			return $result->setList(
 				$this->checkAndGetDao()->fetchCollections(
 					$this->collections,
@@ -387,61 +398,63 @@
 				)
 			);
 		}
-		
+
 		public function getCustom($index = null)
 		{
 			try {
 				$result =
 					$this->checkAndGetDao()->getCustom($this->toSelectQuery());
-				
+
 				if ($index) {
-					if (array_key_exists($index, $result))
+					if (array_key_exists($index, $result)) {
 						return $result[$index];
-					
+                    }
+
 					throw new MissingElementException(
-						'No such key: "'.$index.'" in result set.'
+						'No such key: "' . $index . '" in result set.'
 					);
 				}
-				
+
 				return $result;
 			} catch (ObjectNotFoundException $e) {
-				if (!$this->isSilent())
+				if (!$this->isSilent()) {
 					throw $e;
-				
+                }
+
 				return null;
 			}
 		}
-		
+
 		public function getCustomList()
 		{
 			try {
 				return
 					$this->checkAndGetDao()->
 					getCustomList($this->toSelectQuery());
-				
 			} catch (ObjectNotFoundException $e) {
-				if (!$this->isSilent())
+				if (!$this->isSilent()) {
 					throw $e;
-				
-				return array();
+                }
+
+				return [];
 			}
 		}
-		
+
 		public function getPropertyList()
 		{
 			try {
 				return
 					$this->checkAndGetDao()->
 					getCustomRowList($this->toSelectQuery());
-				
 			} catch (ObjectNotFoundException $e) {
-				if (!$this->isSilent())
+				if (!$this->isSilent()) {
 					throw $e;
-				
-				return array();
+                }
+
+				return [];
 			}
 		}
-		
+
 		public function toString()
 		{
 			return $this->toDialectString(
@@ -450,12 +463,12 @@
 					: ImaginaryDialect::me()
 			);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return $this->toSelectQuery()->toDialectString($dialect);
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -468,15 +481,17 @@
 						$this->checkAndGetDao()->makeSelectHead()->
 							dropFields()
 					);
-			} else
-				$query = $this->checkAndGetDao()->makeSelectHead();
-			
-			if ($this->distinct)
+			} else {
+$query = $this->checkAndGetDao()->makeSelectHead();
+            }
+
+			if ($this->distinct) {
 				$query->distinct();
-			
+            }
+
 			return $this->fillSelectQuery($query);
 		}
-		
+
 		/**
 		 * @return SelectQuery
 		**/
@@ -484,23 +499,24 @@
 		{
 			$query->
 				limit($this->limit, $this->offset);
-			
-			if ($this->distinct)
+
+			if ($this->distinct) {
 				$query->distinct();
-			
+            }
+
 			if ($this->logic->getSize()) {
 				$query->
 					andWhere(
 						$this->logic->toMapped($this->checkAndGetDao(), $query)
 					);
 			}
-			
+
 			if ($this->order) {
 				$query->setOrderChain(
 					$this->order->toMapped($this->checkAndGetDao(), $query)
 				);
 			}
-			
+
 			if (
 				$this->projection->isEmpty()
 				&& (
@@ -514,32 +530,31 @@
 					true
 				);
 			}
-			
+
 			return $query;
 		}
-		
+
 		/**
 		 * @return Criteria
 		**/
 		public function dropProjectionByType(/* array */ $dropTypes)
 		{
 			Assert::isInstance($this->projection, 'ProjectionChain');
-			
+
 			$this->projection->dropByType($dropTypes);
-			
+
 			return $this;
 		}
-		
+
 		private function joinProperties(
 			SelectQuery $query,
 			ProtoDAO $parentDao,
 			$parentTable,
 			$parentRequired,
 			$prefix = null
-		)
-		{
-			$proto = call_user_func(array($parentDao->getObjectName(), 'proto'));
-			
+		) {
+			$proto = call_user_func([$parentDao->getObjectName(), 'proto']);
+
 			foreach ($proto->getPropertyList() as $property) {
 				if (
 					($property instanceof LightMetaProperty)
@@ -572,36 +587,38 @@
 						continue;
 					} elseif ($property->isInner()) {
 						$proto = call_user_func(
-							array($property->getClassName(), 'proto')
+							[$property->getClassName(), 'proto']
 						);
 
 						/**@var LightMetaProperty $innerProperty**/
-						foreach ($proto->getPropertyList() as $innerProperty)
+						foreach ($proto->getPropertyList() as $innerProperty) {
 							$query->get(
 								new DBField(
 									$innerProperty->getColumnName(),
 									$parentTable
 								)
 							);
-						
+                        }
+
 						continue;
 					}
-					
+
 					$propertyDao = call_user_func(
-						array($property->getClassName(), 'dao')
+						[$property->getClassName(), 'dao']
 					);
-					
+
 					// add's custom dao's injection possibility
-					if (!$propertyDao instanceof ProtoDAO)
+					if (!$propertyDao instanceof ProtoDAO) {
 						continue;
-					
+                    }
+
 					$tableAlias = $propertyDao->getJoinName(
 						$property->getColumnName(),
 						$prefix
 					);
-					
+
 					$fields = $propertyDao->getFields();
-					
+
 					if (!$query->hasJoinedTable($tableAlias)) {
 						$logic =
 							Expression::eq(
@@ -609,27 +626,27 @@
 									$property->getColumnName(),
 									$parentTable
 								),
-								
 								DBField::create(
 									$propertyDao->getIdName(),
 									$tableAlias
 								)
 							);
-						
-						if ($property->isRequired() && $parentRequired)
+
+						if ($property->isRequired() && $parentRequired) {
 							$query->join($propertyDao->getTable(), $logic, $tableAlias);
-						else
-							$query->leftJoin($propertyDao->getTable(), $logic, $tableAlias);
+						} else {
+$query->leftJoin($propertyDao->getTable(), $logic, $tableAlias);
+                        }
 					}
-					
+
 					foreach ($fields as $field) {
 						$query->get(
 							new DBField($field, $tableAlias),
 							$propertyDao->getJoinPrefix($property->getColumnName(), $prefix)
-								.$field
+								. $field
 						);
 					}
-					
+
 					$this->joinProperties(
 						$query,
 						$propertyDao,
@@ -640,7 +657,7 @@
 				}
 			}
 		}
-		
+
 		/**
 		 * @return AbstractProtoClass
 		**/
@@ -648,8 +665,7 @@
 		{
 			return
 				call_user_func(
-					array($this->checkAndGetDao()->getObjectName(), 'proto')
+					[$this->checkAndGetDao()->getObjectName(), 'proto']
 				);
 		}
 	}
-?>

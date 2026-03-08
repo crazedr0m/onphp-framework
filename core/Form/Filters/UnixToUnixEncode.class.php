@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Uuencode a string.
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class UnixToUnixEncode extends BaseFilter
@@ -23,10 +24,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return convert_uuencode($value);
 		}
 	}
-?>

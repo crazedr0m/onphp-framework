@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * @group pgsf
 	 */
@@ -9,13 +10,15 @@
 		 */
 		public function getPgSQL()
 		{
-			foreach (DBTestPool::me()->getPool() as $db)
-				if ($db instanceof PgSQL)
+			foreach (DBTestPool::me()->getPool() as $db) {
+				if ($db instanceof PgSQL) {
 					return $db;
-				
+                }
+            }
+
 			$this->markTestIncomplete('Required PgSQL for testing');
 		}
-		
+
 		/**
 		 * @depends getPgSQL
 		 * @return PgSQL
@@ -25,10 +28,9 @@
 			$this->assertEquals(
 				"'новый год' & 'снегурочка' & 'праздник'",
 				$db->getDialect()->prepareFullText(
-					array('Новый год', 'Снегурочка', 'ПрАзДнИк'),
+					['Новый год', 'Снегурочка', 'ПрАзДнИк'],
 					DB::FULL_TEXT_AND
 				)
 			);
 		}
 	}
-?>

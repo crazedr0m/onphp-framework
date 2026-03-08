@@ -1,4 +1,5 @@
 <?php
+
 	class HstoreDBTest extends TestCaseDAO
 	{
 		/**
@@ -9,11 +10,11 @@
 		{
 			foreach (DBTestPool::me()->getPool() as $connector => $db) {
 				DBPool::me()->setDefault($db);
-				$properties = array(
+				$properties = [
 					'age' => '23',
 					'weight' => 80,
 					'comment' => null,
-				);
+				];
 
 				$user =
 					TestUser::create()->
@@ -54,15 +55,15 @@
 
 				$form->get('properties')->
 					setFormMapping(
-						array(
+						[
 							Primitive::string('age'),
 							Primitive::integer('weight'),
 							Primitive::string('comment'),
-						)
+						]
 					);
 
 				$form->import(
-					array('id' => $user->getId())
+					['id' => $user->getId()]
 				);
 
 				$this->assertNotNull($form->getValue('id'));
@@ -105,4 +106,3 @@
 			}
 		}
 	}
-?>

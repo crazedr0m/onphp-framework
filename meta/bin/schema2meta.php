@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2017 by Igor V. Gulyaev                                 *
  *                                                                         *
@@ -32,15 +33,14 @@ echo '<?xml version="1.0"?>'
 	$fieldExpression = "`(?<fieldName>.+?)` (?<fieldType>\w+)(\((?<fieldSize>.+?)\)){0,1}( unsigned){0,1}((?<notNull> NOT){0,1} NULL){0,1}( default (?<default>'(.*?)'|NULL)){0,1}( auto_increment){0,1}( comment '(?<comment>.*?)'){0,1},{0,1}";
 
 	$schemaFile = file($argv[1]);
-	$table = array();
+	$table = [];
 	$tableStarted = false;
 	while ($line = next($schemaFile)) {
-
 		$line = trim($line);
 
-		$matches = array();
+		$matches = [];
 		if (
-			preg_match('~'.$stopExpression.'~', $line, $matches)
+			preg_match('~' . $stopExpression . '~', $line, $matches)
 			&& $tableStarted
 		) {
 			if (array_key_exists('comment', $matches)) {
@@ -48,32 +48,32 @@ echo '<?xml version="1.0"?>'
 			}
 			$tableStarted = false;
 			table2meta($table);
-			$table = array();
+			$table = [];
 		}
 
-		$matches = array();
+		$matches = [];
 		if (
-			preg_match('~'.$primaryExpression.'~', $line, $matches)
+			preg_match('~' . $primaryExpression . '~', $line, $matches)
 			&& $tableStarted
 		) {
 			$table['pk'] = $matches['fieldName'];
 		}
 
-		$matches = array();
+		$matches = [];
 		if (
-			preg_match('~'.$fieldExpression.'~i', $line, $matches)
+			preg_match('~' . $fieldExpression . '~i', $line, $matches)
 			&& $tableStarted
 		) {
 			$table['fields'][$matches['fieldName']] = $matches;
 		}
 
-		$matches = array();
+		$matches = [];
 		if (
-			preg_match('~'.$startExpression.'~', $line, $matches)
+			preg_match('~' . $startExpression . '~', $line, $matches)
 			&& !$tableStarted
 		) {
 			$table['name'] = $matches['tableName'];
-			$table['fields'] = array();
+			$table['fields'] = [];
 			$table['pk'] = null;
 
 			$tableStarted = true;
@@ -85,7 +85,7 @@ echo '<?xml version="1.0"?>'
 <?php
 	function table2meta($table)
 	{
-		$typeMap = array(
+		$typeMap = [
 			'varchar'	=> 'String',
 			'tinytext'	=> 'String',
 			'text'		=> 'String',
@@ -107,7 +107,7 @@ echo '<?xml version="1.0"?>'
 			'float'		=> 'Float',
 			'double'	=> 'Double',
 			'decimal'	=> 'Numeric'
-		);
+		];
 
 		$tableName = $table['name'];
 		$classNameArray = explode('_', $tableName);
@@ -125,15 +125,14 @@ echo '<?xml version="1.0"?>'
 		<properties>
 <?php
 		foreach ($table['fields'] as $fieldName => $props) {
+			$attributesList = [];
 
-			$attributesList = array();
-			
 			$column = $fieldName;
 
 			$attributesList['name'] =
 				preg_replace_callback(
 					'/_([a-z0-9])/',
-					function($matches) {
+					function ($matches) {
 						return strtolower($matches[0]);
 					},
 					$fieldName
@@ -141,8 +140,9 @@ echo '<?xml version="1.0"?>'
 			$isPrimaryKey = ($table['pk'] == $column);
 
 			$tag = 'property';
-			if ($isPrimaryKey)
+			if ($isPrimaryKey) {
 				$tag = 'identifier';
+            }
 
 			$type = $props['fieldType'];
 			// skip foreign key constraint yet
@@ -150,14 +150,15 @@ echo '<?xml version="1.0"?>'
 				continue;
 			}
 
-			if (isset($typeMap[$type]))
+			if (isset($typeMap[$type])) {
 				$type = $typeMap[$type];
+            }
 
 			$attributesList['type'] = $type;
 
 			$hasSize = !in_array(
 				$type,
-				array('Timestamp', 'Date', 'SmallInteger', 'Integer', 'BigInteger')
+				['Timestamp', 'Date', 'SmallInteger', 'Integer', 'BigInteger']
 			);
 
 			if (
@@ -168,27 +169,29 @@ echo '<?xml version="1.0"?>'
 				$attributesList['size'] = $props['fieldSize'];
 			}
 
-			$isDateTime = in_array($type, array('Timestamp', 'Date'));
+			$isDateTime = in_array($type, ['Timestamp', 'Date']);
 
 			if (!$isPrimaryKey) {
 				$default = null;
 				if (isset($props['default']) && !$isDateTime) {
 					$default = str_replace("'", '', $props['default']);
-					if ($default && $default != 'NULL')
+					if ($default && $default != 'NULL') {
 						$attributesList['default'] = $default;
+                    }
 				}
 
 				$attributesList['required'] = (isset($props['notNull']) ? 'true' : 'false');
 
-				if ($default == 'NULL')
+				if ($default == 'NULL') {
 					$attributesList['required'] = 'false';
+                }
 			}
 
 			$attributesList['column'] = $column;
-			
+
 			$attributesString = '';
 			foreach ($attributesList as $key => $value) {
-				$attributesString .= " $key".'="'.$value.'"';
+				$attributesString .= " $key" . '="' . $value . '"';
 			}
 			if (array_key_exists('comment', $props)) {
 ?>

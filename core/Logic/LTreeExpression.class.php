@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -21,7 +22,7 @@
 		const DESCENDANT	= '<@';
 		const MATCH			= '~';
 		const SEARCH		= '@';
-		
+
 		/**
 		 * Is left argument an ancestor of right (or equal)?
 		 *
@@ -31,7 +32,7 @@
 		{
 			return new BinaryExpression($left, $right, self::ANCESTOR);
 		}
-		
+
 		/**
 		 * Is left argument a descendant of right (or equal)?
 		 *
@@ -41,7 +42,7 @@
 		{
 			return new BinaryExpression($left, $right, self::DESCENDANT);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -49,7 +50,7 @@
 		{
 			return new BinaryExpression($ltree, $lquery, self::MATCH);
 		}
-		
+
 		/**
 		 * @return BinaryExpression
 		**/
@@ -58,4 +59,3 @@
 			return new BinaryExpression($ltree, $ltxtquery, self::SEARCH);
 		}
 	}
-?>

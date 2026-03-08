@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Evgeniya Tekalin                                *
  *                                                                         *
@@ -311,7 +312,9 @@
 			try {
 				$this->channel->getTransport()->
 					setAlive($alive);
-			} catch (WrongArgumentException $e) {/*no_connection*/}
+			} catch (WrongArgumentException $e) {
+/*no_connection*/
+            }
 
 			return $this;
 		}
@@ -338,4 +341,3 @@
 			return $this;
 		}
 	}
-?>

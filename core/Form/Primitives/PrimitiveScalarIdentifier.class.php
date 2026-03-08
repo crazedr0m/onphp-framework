@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -15,10 +16,9 @@
 	final class PrimitiveScalarIdentifier extends PrimitiveIdentifier
 	{
 		protected $scalar = true;
-		
+
 		public function setScalar($orly = false)
 		{
 			throw new WrongStateException();
 		}
 	}
-?>

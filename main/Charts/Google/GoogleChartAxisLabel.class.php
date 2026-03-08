@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -15,25 +16,24 @@
 	final class GoogleChartAxisLabel extends GoogleChartLabel
 	{
 		protected static $paramName = 'chxl';
-		
+
 		/**
 		 * @return GoogleChartLabel
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public static function getParamName()
 		{
 			return self::$paramName;
 		}
-		
+
 		public function toString()
 		{
 			$labels = implode('|', $this->labels);
-			
+
 			return $labels;
 		}
 	}
-?>

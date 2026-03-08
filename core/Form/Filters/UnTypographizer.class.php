@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -15,7 +16,7 @@
 	final class UnTypographizer extends BaseFilter
 	{
 		private static $symbols =
-			array(
+			[
 				'&nbsp;'	=> ' ',
 				' &lt; '	=> ' < ',
 				' &gt; '	=> ' > ',
@@ -33,8 +34,8 @@
 				'&frac12;'	=> '½',
 				'&frac34;'	=> '¾',
 				'&plusmn;'	=> '±'
-			);
-		
+			];
+
 		/**
 		 * @return UnTypographizer
 		**/
@@ -42,10 +43,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return strtr($value, self::$symbols);
 		}
 	}
-?>

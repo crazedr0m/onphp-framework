@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://pecl.php.net/package/APC
-	 * 
+	 *
 	 * @ingroup DAOs
 	**/
 	final class ApcSegmentHandler extends OptimizerSegmentHandler
@@ -19,33 +20,32 @@
 		public function __construct($segmentId)
 		{
 			parent::__construct($segmentId);
-			
+
 			$this->locker = SemaphorePool::me();
 		}
-		
+
 		public function drop()
 		{
 			return apc_delete($this->id);
 		}
-		
+
 		protected function getMap()
 		{
 			$this->locker->get($this->id);
-			
+
 			if (!$map = apc_fetch($this->id)) {
-				$map = array();
+				$map = [];
 			}
-			
+
 			return $map;
 		}
-		
+
 		protected function storeMap(array $map)
 		{
 			$result = apc_store($this->id, $map, Cache::EXPIRES_FOREVER);
-			
+
 			$this->locker->free($this->id);
-			
+
 			return $result;
 		}
 	}
-?>

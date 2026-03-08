@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * HTML Special Characters replacer.
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class HtmlSpecialCharsFilter extends BaseFilter
@@ -23,10 +24,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return htmlspecialchars($value);
 		}
 	}
-?>

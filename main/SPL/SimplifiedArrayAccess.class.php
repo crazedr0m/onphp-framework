@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -16,12 +17,11 @@
 	{
 		public function clean();
 		public function isEmpty();
-		
+
 		public function getList();
-		
+
 		public function set($name, $var);
 		public function get($name);
 		public function has($name);
 		public function drop($name);
 	}
-?>

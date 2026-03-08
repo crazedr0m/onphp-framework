@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2008 by Konstantin V. Arkhipov, Sveta A. Smirnova  *
  *                                                                         *
@@ -19,7 +20,7 @@
 		const URL_PATTERN 	= '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}((:[0-9]{1,5})?\/.*)?$/is';
 		const SHA1_PATTERN	= '/^[0-9a-f]{40}$/';
 		const MD5_PATTERN	= '/^[0-9a-f]{32}$/';
-		
+
 		protected $pattern = null;
 
 		/**
@@ -29,29 +30,31 @@
 		{
 			return $this->pattern;
 		}
-		
+
 		/**
 		 * @return PrimitiveString
 		**/
 		public function setAllowedPattern($pattern)
 		{
 			$this->pattern = $pattern;
-			
+
 			return $this;
 		}
-		
+
 		public function import($scope)
 		{
-			if (!BasePrimitive::import($scope))
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
-			if (!is_scalar($scope[$this->name]) || is_bool($scope[$this->name]))
+            }
+
+			if (!is_scalar($scope[$this->name]) || is_bool($scope[$this->name])) {
 				return false;
-			
+            }
+
 			$this->value = (string) $scope[$this->name];
-			
+
 			$this->selfFilter();
-			
+
 			if (
 				is_string($this->value)
 				// zero is quite special value here
@@ -65,8 +68,7 @@
 			} else {
 				$this->value = null;
 			}
-			
+
 			return false;
 		}
 	}
-?>

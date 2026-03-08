@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -19,4 +20,3 @@
 			return parent::baseToString($dialect, null);
 		}
 	}
-?>

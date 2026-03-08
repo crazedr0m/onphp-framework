@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,16 +12,16 @@
 
 	/**
 	 * Basis for transparent DAO workers.
-	 * 
+	 *
 	 * @see VoodooDaoWorker for obscure and greedy worker.
 	 * @see SmartDaoWorker for less obscure locking-based worker.
-	 * 
+	 *
 	 * @ingroup DAOs
 	**/
 	abstract class TransparentDaoWorker extends CommonDaoWorker
 	{
 		abstract protected function gentlyGetByKey($key);
-		
+
 		/// single object getters
 		//@{
 		public function getById($id, $expires = null)
@@ -34,12 +35,12 @@
 				throw $e;
 			}
 		}
-		
+
 		public function getByLogic(LogicalObject $logic, $expires = null)
 		{
 			return parent::getByLogic($logic, Cache::EXPIRES_FOREVER);
 		}
-		
+
 		public function getByQuery(SelectQuery $query, $expires = null)
 		{
 			try {
@@ -51,7 +52,7 @@
 				throw $e;
 			}
 		}
-		
+
 		public function getCustom(SelectQuery $query, $expires = null)
 		{
 			try {
@@ -64,25 +65,26 @@
 			}
 		}
 		//@}
-		
+
 		/// object's list getters
 		//@{
 		public function getListByIds(array $ids, $expires = null)
 		{
-			$list = array();
-			$toFetch = array();
-			$prefixed = array();
-			
+			$list = [];
+			$toFetch = [];
+			$prefixed = [];
+
 			$proto = $this->dao->getProtoClass();
-			
+
 			$proto->beginPrefetch();
-			
+
 			// dupes, if any, will be resolved later @ ArrayUtils::regularizeList
 			$ids = array_unique($ids);
-			
-			foreach ($ids as $id)
+
+			foreach ($ids as $id) {
 				$prefixed[$id] = $this->makeIdKey($id);
-			
+            }
+
 			if (
 				$cachedList
 					= Cache::me()->mark($this->className)->getList($prefixed)
@@ -90,65 +92,66 @@
 				foreach ($cachedList as $cached) {
 					if ($cached && ($cached !== Cache::NOT_FOUND)) {
 						$list[] = $this->dao->completeObject($cached);
-						
+
 						unset($prefixed[$cached->getId()]);
 					}
 				}
 			}
-			
+
 			$toFetch += array_keys($prefixed);
-			
+
 			if ($toFetch) {
-				$remainList = array();
-				
+				$remainList = [];
+
 				foreach ($toFetch as $id) {
 					try {
 						$remainList[] = $this->getById($id);
-					} catch (ObjectNotFoundException $e) {/*_*/}
+					} catch (ObjectNotFoundException $e) {
+/*_*/
+                    }
 				}
-				
+
 				$list = array_merge($list, $remainList);
 			}
-			
+
 			$proto->endPrefetch($list);
-			
+
 			return $list;
 		}
-		
+
 		public function getListByQuery(SelectQuery $query, $expires = null)
 		{
 			$list = $this->getCachedList($query);
 
 			if ($list) {
-				if ($list === Cache::NOT_FOUND)
+				if ($list === Cache::NOT_FOUND) {
 					throw new ObjectNotFoundException();
-				else
-					return $list;
+				} else {
+return $list;
+                }
 			} else {
-
 				if ($list = $this->fetchList($query)) {
 					return $this->cacheListByQuery($query, $list);
-				}
-				else {
+				} else {
 					$this->cacheListByQuery($query, Cache::NOT_FOUND);
 					throw new ObjectNotFoundException();
 				}
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function getListByLogic(LogicalObject $logic, $expires = null)
 		{
 			return parent::getListByLogic($logic, Cache::EXPIRES_FOREVER);
 		}
-		
+
 		public function getPlainList($expires = null)
 		{
 			return parent::getPlainList(Cache::EXPIRES_FOREVER);
 		}
 		//@}
-		
+
 		/// custom list getters
 		//@{
 		public function getCustomList(SelectQuery $query, $expires = null)
@@ -162,7 +165,7 @@
 				throw $e;
 			}
 		}
-		
+
 		public function getCustomRowList(SelectQuery $query, $expires = null)
 		{
 			try {
@@ -175,7 +178,7 @@
 			}
 		}
 		//@}
-		
+
 		/// query result getters
 		//@{
 		public function getQueryResult(SelectQuery $query, $expires = null)
@@ -183,24 +186,24 @@
 			return parent::getQueryResult($query, Cache::EXPIRES_FOREVER);
 		}
 		//@}
-		
+
 		/// cachers
 		//@{
 		protected function cacheById(
 			Identifiable $object,
-			$expires = Cache::EXPIRES_FOREVER)
-		{
+			$expires = Cache::EXPIRES_FOREVER
+) {
 			Cache::me()->mark($this->className)->
 				add(
 					$this->makeIdKey($object->getId()),
 					$object,
 					$expires
 				);
-			
+
 			return $object;
 		}
 		//@}
-		
+
 		/// internal helpers
 		//@{
 		protected function getCachedByQuery(SelectQuery $query)
@@ -210,7 +213,7 @@
 					$this->makeQueryKey($query, self::SUFFIX_QUERY)
 				);
 		}
-		
+
 		protected function getCachedList(SelectQuery $query)
 		{
 			return
@@ -218,7 +221,7 @@
 					$this->makeQueryKey($query, self::SUFFIX_LIST)
 				);
 		}
-		
+
 		protected function cacheNullById($id)
 		{
 			return
@@ -229,7 +232,7 @@
 						Cache::EXPIRES_FOREVER
 					);
 		}
-		
+
 		protected function keyToInt($key)
 		{
 			// 7 == strlen(dechex(x86 PHP_INT_MAX)) - 1
@@ -237,4 +240,3 @@
 		}
 		//@}
 	}
-?>

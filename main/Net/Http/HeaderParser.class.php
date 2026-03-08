@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -14,14 +15,14 @@
 	**/
 	final class HeaderParser
 	{
-		private $headers		= array();
+		private $headers		= [];
 		private $currentHeader	= null;
-		
+
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @param raw header data
 		 * @return associative array of headers (name => value)
@@ -29,34 +30,32 @@
 		public function parse($data)
 		{
 			$lines = explode("\n", $data);
-			
+
 			foreach ($lines as $line) {
 				$this->doLine($line);
 			}
-			
+
 			return $this;
 		}
-		
+
 		public function doLine($line)
 		{
 			$line = trim($line, "\r\n");
-			$matches = array();
+			$matches = [];
 
 			if (preg_match("/^([\w-]+):\s+(.+)/", $line, $matches)) {
-				
 				$name = strtolower($matches[1]);
 				$value = $matches[2];
 				$this->currentHeader = $name;
 
 				if (isset($this->headers[$name])) {
 					if (!is_array($this->headers[$name])) {
-						$this->headers[$name] = array($this->headers[$name]);
+						$this->headers[$name] = [$this->headers[$name]];
 					}
 					$this->headers[$name][] = $value;
 				} else {
 					$this->headers[$name] = $value;
 				}
-				
 			} elseif (
 				preg_match("/^\s+(.+)$/", $line, $matches)
 				&& $this->currentHeader !== null
@@ -69,10 +68,10 @@
 					$this->headers[$this->currentHeader] .= $matches[1];
 				}
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return associative array of headers (name => value)
 		**/
@@ -80,15 +79,14 @@
 		{
 			return $this->headers;
 		}
-		
+
 		public function hasHeader($name)
 		{
 			return isset($this->headers[strtolower($name)]);
 		}
-		
+
 		public function getHeader($name)
 		{
 			return $this->headers[strtolower($name)];
 		}
 	}
-?>

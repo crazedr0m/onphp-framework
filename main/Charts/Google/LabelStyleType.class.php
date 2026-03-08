@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -10,7 +11,7 @@
  ***************************************************************************/
 
 	// TODO: support for currency
-	
+
 	/**
 	 * @ingroup GoogleChart
 	**/
@@ -19,13 +20,13 @@
 		const FLOAT				= 0x1;
 		const PERCENT			= 0x2;
 		const SCIENTIFIC		= 0x3;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::FLOAT			=> 'f',
 			self::PERCENT		=> 'p',
 			self::SCIENTIFIC	=> 'e'
-		);
-		
+		];
+
 		/**
 		 * @return LabelStyleType
 		**/
@@ -33,10 +34,9 @@
 		{
 			return new self($id);
 		}
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

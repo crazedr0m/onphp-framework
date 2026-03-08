@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -24,7 +25,7 @@
 EOT;
 
 			$columns = [];
-			
+
 			foreach ($propertyList as $property) {
 				if (
 					$property->getRelation()
@@ -32,31 +33,31 @@ EOT;
 				) {
 					continue;
 				}
-				
+
 				$column = $property->toColumn();
-				
-				if (is_array($column))
+
+				if (is_array($column)) {
 					$columns = array_merge($columns, $column);
-				else
-					$columns[] = $property->toColumn();
+				} else {
+$columns[] = $property->toColumn();
+                }
 			}
-			
+
 			$out .= implode("->\n", $columns);
-			
-			return $out."\n);\n\n";
+
+			return $out . "\n);\n\n";
 		}
-		
+
 		public static function buildRelations(MetaClass $class)
 		{
 			$out = null;
-			
+
 			$knownJunctions = [];
-			
+
 			foreach ($class->getAllProperties() as $property) {
 				if ($relation = $property->getRelation()) {
-					
 					$foreignClass = $property->getType()->getClass();
-					
+
 					if (
 						$relation->getId() == MetaRelation::ONE_TO_MANY
 						// nothing to build, it's in the same table
@@ -71,41 +72,42 @@ EOT;
 					) {
 						$tableName =
 							$class->getTableName()
-							.'_'
-							.$foreignClass->getTableName();
-						
-						if (isset($knownJunctions[$tableName]))
+							. '_'
+							. $foreignClass->getTableName();
+
+						if (isset($knownJunctions[$tableName])) {
 							continue; // collision prevention
-						else
-							$knownJunctions[$tableName] = true;
-						
+						} else {
+$knownJunctions[$tableName] = true;
+                        }
+
 						$foreignPropery = clone $foreignClass->getIdentifier();
-						
+
 						$name = $class->getName();
-						$name = strtolower($name[0]).substr($name, 1);
+						$name = strtolower($name[0]) . substr($name, 1);
 						$name .= 'Id';
-						
+
 						$foreignPropery->
 							setName($name)->
 							setColumnName($foreignPropery->getConvertedName())->
 							// we don't need primary key here
 							setIdentifier(false);
-						
+
 						// we don't want any garbage in such tables
 						$property = clone $property;
 						$property->required();
-						
+
 						// prevent name collisions
 						if (
 							$property->getRelationColumnName()
 							== $foreignPropery->getColumnName()
 						) {
 							$foreignPropery->setColumnName(
-								$class->getTableName().'_'
-								.$property->getConvertedName().'_id'
+								$class->getTableName() . '_'
+								. $property->getConvertedName() . '_id'
 							);
 						}
-						
+
 						$out .= <<<EOT
 \$schema->
 	addTable(
@@ -120,10 +122,10 @@ EOT;
 					} else {
 						$sourceTable = $class->getTableName();
 						$sourceColumn = $property->getRelationColumnName();
-						
+
 						$targetTable = $foreignClass->getTableName();
 						$targetColumn = $foreignClass->getIdentifier()->getColumnName();
-						
+
 						$out .= <<<EOT
 // {$sourceTable}.{$sourceColumn} -> {$targetTable}.{$targetColumn}
 \$schema->
@@ -139,21 +141,19 @@ EOT;
 
 
 EOT;
-					
 					}
 				}
 			}
-			
+
 			return $out;
 		}
-		
+
 		public static function getHead()
 		{
 			$out = parent::getHead();
-			
+
 			$out .= "\$schema = new DBSchema();\n\n";
-			
+
 			return $out;
 		}
 	}
-?>

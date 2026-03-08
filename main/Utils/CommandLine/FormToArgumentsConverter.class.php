@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -16,38 +17,43 @@
 			$short = null;
 
 			/**@var BasePrimitive $primitive**/
-			foreach ($form->getPrimitiveList() as $primitive)
-				if (strlen($primitive->getName()) == 1)
+			foreach ($form->getPrimitiveList() as $primitive) {
+				if (strlen($primitive->getName()) == 1) {
 					$short .=
 						$primitive->getName()
-						.self::getValueType($primitive);
-			
+						. self::getValueType($primitive);
+                }
+            }
+
 			return $short;
 		}
-		
+
 		public static function getLong(Form $form)
 		{
-			$long = array();
-			
+			$long = [];
+
 			/**@var BasePrimitive $primitive**/
-			foreach ($form->getPrimitiveList() as $primitive)
-				if (strlen($primitive->getName()) > 1)
+			foreach ($form->getPrimitiveList() as $primitive) {
+				if (strlen($primitive->getName()) > 1) {
 					$long[] =
 						$primitive->getName()
-						.self::getValueType($primitive);
-			
+						. self::getValueType($primitive);
+                }
+            }
+
 			return $long;
 		}
-		
+
 		private static function getValueType(BasePrimitive $primitive)
 		{
-			if ($primitive instanceof PrimitiveNoValue)
+			if ($primitive instanceof PrimitiveNoValue) {
 				return null;
-			
-			if ($primitive->isRequired())
+            }
+
+			if ($primitive->isRequired()) {
 				return ':';
-			else
-				return '::';
+			} else {
+return '::';
+            }
 		}
 	}
-?>

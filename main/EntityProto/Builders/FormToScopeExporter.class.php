@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -18,12 +19,12 @@
 		{
 			return new self($proto);
 		}
-		
+
 		protected function createEmpty()
 		{
-			return array();
+			return [];
 		}
-		
+
 		/**
 		 * @return FormGetter
 		**/
@@ -31,7 +32,7 @@
 		{
 			return new FormExporter($this->proto, $object);
 		}
-		
+
 		/**
 		 * @return ObjectSetter
 		**/
@@ -40,4 +41,3 @@
 			return new ScopeSetter($this->proto, $object);
 		}
 	}
-?>

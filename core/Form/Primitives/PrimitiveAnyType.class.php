@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,5 +13,7 @@
 	/**
 	 * @ingroup Primitives
 	**/
-	final class PrimitiveAnyType extends BasePrimitive {/* nop */}
-?>
+	final class PrimitiveAnyType extends BasePrimitive
+    {
+/* nop */
+    }

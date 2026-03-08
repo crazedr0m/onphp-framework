@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Vladimir A. Altuchov                            *
  *                                                                         *
@@ -21,10 +22,9 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return mb_strtolower($value);
 		}
 	}
-?>

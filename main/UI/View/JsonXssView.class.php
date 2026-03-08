@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -48,8 +49,9 @@
 		 */
 		public function setPrefix($value)
 		{
-			if(!preg_match(static::CALLBACK_PATTERN, $value))
-				throw new WrongArgumentException('invalid prefix name, you should set valid javascript function name! gived "'.$value.'"');
+			if (!preg_match(static::CALLBACK_PATTERN, $value)) {
+				throw new WrongArgumentException('invalid prefix name, you should set valid javascript function name! gived "' . $value . '"');
+            }
 
 			$this->prefix = $value;
 
@@ -73,16 +75,15 @@
 			$json = JsonView::toString($model);
 
 			$json = str_ireplace(
-				array('u0022', 'u0027'),
-				array('\u0022', '\u0027'),
+				['u0022', 'u0027'],
+				['\u0022', '\u0027'],
 				$json
 			);
 
-			$result = '<script type="text/javascript">'."\n";
-			$result.="\t".$this->prefix.$this->callback.'=\''.$json.'\';'."\n";
-			$result.='</script>'."\n";
+			$result = '<script type="text/javascript">' . "\n";
+			$result .= "\t" . $this->prefix . $this->callback . '=\'' . $json . '\';' . "\n";
+			$result .= '</script>' . "\n";
 
 			return $result;
 		}
-
-	}
+    }

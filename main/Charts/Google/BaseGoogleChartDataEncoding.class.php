@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -12,21 +13,18 @@
 	/**
 	 * @ingroup GoogleChart
 	**/
-	abstract class BaseGoogleChartDataEncoding
-		extends BaseGoogleChartParameter
-		implements GoogleChartDataEncoding
+	abstract class BaseGoogleChartDataEncoding extends BaseGoogleChartParameter implements GoogleChartDataEncoding
 	{
 		protected $maxValue = null;
 		protected $delimiter = null;
-		
+
 		/**
 		 * @return BaseGoogleChartDataEncoding
 		**/
 		public function setMaxValue($maxValue)
 		{
 			$this->maxValue = $maxValue;
-			
+
 			return $this;
 		}
 	}
-?>

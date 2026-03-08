@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -8,7 +9,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	interface AutoloaderWithNamespace extends Autoloader
 	{
 		/**
@@ -16,22 +17,21 @@
 		 * @return Autoloader
 		 */
 		public function setNamespaceResolver(NamespaceResolver $namespaceResolver);
-		
+
 		/**
 		 * @return Autoloader
 		 */
 		public function getNamespaceResolver();
-		
+
 		/**
 		 * @param string $path
 		 * @return Autoloader
 		 */
 		public function addPath($path, $namespace = null);
-		
+
 		/**
 		 * @param array $pathes
 		 * @return Autoloader
 		 */
 		public function addPaths(array $paths, $namespace = null);
 	}
-?>

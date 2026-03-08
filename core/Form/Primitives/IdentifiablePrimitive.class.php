@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -12,20 +13,19 @@
 	/**
 	 * @ingroup Primitives
 	**/
-	abstract class IdentifiablePrimitive
-		extends PrimitiveInteger // parent class doesn't really matter here
+	abstract class IdentifiablePrimitive extends PrimitiveInteger // parent class doesn't really matter here
 	{
 		protected $className = null;
 		private $extractMethod = 'getId';
-		
+
 		/**
 		 * due to historical reasons, by default we're dealing only with
 		 * integer identifiers, this problem correctly fixed in master branch
 		*/
 		protected $scalar = false;
-		
+
 		abstract public function of($className);
-		
+
 		/**
 		 * @param mixed $extractMethod
 		 * @return IdentifiablePrimitive
@@ -37,18 +37,18 @@
 			} elseif (strpos($extractMethod, '::') === false) {
 				Assert::isTrue(
 					method_exists($this->className, $extractMethod),
-					"knows nothing about '".$this->className
-					."::{$extractMethod}' method"
+					"knows nothing about '" . $this->className
+					. "::{$extractMethod}' method"
 				);
 			} else {
 				ClassUtils::checkStaticMethod($extractMethod);
 			}
-			
+
 			$this->extractMethod = $extractMethod;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return string
 		**/
@@ -56,17 +56,17 @@
 		{
 			return $this->className;
 		}
-		
+
 		/**
 		 * @return IdentifiablePrimitive
 		**/
 		public function setScalar($orly = false)
 		{
 			$this->scalar = ($orly === true);
-			
+
 			return $this;
 		}
-		
+
 		public function isScalar()
 		{
 			return $this->scalar;
@@ -79,58 +79,62 @@
 		public function setValue($value)
 		{
 			$className = $this->className;
-			
+
 			Assert::isNotNull($this->className);
-			
+
 			Assert::isTrue($value instanceof $className);
-			
+
 			return parent::setValue($value);
 		}
-		
+
 		protected static function guessClassName($class)
 		{
-			if (is_string($class))
+			if (is_string($class)) {
 				return $class;
-			elseif (is_object($class)) {
-				if ($class instanceof Identifiable)
+			} elseif (is_object($class)) {
+				if ($class instanceof Identifiable) {
 					return get_class($class);
-				elseif ($class instanceof GenericDAO)
+				} elseif ($class instanceof GenericDAO) {
 					return $class->getObjectName();
+                }
 			}
-			
-			throw new WrongArgumentException('strange class given - '.$class);
+
+			throw new WrongArgumentException('strange class given - ' . $class);
 		}
-		
+
 		public function exportValue()
 		{
-			if (!$this->value)
+			if (!$this->value) {
 				return null;
-			
+            }
+
 			return $this->actualExportValue($this->value);
 		}
-		
+
 		/* void */ protected function checkNumber($number)
 		{
-			if ($this->scalar)
+			if ($this->scalar) {
 				Assert::isScalar($number);
-			else
-				Assert::isInteger($number);
+			} else {
+Assert::isInteger($number);
+            }
 		}
-		
+
 		protected function castNumber($number)
 		{
-			if (!$this->scalar && Assert::checkInteger($number))
+			if (!$this->scalar && Assert::checkInteger($number)) {
 				return (int) $number;
-			
+            }
+
 			return $number;
 		}
-		
+
 		protected function actualExportValue($value)
 		{
 			if (!ClassUtils::isInstanceOf($value, $this->className)) {
 				return null;
 			}
-			
+
 			if (is_callable($this->extractMethod)) {
 				return call_user_func($this->extractMethod, $value);
 			} elseif (strpos($this->extractMethod, '::') === false) {
@@ -140,4 +144,3 @@
 			}
 		}
 	}
-?>

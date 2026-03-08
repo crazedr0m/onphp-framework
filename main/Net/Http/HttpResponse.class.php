@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -19,14 +20,13 @@
 		**/
 		public function getStatus();
 		public function getReasonPhrase();
-		
+
 		/**
 		 * @return array of headers
 		**/
 		public function getHeaders();
 		public function hasHeader($name);
 		public function getHeader($name);
-		
+
 		public function getBody();
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Alexey S. Denisov                               *
  *                                                                         *
@@ -18,7 +19,7 @@
 		 * @var Closure
 		 */
 		private $callback = null;
-		
+
 		/**
 		 * @return CallbackFilter
 		**/
@@ -26,15 +27,14 @@
 		{
 			return new self($callback);
 		}
-		
+
 		public function __construct(Closure $callback)
 		{
 			$this->callback = $callback;
 		}
-		
+
 		public function apply($value)
 		{
 			return $this->callback->__invoke($value);
 		}
 	}
-?>

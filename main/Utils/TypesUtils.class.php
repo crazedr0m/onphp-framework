@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -16,21 +17,22 @@
 	{
 		const SIGNED_MAX	= 2147483647;
 		const UNSIGNED_MAX	= 4294967295;
-		
+
 		public static function signedToUnsigned($signedInt)
 		{
-			if ($signedInt < 0)
+			if ($signedInt < 0) {
 				return $signedInt + self::UNSIGNED_MAX + 1;
-			else
-				return $signedInt;
+			} else {
+return $signedInt;
+            }
 		}
 
 		public static function unsignedToSigned($unsignedInt)
 		{
-			if ($unsignedInt > self::SIGNED_MAX)
+			if ($unsignedInt > self::SIGNED_MAX) {
 				return $unsignedInt - self::UNSIGNED_MAX - 1;
-			else
-				return $unsignedInt;
-		}	
+			} else {
+return $unsignedInt;
+            }
+		}
 	}
-?>

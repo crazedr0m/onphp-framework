@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -18,13 +19,11 @@ require 'AutoloaderClassNotFound.class.php';
 require 'AutoloaderClassPathCache.class.php';
 require 'AutoloaderNoCache.class.php';
 require 'AutoloaderPool.class.php';
-require dirname(dirname(__DIR__)).'/core/Exceptions/BaseException.class.php';
-require dirname(dirname(__DIR__)).'/core/Exceptions/ClassNotFoundException.class.php';
+require dirname(dirname(__DIR__)) . '/core/Exceptions/BaseException.class.php';
+require dirname(dirname(__DIR__)) . '/core/Exceptions/ClassNotFoundException.class.php';
 require 'NamespaceDirScaner.class.php';
 require 'NamespaceDirScanerOnPHP.class.php';
 require 'NamespaceDirScanerPSR0.class.php';
 require 'NamespaceResolver.class.php';
 require 'NamespaceResolverOnPHP.class.php';
 require 'NamespaceResolverPSR0.class.php';
-
-?>

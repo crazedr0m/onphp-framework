@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -19,4 +20,3 @@
 			return 'DataType::create(DataType::CHAR)';
 		}
 	}
-?>

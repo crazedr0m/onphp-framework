@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,36 +14,42 @@
 	{
 		public function get($name)
 		{
-			if (!isset($this->mapping[$name]))
+			if (!isset($this->mapping[$name])) {
 				throw new WrongArgumentException(
 					"knows nothing about property '{$name}'"
 				);
-			
+            }
+
 			$primitive = $this->mapping[$name];
 
-			$path = $this->object.'/'.$primitive->getName();
+			$path = $this->object . '/' . $primitive->getName();
 
-			if ($primitive instanceof PrimitiveFile)
+			if ($primitive instanceof PrimitiveFile) {
 				return $path;
+            }
 
-			if (!file_exists($path))
+			if (!file_exists($path)) {
 				return null;
+            }
 
 			if ($primitive instanceof PrimitiveForm) {
-				if (!$primitive instanceof PrimitiveFormsList)
+				if (!$primitive instanceof PrimitiveFormsList) {
 					return $path;
+                }
 
-				$result = array();
+				$result = [];
 
-				$subDirs = glob($path.'/*');
+				$subDirs = glob($path . '/*');
 
-				if ($subDirs === false)
+				if ($subDirs === false) {
 					throw new WrongStateException(
-						'cannot read directory '.$path
+						'cannot read directory ' . $path
 					);
+                }
 
-				foreach ($subDirs as $path)
+				foreach ($subDirs as $path) {
 					$result[basename($path)] = $path;
+                }
 
 				return $result;
 			}
@@ -54,8 +61,9 @@
 					throw new WrongArgumentException("failed to read $path");
 				}
 
-				if ($result)
+				if ($result) {
 					break;
+                }
 
 				// NOTE: empty file COULD mean that data is being prepared now.
 				// On heavy loaded systems it means that file was just
@@ -65,4 +73,3 @@
 			return $result;
 		}
 	}
-?>

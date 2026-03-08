@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,11 +12,11 @@
 
 	/**
 	 * Filter's template.
-	 * 
+	 *
 	 * @ingroup Filters
 	 * @ingroup Module
 	**/
-	abstract class BaseFilter
-		extends Singleton
-		implements Filtrator, Instantiatable {/*_*/}
-?>
+	abstract class BaseFilter extends Singleton implements Filtrator, Instantiatable
+    {
+/*_*/
+    }

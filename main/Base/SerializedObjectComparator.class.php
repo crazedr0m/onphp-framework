@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -9,23 +10,22 @@
  *                                                                         *
  ***************************************************************************/
 
-	final class SerializedObjectComparator extends Singleton
-		implements Comparator, Instantiatable
+	final class SerializedObjectComparator extends Singleton implements Comparator, Instantiatable
 	{
 		public static function me()
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function compare($one, $two)
 		{
 			$serializedOne = serialize($one);
 			$serializedTwo = serialize($two);
-			
-			if ($serializedOne == $serializedTwo)
+
+			if ($serializedOne == $serializedTwo) {
 				return 0;
-			
+            }
+
 			return ($serializedOne < $serializedTwo) ? -1 : 1;
 		}
 	}
-?>

@@ -73,4 +73,3 @@
 			$this->assertEquals('/custom/path', $ns->getBaseDir());
 		}
 	}
-?>

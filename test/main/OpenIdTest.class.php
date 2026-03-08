@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -27,17 +28,17 @@ EOT
 						)
 				)
 			);
-			
+
 			$this->assertEquals(
 				$credential->getServer()->toString(),
 				'http://www.myopenid.com/server'
 			);
-			
+
 			$this->assertEquals(
 				$credential->getRealId()->toString(),
 				'http://example.myopenid.com/'
 			);
-			
+
 			// from openId creator blog
 			$credential = OpenIdCredentials::create(
 				HttpUrl::create()->parse('http://brad.livejournal.com/'),
@@ -154,7 +155,7 @@ EOT
 				$credential->getServer()->toString(),
 				'http://www.livejournal.com/openid/server.bml'
 			);
-			
+
 			try {
 				$credential = OpenIdCredentials::create(
 					HttpUrl::create()->parse('http://www.example.com/'),
@@ -171,104 +172,104 @@ EOT
 			}
 		}
 	}
-	
+
 	class HttpResponseStub implements HttpResponse
 	{
 		private $status = null;
 		private $body = null;
-		
+
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function getStatus()
 		{
 			return $this->status;
 		}
-		
+
 		public function setStatus(HttpStatus $status)
 		{
 			$this->status = $status;
 			return $this;
 		}
-		
+
 		public function getBody()
 		{
 			return $this->body;
 		}
-		
+
 		public function setBody($body)
 		{
 			$this->body = $body;
 			return $this;
 		}
-		
+
 		public function getReasonPhrase()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function getHeaders()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function hasHeader($name)
 		{
 			return false;
 		}
-		
+
 		public function getHeader($name)
 		{
 			return 'text/html';
 		}
 	}
-	
+
 	class HttpClientStub implements HttpClient
 	{
 		private $response = null;
-		
+
 		public function __construct(HttpResponse $response)
 		{
 			$this->response = $response;
 		}
-		
+
 		public static function create(HttpResponse $response)
 		{
 			return new self($response);
 		}
-		
+
 		public function setTimeout($timeout)
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function getTimeout()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function setFollowLocation(/* boolean */ $really)
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function isFollowLocation()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function setMaxRedirects($maxRedirects)
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function getMaxRedirects()
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function send(HttpRequest $request)
 		{
 			return $this->response;
@@ -309,4 +310,3 @@ EOT
 			throw new UnsupportedMethodException();
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2010 by Alexandr S. Krotov                              *
  *                                                                         *
@@ -15,7 +16,7 @@
 	final class YandexRssFeedItem extends FeedItem
 	{
 		private $fullText	= null;
-		
+
 		/**
 		 * @return YandexRssFeedItem
 		**/
@@ -23,20 +24,19 @@
 		{
 			return new self($title);
 		}
-		
+
 		public function getFullText()
 		{
 			return $this->fullText;
 		}
-		
+
 		/**
 		 * @return YandexRssFeedItem
 		**/
 		public function setFullText($fullText)
 		{
 			$this->fullText = $fullText;
-			
+
 			return $this;
 		}
 	}
-?>

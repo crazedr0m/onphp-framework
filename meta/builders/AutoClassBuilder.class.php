@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -14,7 +15,6 @@
 	**/
 	final class AutoClassBuilder extends BaseBuilder
 	{
-
 		public static function build(MetaClass $class)
 		{
 			$unsetInSleep = [];
@@ -33,12 +33,12 @@ EOT;
 
 			$className = $ns ? $class->getName() : "Auto{$class->getName()}";
 			$out .= "abstract class {$className}";
-			
+
 			$isNamed = false;
-			
+
 			if ($parent = $class->getParent()) {
 				if ($parent->getNameSpace()) {
-					$parentName = $parent->getNameSpace()->buildFullName('business', true).'\\'.$parent->getName();
+					$parentName = $parent->getNameSpace()->buildFullName('business', true) . '\\' . $parent->getName();
 				} else {
 					$parentName = $parent->getName();
 				}
@@ -60,20 +60,22 @@ EOT;
 					$out .= " extends IdentifiableObject";
 				}
 			}
-			
-			if ($interfaces = $class->getInterfaces())
-				$out .= ' implements '.implode(', ', $interfaces);
-			
+
+			if ($interfaces = $class->getInterfaces()) {
+				$out .= ' implements ' . implode(', ', $interfaces);
+            }
+
 			$out .= "\n{\n";
-			
+
 			foreach ($class->getProperties() as $property) {
-				if (!self::doPropertyBuild($class, $property, $isNamed))
+				if (!self::doPropertyBuild($class, $property, $isNamed)) {
 					continue;
-				
+                }
+
 				$out .=
 					"protected \${$property->getName()} = "
-					."{$property->getType()->getDeclaration()};\n";
-				
+					. "{$property->getType()->getDeclaration()};\n";
+
 				if ($property->getFetchStrategyId() == FetchStrategy::LAZY) {
 					$unsetInSleep[] = $property->getName();
 
@@ -97,11 +99,10 @@ EOT;
 						$cloneValueObject[]  = $property->getName();
 					}
 				}
-
 			}
-			
+
 			$valueObjects = [];
-			
+
 			foreach ($class->getProperties() as $property) {
 				if (
 					$property->getType() instanceof ObjectType
@@ -113,7 +114,7 @@ EOT;
 						$property->getType()->getClassName();
 				}
 			}
-			
+
 			if ($valueObjects) {
 				$out .= <<<EOT
 
@@ -124,7 +125,7 @@ EOT;
 				foreach ($valueObjects as $propertyName => $className) {
 					$out .= "\$this->{$propertyName} = new {$className}();\n";
 				}
-				
+
 				$out .= "}\n";
 			}
 
@@ -155,7 +156,7 @@ EOT;
 					$out .= "\$this->{$propertyName} = null;\n";
 				}
 				if (!empty($cloneNull) && !empty($cloneValueObject)) {
-					$out.= "\n";
+					$out .= "\n";
 				}
 				foreach ($cloneValueObject as $propertyName) {
 					$out .= "\$this->{$propertyName} = clone \$this->{$propertyName};\n";
@@ -164,24 +165,24 @@ EOT;
 			}
 
 			foreach ($class->getProperties() as $property) {
-				if (!self::doPropertyBuild($class, $property, $isNamed))
+				if (!self::doPropertyBuild($class, $property, $isNamed)) {
 					continue;
-				
+                }
+
 				$out .= $property->toMethods($class);
 			}
-			
+
 			$out .= "}\n";
 			$out .= self::getHeel();
-			
+
 			return $out;
 		}
-		
+
 		private static function doPropertyBuild(
 			MetaClass $class,
 			MetaClassProperty $property,
 			$isNamed
-		)
-		{
+		) {
 			if (
 				$parentProperty =
 					$class->isRedefinedProperty($property->getName())
@@ -194,21 +195,24 @@ EOT;
 					) && (
 						$property->getFetchStrategyId() === FetchStrategy::LAZY
 					)
-				)
+				) {
 					return true;
-				
+                }
+
 				return false;
 			}
-			
-			if ($isNamed && $property->getName() == 'name')
+
+			if ($isNamed && $property->getName() == 'name') {
 				return false;
-			
+            }
+
 			if (
 				($property->getName() == 'id')
 				&& !$property->getClass()->getParent()
-			)
+			) {
 				return false;
-			
+            }
+
 			// do not redefine parent's properties
 			if (
 				$property->getClass()->getParent()
@@ -216,10 +220,10 @@ EOT;
 					$property->getName(),
 					$property->getClass()->getAllParentsProperties()
 				)
-			)
+			) {
 				return false;
-			
+            }
+
 			return true;
 		}
 	}
-?>

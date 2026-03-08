@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -18,10 +19,9 @@
 		 * @return BigInteger
 		**/
 		public function getPublic();
-		
+
 		/**
 		 * @return BigInteger
 		**/
 		public function getPrivate();
 	}
-?>

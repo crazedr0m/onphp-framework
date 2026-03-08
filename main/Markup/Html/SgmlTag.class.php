@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -16,20 +17,19 @@
 	abstract class SgmlTag extends SgmlToken
 	{
 		private $id = null;
-		
+
 		/**
 		 * @return SgmlTag
 		**/
 		public function setId($id)
 		{
 			$this->id = $id;
-			
+
 			return $this;
 		}
-		
+
 		public function getId()
 		{
 			return $this->id;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -9,5 +10,7 @@
  *                                                                         *
  ***************************************************************************/
 
-	final class RouterException extends BaseException {/*_*/}
-?>
+	final class RouterException extends BaseException
+    {
+/*_*/
+    }

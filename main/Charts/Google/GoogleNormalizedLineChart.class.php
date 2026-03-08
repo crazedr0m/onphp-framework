@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -19,14 +20,13 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			parent::__construct();
-			
+
 			$this->data->setNormalize();
 		}
 	}
-?>

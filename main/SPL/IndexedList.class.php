@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Unordered indexed list of Identifiable objects.
-	 * 
+	 *
 	 * @ingroup onSPL
 	**/
 	final class IndexedList extends AbstractList
@@ -21,26 +22,26 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return IndexedList
 		**/
 		public function offsetSet($offset, $value)
 		{
 			Assert::isTrue($value instanceof Identifiable);
-			
+
 			$offset = $value->getId();
-			
-			if ($this->offsetExists($offset))
+
+			if ($this->offsetExists($offset)) {
 				throw new WrongArgumentException(
 					"object with id == '{$offset}' already exists"
 				);
-			
+            }
+
 			$this->list[$offset] = $value;
-			
+
 			return $this;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -14,8 +15,8 @@
 	**/
 	class UncacherVoodoDaoWorkerLists implements UncacherBase
 	{
-		private $handlerList = array();
-		
+		private $handlerList = [];
+
 		/**
 		 * @return UncacherBaseDaoWorker
 		 */
@@ -23,17 +24,17 @@
 		{
 			return new self($className, $handler);
 		}
-		
+
 		public function __construct($className, SegmentHandler $handler)
 		{
 			$this->handlerList[$className] = $handler;
 		}
-		
+
 		public function getHandlerList()
 		{
 			return $this->handlerList;
 		}
-		
+
 		/**
 		 * @param $uncacher UncacherVoodoDaoWorkerLists same as self class
 		 * @return BaseUncacher (this)
@@ -43,22 +44,23 @@
 			Assert::isInstance($uncacher, get_class($this));
 			return $this->mergeSelf($uncacher);
 		}
-		
+
 		public function uncache()
 		{
 			foreach ($this->handlerList as $className => $handler) {
 				$this->uncacheClassName($className, $handler);
 			}
 		}
-		
-		protected function uncacheClassName($className, SegmentHandler $handler) {
+
+		protected function uncacheClassName($className, SegmentHandler $handler)
+        {
 			$handler->drop();
-			
-			$dao = ClassUtils::callStaticMethod($className.'::dao');
+
+			$dao = ClassUtils::callStaticMethod($className . '::dao');
 			/* @var $dao StorableDAO */
 			return Cache::worker($dao)->uncacheByQuery($dao->makeSelectHead());
 		}
-		
+
 		/**
 		 * @param UncacherVoodoDaoWorkerLists $uncacher
 		 * @return UncacherVoodoDaoWorkerLists
@@ -73,4 +75,3 @@
 			return $this;
 		}
 	}
-?>

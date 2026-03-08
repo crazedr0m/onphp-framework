@@ -1,4 +1,5 @@
 <?php
+
 	/***************************************************************************
 	*   Copyright (C) 2012 by Artem Naumenko                                  *
 	*                                                                         *
@@ -14,13 +15,13 @@
 		const DEFAULT_HOST = 'localhost';
 		const DEFAULT_PORT = '6379';
 		const DEFAULT_TIMEOUT = 1.0;
-		
+
 		private $redis			= null;
 		private $host			= null;
 		private $port			= null;
 		private $timeout		= null;
 		private $triedConnect	= false;
-		
+
 		/**
 		 * @param type $host
 		 * @param type $port
@@ -31,8 +32,7 @@
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT,
 			$timeout = self::DEFAULT_TIMEOUT
-		)
-		{
+		) {
 			return new self($host, $port, $timeout);
 		}
 
@@ -40,13 +40,12 @@
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT,
 			$timeout = self::DEFAULT_TIMEOUT
-		)
-		{
+		) {
 			$this->host		= $host;
 			$this->port		= $port;
 			$this->timeout	= $timeout;
 		}
-		
+
 		public function __destruct()
 		{
 			if ($this->alive) {
@@ -57,37 +56,37 @@
 				}
 			}
 		}
-		
+
 		public function clean()
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				$this->redis->flushDB();
 			} catch (RedisException $e) {
 				$this->alive = false;
 			}
-			
+
 			return parent::clean();
 		}
-		
+
 		public function isAlive()
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				$this->alive = $this->redis->ping() == '+PONG';
 			} catch (RedisException $e) {
 				$this->alive = false;
 			}
-			
+
 			return parent::isAlive();
 		}
 
 		public function append($key, $data)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->redis->append($key, $data);
 			} catch (RedisException $e) {
@@ -98,7 +97,7 @@
 		public function decrement($key, $value)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->redis->decrBy($key, $value);
 			} catch (RedisException $e) {
@@ -109,7 +108,7 @@
 		public function delete($key)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->redis->delete($key);
 			} catch (RedisException $e) {
@@ -120,12 +119,12 @@
 		public function get($key)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->redis->get($key);
 			} catch (RedisException $e) {
 				$this->alive = false;
-				
+
 				return null;
 			}
 		}
@@ -133,7 +132,7 @@
 		public function increment($key, $value)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->redis->incrBy($key, $value);
 			} catch (RedisException $e) {
@@ -149,10 +148,10 @@
 		public function fetchList($key, $timeout = null)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			return new RedisNoSQLList($this->redis, $key, $timeout);
 		}
-		
+
 		/**
 		 * @param string $key
 		 *
@@ -162,7 +161,7 @@
 		{
 			throw new UnimplementedFeatureException();
 		}
-		
+
 		/**
 		 * @param string $key
 		 *
@@ -172,11 +171,11 @@
 		{
 			throw new UnimplementedFeatureException();
 		}
-		
+
 		protected function store($action, $key, $value, $expires = Cache::EXPIRES_MEDIUM)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			switch ($action) {
 				case 'set':
 				case 'replace':
@@ -188,29 +187,29 @@
 					} catch (RedisException $e) {
 						return $this->alive = false;
 					}
-					
+
 				default:
 					throw new UnimplementedFeatureException();
 			}
 		}
-		
+
 		protected function ensureTriedToConnect()
 		{
-			if ($this->triedConnect)
+			if ($this->triedConnect) {
 				return $this;
-			
+            }
+
 			$this->triedConnect = true;
-			
+
 			$this->redis = new Redis();
-			
+
 			try {
 				$this->redis->pconnect($this->host, $this->port, $this->timeout);
 				$this->isAlive();
 			} catch (RedisException $e) {
 				$this->alive = false;
 			}
-			
+
 			return $this;
 		}
 	}
-

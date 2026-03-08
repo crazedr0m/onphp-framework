@@ -1,5 +1,5 @@
 <?php
-	
+
 	class RouterBaseRuleStub extends RouterBaseRule
 	{
 		/**
@@ -9,17 +9,23 @@
 		{
 			return new self();
 		}
-		
+
 		public function getPath(HttpUrl $url)
 		{
 			return parent::getPath($url);
 		}
-		
-		public function match(HttpRequest $request) {/**/}
-		
-		public function assembly(array $data = array(), $reset = false, $encode = false) {/**/}
+
+		public function match(HttpRequest $request)
+        {
+/**/
+        }
+
+		public function assembly(array $data = [], $reset = false, $encode = false)
+        {
+/**/
+        }
 	}
-	
+
 	class RouterBaseRuleTest extends TestCase
 	{
 		/**
@@ -31,11 +37,11 @@
 		 * 		),
 		 * 	...
 		 * )
-		 * 
+		 *
 		 * @var array
 		**/
-		protected static $fixtures = array(
-			'/example/' => array(
+		protected static $fixtures = [
+			'/example/' => [
 				'' => '',
 				'/' => '/',
 				'/example/' => '',
@@ -44,9 +50,9 @@
 				'/example/login/?user=boo' => 'login/',
 				'/example/script.php' => 'script.php',
 				'http://example.org/example/login/?user=boo' => 'login/'
-			),
-			
-			'http://example.org/example/' => array(
+			],
+
+			'http://example.org/example/' => [
 				'' => '',
 				'/' => '/',
 				'http://example.org/example/' => '',
@@ -56,9 +62,9 @@
 				'/example/script.php' => 'script.php',
 				'http://example.org/example/login/?user=boo' => 'login/',
 				'http://example.com/example/login/?user=boo' => 'http://example.com/example/login/'
-			),
-			
-			'http://example.org/' => array(
+			],
+
+			'http://example.org/' => [
 				'' => '',
 				'/' => '',
 				'http://example.org/' => '',
@@ -69,9 +75,9 @@
 				'http://example.org/' => '',
 				'http://example.org' => '',
 				'http://example.com' => 'http://example.com'
-			),
-			
-			'http://example.org' => array(
+			],
+
+			'http://example.org' => [
 				'' => '',
 				'/' => '/',
 				'http://example.org' => '',
@@ -82,9 +88,9 @@
 				'http://example.org/?user=boo' => '/',
 				'http://example.org?user=boo' => '',
 				'http://example.com?user=boo' => 'http://example.com'
-			),
-			
-			'/' => array(
+			],
+
+			'/' => [
 				'' => '',
 				'/' => '',
 				'login?user=boo' => 'login',
@@ -93,9 +99,9 @@
 				'/example/script.php' => 'example/script.php',
 				'http://example.org/?user=boo' => '',
 				'http://example.org?user=boo' => ''
-			),
-			
-			'/example/index.php' => array(
+			],
+
+			'/example/index.php' => [
 				'' => '',
 				'/' => '/',
 				'/example/index.php' => 'index.php',
@@ -104,9 +110,9 @@
 				'/example/login/?user=boo' => 'login/',
 				'/example/script.php' => 'script.php',
 				'http://example.org/example/login/' => 'login/'
-			),
-			
-			'index.php' => array(
+			],
+
+			'index.php' => [
 				'' => '',
 				'/' => '/',
 				'index.php' => 'index.php',
@@ -117,9 +123,9 @@
 				'http://example.org/index.php?user=boo' => '/index.php',
 				'script.php' => 'script.php',
 				'index.php/boo' => 'index.php/boo'
-			),
-			
-			'' => array(
+			],
+
+			'' => [
 				'' => '',
 				'/' => '/',
 				'login?user=boo' => 'login',
@@ -128,9 +134,9 @@
 				'/example/script.php' => '/example/script.php',
 				'http://example.org/?user=boo' => '/',
 				'http://example.org?user=boo' => ''
-			)
-		);
-		
+			]
+		];
+
 		public function testGetPath()
 		{
 			foreach (self::$fixtures as $base => $cases) {
@@ -138,7 +144,7 @@
 					RouterRewrite::me()->setBaseUrl(
 						HttpUrl::create()->parse($base)
 					);
-				
+
 				foreach ($cases as $requestUri => $pathResult) {
 					$actualResult =
 						RouterBaseRuleStub::create()->
@@ -147,7 +153,7 @@
 							parse($requestUri)
 						)->
 						toString();
-						
+
 					$this->assertEquals(
 						$pathResult,
 						$actualResult,
@@ -157,4 +163,3 @@
 			}
 		}
 	}
-?>

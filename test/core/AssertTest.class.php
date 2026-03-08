@@ -1,13 +1,13 @@
 <?php
-	
+
 	final class AssertTest extends TestCase
 	{
 		protected $backupGlobals = false;
-		
+
 		public function testTrue()
 		{
 			Assert::isTrue(true);
-			
+
 			try {
 				Assert::isTrue(false);
 				$this->fail();
@@ -15,11 +15,11 @@
 				/* pass */
 			}
 		}
-		
+
 		public function testFalse()
 		{
 			Assert::isFalse(false);
-			
+
 			try {
 				Assert::isFalse(true);
 				$this->fail();
@@ -27,28 +27,28 @@
 				/* pass */
 			}
 		}
-		
+
 		public function testFloat()
 		{
 			Assert::isFloat(4.2);
 			Assert::isFloat('28.82');
-			
+
 			$this->nonFloatCheck(null);
 		}
-		
+
 		public function testInteger()
 		{
 			Assert::isInteger(2006);
 			Assert::isInteger(0);
 			Assert::isInteger('095');
-			
+
 			$this->nonIntegerCheck(null);
 			$this->nonIntegerCheck('1e9');
 			$this->nonIntegerCheck(20.06);
 			$this->nonIntegerCheck(acos(20.06));
 			$this->nonIntegerCheck(log(0));
 		}
-		
+
 		public function nonFloatCheck($string)
 		{
 			try {
@@ -58,7 +58,7 @@
 				/* pass */
 			}
 		}
-		
+
 		public function nonIntegerCheck($string)
 		{
 			try {
@@ -68,7 +68,7 @@
 				/* pass */
 			}
 		}
-		
+
 		public function testTernaryBase()
 		{
 			try {
@@ -81,4 +81,3 @@
 			}
 		}
 	}
-?>

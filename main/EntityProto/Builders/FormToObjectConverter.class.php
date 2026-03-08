@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -18,7 +19,7 @@
 		{
 			return new self($proto);
 		}
-		
+
 		/**
 		 * @return FormGetter
 		**/
@@ -26,7 +27,7 @@
 		{
 			return new FormGetter($this->proto, $object);
 		}
-		
+
 		/**
 		 * @return ObjectSetter
 		**/
@@ -35,4 +36,3 @@
 			return new ObjectSetter($this->proto, $object);
 		}
 	}
-?>

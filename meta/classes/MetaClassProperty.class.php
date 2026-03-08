@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2009 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,33 +16,32 @@
 	class MetaClassProperty
 	{
 		private $class		= null;
-		
+
 		private $name		= null;
 		private $columnName	= null;
-		
+
 		private $type		= null;
 		private $size		= null;
-		
+
 		private $required	= false;
 		private $identifier	= false;
-		
+
 		private $relation	= null;
-		
+
 		private $strategy	= null;
-		
+
 		public function __construct(
 			$name,
 			BasePropertyType $type,
 			MetaClass $class
-		)
-		{
+		) {
 			$this->name = $name;
-			
+
 			$this->type = $type;
-			
+
 			$this->class = $class;
 		}
-		
+
 		public function equals(MetaClassProperty $property)
 		{
 			return (
@@ -54,7 +54,7 @@
 				&& ($property->isIdentifier() == $this->isIdentifier())
 			);
 		}
-		
+
 		/**
 		 * @return MetaClass
 		**/
@@ -62,37 +62,37 @@
 		{
 			return $this->class;
 		}
-		
+
 		public function getName()
 		{
 			return $this->name;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function setName($name)
 		{
 			$this->name = $name;
-			
+
 			return $this;
 		}
-		
+
 		public function getColumnName()
 		{
 			return $this->columnName;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function setColumnName($name)
 		{
 			$this->columnName = $name;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
@@ -102,7 +102,7 @@
 				preg_replace(':([A-Z]):', '_\1', $this->name)
 			);
 		}
-		
+
 		/**
 		 * @return BasePropertyType
 		**/
@@ -110,12 +110,12 @@
 		{
 			return $this->type;
 		}
-		
+
 		public function getSize()
 		{
 			return $this->size;
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return MetaClassProperty
@@ -125,73 +125,74 @@
 			if ($this->type instanceof NumericType) {
 				if (strpos($size, ',') !== false) {
 					list($size, $precision) = explode(',', $size, 2);
-				
+
 					$this->type->setPrecision($precision);
 				}
 			}
-			
+
 			Assert::isInteger(
 				$size,
 				'only integers allowed in size parameter'
 			);
-			
+
 			if ($this->type->isMeasurable()) {
 				$this->size = $size;
-			} else
-				throw new WrongArgumentException(
-					"size not allowed for '"
-					.$this->getName().'::'.get_class($this->type)
-					."' type"
-				);
-			
+			} else {
+throw new WrongArgumentException(
+    "size not allowed for '"
+					. $this->getName() . '::' . get_class($this->type)
+					. "' type"
+);
+            }
+
 			return $this;
 		}
-		
+
 		public function isRequired()
 		{
 			return $this->required;
 		}
-		
+
 		public function isOptional()
 		{
 			return !$this->required;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function required()
 		{
 			$this->required = true;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function optional()
 		{
 			$this->required = false;
-			
+
 			return $this;
 		}
-		
+
 		public function isIdentifier()
 		{
 			return $this->identifier;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function setIdentifier($really = false)
 		{
 			$this->identifier = ($really === true);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaRelation
 		**/
@@ -199,35 +200,36 @@
 		{
 			return $this->relation;
 		}
-		
+
 		public function getRelationId()
 		{
-			if ($this->relation)
+			if ($this->relation) {
 				return $this->relation->getId();
-			
+            }
+
 			return null;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function setRelation(MetaRelation $relation)
 		{
 			$this->relation = $relation;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return MetaClassProperty
 		**/
 		public function setFetchStrategy(FetchStrategy $strategy)
 		{
 			$this->strategy = $strategy;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
@@ -235,49 +237,51 @@
 		{
 			return $this->strategy;
 		}
-		
+
 		public function getFetchStrategyId()
 		{
-			if ($this->strategy)
+			if ($this->strategy) {
 				return $this->strategy->getId();
-			elseif (
+			} elseif (
 				$this->getClass()->getFetchStrategyId()
 				&& ($this->getRelationId() == MetaRelation::ONE_TO_ONE)
 				&& ($this->getType() instanceof ObjectType)
 				&& (!$this->getType()->isGeneric())
-			)
+			) {
 				return $this->getClass()->getFetchStrategyId();
-			
+            }
+
 			return null;
 		}
-		
+
 		public function toMethods(
 			MetaClass $class,
 			MetaClassProperty $holder = null
-		)
-		{
+		) {
 			return $this->type->toMethods($class, $this, $holder);
 		}
-		
+
 		public function getRelationColumnName()
 		{
 			if ($this->type instanceof ObjectType && !$this->type->isGeneric()) {
-				if ($this->relation->getId() == MetaRelation::MANY_TO_MANY)
-					$columnName = $this->type->getClass()->getTableName().'_id';
-				else
-					$columnName = $this->getColumnName();
+				if ($this->relation->getId() == MetaRelation::MANY_TO_MANY) {
+					$columnName = $this->type->getClass()->getTableName() . '_id';
+				} else {
+$columnName = $this->getColumnName();
+                }
 			} elseif ($this->type instanceof InternalType) {
-				$out = array();
+				$out = [];
 				foreach ($this->type->getSuffixList() as $suffix) {
-					$out[] = $this->getColumnName().'_'.$suffix;
+					$out[] = $this->getColumnName() . '_' . $suffix;
 				}
 				return $out;
-			} else
-				$columnName = $this->getColumnName();
-			
+			} else {
+$columnName = $this->getColumnName();
+            }
+
 			return $columnName;
 		}
-		
+
 		public function toColumn()
 		{
 			if (
@@ -293,31 +297,31 @@
 					)
 				)
 			) {
-				$columns = array();
-				
+				$columns = [];
+
 				$prefix =
 					$this->getType() instanceof InternalType
-						? $this->getColumnName().'_'
+						? $this->getColumnName() . '_'
 						: null;
-				
+
 				$remote = $this->getType()->getClass();
-				
+
 				foreach ($remote->getAllProperties() as $property) {
 					$columns[] = $property->buildColumn(
-						$prefix.$property->getRelationColumnName()
+						$prefix . $property->getRelationColumnName()
 					);
 				}
-				
+
 				return $columns;
 			}
-			
+
 			return $this->buildColumn($this->getRelationColumnName());
 		}
-		
+
 		public function toLightProperty(MetaClass $holder)
 		{
 			$className = null;
-			
+
 			if (
 				($this->getRelationId() == MetaRelation::ONE_TO_MANY)
 				|| ($this->getRelationId() == MetaRelation::MANY_TO_MANY)
@@ -331,8 +335,9 @@
 				} elseif ($this->getType() instanceof StringType) {
 					$primitiveName = 'scalarIdentifier';
 					$className = $holder->getName();
-				} else
-					$primitiveName = $this->getType()->getPrimitiveName();
+				} else {
+$primitiveName = $this->getType()->getPrimitiveName();
+                }
 			} elseif (
 				!$this->isIdentifier()
 				&& !$this->getType()->isGeneric()
@@ -352,25 +357,29 @@
 						$primitiveName = 'integerIdentifier';
 					} elseif ($identifier->getType() instanceof StringType) {
 						$primitiveName = 'scalarIdentifier';
-					} else
-						$primitiveName = $this->getType()->getPrimitiveName();
-				} else 
-					$primitiveName = $this->getType()->getPrimitiveName();
-			} else
-				$primitiveName = $this->getType()->getPrimitiveName();
-			
+					} else {
+$primitiveName = $this->getType()->getPrimitiveName();
+                    }
+				} else {
+$primitiveName = $this->getType()->getPrimitiveName();
+                }
+			} else {
+$primitiveName = $this->getType()->getPrimitiveName();
+            }
+
 			$inner = false;
-			
+
 			if ($this->getType() instanceof ObjectType) {
 				$className = $this->getType()->getClassName();
-				
+
 				if (!$this->getType()->isGeneric()) {
 					$class = $this->getType()->getClass();
 					$pattern = $class->getPattern();
-					
-					if ($pattern instanceof InternalClassPattern)
+
+					if ($pattern instanceof InternalClassPattern) {
 						$className = $holder->getName();
-					
+                    }
+
 					if (
 						(
 							($pattern instanceof InternalClassPattern)
@@ -383,13 +392,13 @@
 					}
 				}
 			}
-			
+
 			$propertyClassName = (
 				$inner
 					? 'InnerMetaProperty'
 					: 'LightMetaProperty'
 			);
-			
+
 			if (
 				($this->getType() instanceof IntegerType)
 			) {
@@ -406,12 +415,12 @@
 			} else {
 				$size = null;
 			}
-			
+
 			return
 				call_user_func_array(
-					array($propertyClassName, 'fill'),
-					array(
-						new $propertyClassName,
+					[$propertyClassName, 'fill'],
+					[
+						new $propertyClassName(),
 						$this->getName(),
 						$this->getName() <> $this->getRelationColumnName()
 							? $this->getRelationColumnName()
@@ -424,22 +433,22 @@
 						$inner,
 						$this->getRelationId(),
 						$this->getFetchStrategyId()
-					)
+					]
 				);
 		}
 
 		private function buildColumn($columnName)
 		{
 			if (is_array($columnName)) {
-				$out = array();
-				
+				$out = [];
+
 				foreach ($columnName as $name) {
 					$out[] = $this->buildColumn($name);
 				}
-				
+
 				return $out;
 			}
-			
+
 			$column = <<<EOT
 addColumn(
 	DBColumn::create(
@@ -452,21 +461,21 @@ EOT;
 setNull(false)
 EOT;
 			}
-			
+
 			if ($this->size) {
 				$column .= <<<EOT
 ->
 setSize({$this->size})
 EOT;
 			}
-			
+
 			if ($this->type instanceof NumericType) {
 				$column .= <<<EOT
 ->
 setPrecision({$this->type->getPrecision()})
 EOT;
 			}
-			
+
 			$column .= <<<EOT
 ,
 '{$columnName}'
@@ -478,7 +487,7 @@ EOT;
 ->
 setPrimaryKey(true)
 EOT;
-				
+
 				if ($this->getType() instanceof IntegerType) {
 					$column .= <<<EOT
 ->
@@ -486,36 +495,36 @@ setAutoincrement(true)
 EOT;
 				}
 			}
-			
+
 			if ($this->type->hasDefault()) {
 				$default = $this->type->getDefault();
-				
+
 				if ($this->type instanceof BooleanType) {
-					if ($default)
+					if ($default) {
 						$default = 'true';
-					else
-						$default = 'false';
+					} else {
+$default = 'false';
+                    }
 				} elseif ($this->type instanceof StringType) {
 					$default = "'{$default}'";
 				}
-				
+
 				$column .= <<<EOT
 ->
 setDefault({$default})
 EOT;
 			}
-			
+
 			$column .= <<<EOT
 
 )
 EOT;
-			
+
 			return $column;
 		}
-		
+
 		private function toVarName($name)
 		{
-			return strtolower($name[0]).substr($name, 1);
+			return strtolower($name[0]) . substr($name, 1);
 		}
 	}
-?>

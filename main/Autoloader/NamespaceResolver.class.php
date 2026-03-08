@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -8,47 +9,47 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-	
+
 	interface NamespaceResolver
 	{
 		const DS = DIRECTORY_SEPARATOR;
-		
+
 		/**
 		 * @param string $path
 		 * @return NamespaceResolver
 		 */
 		public function addPath($path, $namespace = null);
-		
+
 		/**
 		 * @param array $path
 		 * @return NamespaceResolver
 		 */
 		public function addPaths(array $pathList, $namespace = null);
-		
+
 		/**
 		 * @return array
 		 */
 		public function getPaths();
-		
+
 		/**
 		 * @param string $classExtension
 		 * @return NamespaceResolver
 		 */
 		public function setClassExtension($classExtension);
-		
+
 		/**
 		 * @return string
 		 */
 		public function getClassExtension();
-		
+
 		/**
 		 * Return path to className or null if path not found
-		 * 
+		 *
 		 * @param string $className
 		 * @return string
 		 */
 		public function getClassPath($className);
-		
+
 		/**
 		 * Return special array numeric keys contains directories paths
 		 * and other keys (className keys) contains keys of directories
@@ -56,4 +57,3 @@
 		 */
 		public function getClassPathList();
 	}
-?>

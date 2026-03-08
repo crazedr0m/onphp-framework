@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -14,24 +15,24 @@
 	**/
 	abstract class BaseLocker extends Singleton
 	{
-		protected $pool = array();
-		
+		protected $pool = [];
+
 		/// acquire lock
 		abstract public function get($key);
-		
+
 		/// release lock
 		abstract public function free($key);
-		
+
 		/// completely remove lock
 		abstract public function drop($key);
-		
+
 		/// drop all acquired/released locks
 		public function clean()
 		{
-			foreach (array_keys($this->pool) as $key)
+			foreach (array_keys($this->pool) as $key) {
 				$this->drop($key);
-			
+            }
+
 			return true;
 		}
 	}
-?>

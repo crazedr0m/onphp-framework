@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -15,5 +16,7 @@
 	 * @ingroup Exceptions
 	 * @ingroup Module
 	**/
-	class DuplicateObjectException extends DatabaseException {/*_*/}
-?>
+	class DuplicateObjectException extends DatabaseException
+    {
+/*_*/
+    }

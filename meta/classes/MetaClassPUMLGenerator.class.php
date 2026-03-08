@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2013 by Evgeny V. Kokovikhin                            *
  *                                                                         *
@@ -13,38 +14,40 @@
 	{
 		public static function generate(MetaClass $class)
 		{
-			if (!$class->doBuild())
+			if (!$class->doBuild()) {
 				return null;
-			
+            }
+
 			$out = '';
-			
-			$out .= "class ".$class->getName();
-			
-			
+
+			$out .= "class " . $class->getName();
+
+
 			$out .= " {\n";
-			
-			
+
+
 			foreach ($class->getProperties() as $property) {
-				$out .= "+get".ucfirst($property->getName())."()\n";
+				$out .= "+get" . ucfirst($property->getName()) . "()\n";
 			}
-			
+
 			$out .= "}\n";
-			
-			if ($class->getParent())
-				$out .= $class->getParent()->getName()." <|-- ".$class->getName()."\n";
-			
+
+			if ($class->getParent()) {
+				$out .= $class->getParent()->getName() . " <|-- " . $class->getName() . "\n";
+            }
+
 			$out .= "\n";
-			
+
 			return $out;
 		}
-		
+
 		public static function generateLinks(array $classes)
 		{
-			$links = array();
-			
+			$links = [];
+
 			foreach ($classes as $class) {
 				Assert::isInstance($class, 'MetaClass');
-				
+
 				foreach ($class->getProperties() as $property) {
 					if (
 						$property->getType() instanceof ObjectType
@@ -56,29 +59,28 @@
 								$rel = ' -- ';
 
 								break;
-							
+
 							case MetaRelation::ONE_TO_MANY:
 								$rel = ' *-- ';
-								
+
 								break;
-							
+
 							case MetaRelation::MANY_TO_MANY:
 								$rel = ' *--* ';
-								
+
 								break;
 							default:
 								throw new WrongStateException();
 								break;
 						}
-						
-						$links[] = $class->getName().$rel.$property->getType()->getClassName()."\n";
-				
+
+						$links[] = $class->getName() . $rel . $property->getType()->getClassName() . "\n";
 					}
 				}
-				
+
 				$links = array_unique($links);
 			}
-			
-			return implode("", $links)."\n";
+
+			return implode("", $links) . "\n";
 		}
 	}

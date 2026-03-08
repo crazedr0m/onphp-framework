@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	final class JsonXssViewTest extends TestCase
 	{
-		protected $array = array('<foo>',"'bar'",'"baz"','&blong&');
+		protected $array = ['<foo>',"'bar'",'"baz"','&blong&'];
 
 		public function testMain()
 		{
@@ -19,25 +20,25 @@
 			$callback = 'name';
 
 			$model = Model::create()->set('array', $this->array);
-			$data = array('array' => $this->array);
+			$data = ['array' => $this->array];
 
 			//setup
 			$view = JsonXssView::create();
 
 			$defaultString = $view->toString($model);
 
-			$this->assertEquals($defaultString, $this->makeString($prefix, $callback, $data) );
+			$this->assertEquals($defaultString, $this->makeString($prefix, $callback, $data));
 
 
-			$prefix='window2.';
-			$callback='name2';
+			$prefix = 'window2.';
+			$callback = 'name2';
 
 			$view->setCallback($callback);
 			$view->setPrefix($prefix);
 
 			$customString = $view->toString($model);
 
-			$this->assertEquals($customString, $this->makeString($prefix, $callback, $data) );
+			$this->assertEquals($customString, $this->makeString($prefix, $callback, $data));
 		}
 
 		/**
@@ -47,11 +48,11 @@
 		 */
 		protected function makeString($prefix, $callback, $data)
 		{
-			return '<script type="text/javascript">'."\n".
-				"\t".$prefix.$callback.'=\''.
+			return '<script type="text/javascript">' . "\n" .
+				"\t" . $prefix . $callback . '=\'' .
 				str_ireplace(
-					array('u0022', 'u0027'),
-					array('\u0022', '\u0027'),
+					['u0022', 'u0027'],
+					['\u0022', '\u0027'],
 					json_encode(
 						$data,
 						JSON_HEX_AMP |
@@ -59,11 +60,8 @@
 						JSON_HEX_QUOT |
 						JSON_HEX_TAG
 					)
-				).
-				'\';'."\n".
-				'</script>'."\n";
+				) .
+				'\';' . "\n" .
+				'</script>' . "\n";
 		}
-
-	}
-
-?>
+    }

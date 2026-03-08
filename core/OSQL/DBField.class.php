@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2008 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Reference for actual DB-table column.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
@@ -19,15 +20,16 @@
 	{
 		private $field	= null;
 		private $table	= null;
-		
+
 		public function __construct($field, $table = null)
 		{
 			$this->field = $field;
-			
-			if ($table)
+
+			if ($table) {
 				$this->setTable($table);
+            }
 		}
-		
+
 		/**
 		 * @return DBField
 		**/
@@ -35,28 +37,28 @@
 		{
 			return new self($field, $table);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$field =
 				(
 					$this->table
-						? $this->table->toDialectString($dialect).'.'
+						? $this->table->toDialectString($dialect) . '.'
 						: null
 				)
-				.$dialect->quoteField($this->field);
-			
+				. $dialect->quoteField($this->field);
+
 			return
 				$this->cast
 					? $dialect->toCasted($field, $this->cast)
 					: $field;
 		}
-		
+
 		public function getField()
 		{
 			return $this->field;
 		}
-		
+
 		/**
 		 * @return DialectString
 		**/
@@ -64,24 +66,25 @@
 		{
 			return $this->table;
 		}
-		
+
 		/**
 		 * @throws WrongStateException
 		 * @return DBField
 		**/
 		public function setTable($table)
 		{
-			if ($this->table !== null)
+			if ($this->table !== null) {
 				throw new WrongStateException(
 					'you should not override setted table'
 				);
-			
-			if (!$table instanceof DialectString)
+            }
+
+			if (!$table instanceof DialectString) {
 				$this->table = new FromTable($table);
-			else
-				$this->table = $table;
-			
+			} else {
+$this->table = $table;
+            }
+
 			return $this;
 		}
 	}
-?>

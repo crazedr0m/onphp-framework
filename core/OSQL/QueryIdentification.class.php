@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -24,15 +25,14 @@
 		{
 			return sha1($this->toString());
 		}
-		
+
 		final public function setId($id)
 		{
 			throw new UnsupportedMethodException();
 		}
-		
+
 		public function toString()
 		{
 			return $this->toDialectString(ImaginaryDialect::me());
 		}
 	}
-?>

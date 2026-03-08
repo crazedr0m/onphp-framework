@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -19,13 +20,13 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		protected static function checkExpression(OqlQueryExpression $expression)
 		{
-			if (!$expression instanceof OqlInExpression)
+			if (!$expression instanceof OqlInExpression) {
 				Assert::isInstance($expression->getClassName(), 'LogicalObject');
+            }
 		}
 	}
-?>

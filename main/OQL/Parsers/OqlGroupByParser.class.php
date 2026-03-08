@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -12,15 +13,15 @@
 	final class OqlGroupByParser extends OqlParser
 	{
 		const CLASS_NAME = 'GroupByPropertyProjection';
-		
+
 		/**
 		 * @return OqlGroupByParser
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return OqlProjectionClause
 		**/
@@ -28,23 +29,22 @@
 		{
 			return OqlProjectionClause::create();
 		}
-		
+
 		protected function handleState()
 		{
 			if ($this->state == self::INITIAL_STATE) {
 				$list = $this->getCommaSeparatedList(
-					array($this, 'getLogicExpression'),
+					[$this, 'getLogicExpression'],
 					"expecting expression in 'group by' clause"
 				);
-				
+
 				foreach ($list as $argument) {
 					$this->oqlObject->add(
 						$this->makeQueryExpression(self::CLASS_NAME, $argument)
 					);
 				}
 			}
-			
+
 			return self::FINAL_STATE;
 		}
 	}
-?>

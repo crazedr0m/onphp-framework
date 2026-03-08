@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -16,4 +17,3 @@
 	{
 		public function getBytes($numberOfBytes);
 	}
-?>

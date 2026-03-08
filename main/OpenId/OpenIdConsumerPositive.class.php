@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -15,12 +16,12 @@
 	final class OpenIdConsumerPositive implements OpenIdConsumerResult
 	{
 		private $identity = null;
-		
+
 		public function __construct(HttpUrl $identity)
 		{
 			$this->identity = $identity;
 		}
-		
+
 		/**
 		 * @return HttpUrl
 		**/
@@ -28,10 +29,9 @@
 		{
 			return $this->identity;
 		}
-		
+
 		public function isOk()
 		{
 			return true;
 		}
 	}
-?>

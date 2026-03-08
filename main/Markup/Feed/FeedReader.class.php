@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry E. Pismenny, Dmitry A. Lomash            *
  *                                                                         *
@@ -15,23 +16,23 @@
 	final class FeedReader
 	{
 		private $xml			= null;
-		private $formats		= array();
-		
+		private $formats		= [];
+
 		/**
 		 * @return FeedReader
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			$this->formats[] = YandexRssFeedFormat::me();
 			$this->formats[] = AtomFeedFormat::me();
 			$this->formats[] = RssFeedFormat::me();
 		}
-		
+
 		/**
 		 * @return SimpleXMLElement
 		**/
@@ -39,7 +40,7 @@
 		{
 			return $this->xml;
 		}
-		
+
 		/**
 		 * @return FeedChannel
 		**/
@@ -49,38 +50,40 @@
 				$this->xml = simplexml_load_file($file);
 			} catch (BaseException $e) {
 				throw new WrongArgumentException(
-					'Invalid link or content: '.$e->getMessage()
+					'Invalid link or content: ' . $e->getMessage()
 				);
 			}
-			
-			if (!$this->xml)
+
+			if (!$this->xml) {
 				throw new WrongStateException('simplexml_load_file failed.');
-			
+            }
+
 			return $this->parse();
 		}
-		
+
 		/**
 		 * @return FeedReader
 		**/
 		public function parseXml($xml)
 		{
 			$this->xml = new SimpleXMLElement($xml);
-			
+
 			return $this->parse();
 		}
-		
+
 		/**
 		 * @return FeedChannel
 		**/
 		private function parse()
 		{
-			foreach ($this->formats as $format)
-				if ($format->isAcceptable($this->xml))
+			foreach ($this->formats as $format) {
+				if ($format->isAcceptable($this->xml)) {
 					return $format->parse($this->xml);
-			
+                }
+            }
+
 			throw new WrongStateException(
 				'you\'re using unsupported format of feed'
 			);
 		}
 	}
-?>

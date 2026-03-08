@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) by Evgeny M. Stepanov                                   *
  *                                                                         *
@@ -13,14 +14,14 @@
 	{
 		public function testRun()
 		{
-			$array = array(
+			$array = [
 				'1' => 'qqer',
 				'f' => 'qs34$9&)_@+#qer',
 				'null' => null
-			);
+			];
 
 			$test = Hstore::make($array);
-			$test2= Hstore::create($test->toString());
+			$test2 = Hstore::create($test->toString());
 
 			$this->assertEquals($test->toString(), $test2->toString());
 

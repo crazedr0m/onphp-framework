@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -20,7 +21,7 @@
 					add($factory->makeNumber(2))->
 					toString()
 			);
-			
+
 			$this->assertEquals(
 				'281470681743360',
 				$factory->
@@ -28,7 +29,7 @@
 					subtract($factory->makeNumber('4294967296'))->
 					toString()
 			);
-			
+
 			$this->assertEquals(
 				'281470681743360',
 				$factory->
@@ -41,8 +42,8 @@
 					)->
 					toString()
 			);
-			
-			$binaryConversions = array(
+
+			$binaryConversions = [
 				"\x00"			=> '0',
 				"\x01"			=> '1',
 				"\x7F"			=> '127',
@@ -50,8 +51,8 @@
 				"\x00\x81"		=> '129',
 				"\x00\xFF"		=> '255',
 				"\x00\x80\x00"	=> '32768'
-			);
-			
+			];
+
 			foreach ($binaryConversions as $binary => $string) {
 				$this->assertEquals(
 					$factory->makeFromBinary($binary)->toString(),
@@ -62,7 +63,7 @@
 					$binary
 				);
 			}
-			
+
 			$this->assertTrue(
 				is_float($factory->makeNumber('1')->floatValue())
 			);
@@ -85,7 +86,7 @@
 				is_float($factory->makeNumber('1234567')->floatValue())
 			);
 		}
-		
+
 		public function runRandomTest(BigNumberFactory $factory, RandomSource $source)
 		{
 			$this->assertNotEquals(
@@ -94,7 +95,7 @@
 					cmp($factory->makeRandom(100, $source)),
 				0
 			);
-			
+
 			$this->assertNotEquals(
 				$factory->
 					makeRandom('123456789012345678901234567890', $source)->
@@ -107,7 +108,7 @@
 				0
 			);
 		}
-		
+
 		/* void */ public function testGmp()
 		{
 			if (!extension_loaded('gmp')) {
@@ -117,23 +118,23 @@
 					return $this->markTestSkipped('gmp module not available');
 				}
 			}
-			
+
 			$this->runMathTest(GmpBigIntegerFactory::me());
 		}
-		
+
 		public function runRandomSourceTest(RandomSource $source)
 		{
 			$this->assertNotEquals($source->getBytes(2), $source->getBytes(2));
 			$this->assertNotEquals($source->getBytes(10), $source->getBytes(10));
 			$this->assertNotEquals($source->getBytes(256), $source->getBytes(256));
 		}
-		
+
 		public function testRandomSource()
 		{
 			$this->runRandomSourceTest(MtRandomSource::me());
-			
-			if (file_exists('/dev/urandom') && is_readable('/dev/urandom'))
+
+			if (file_exists('/dev/urandom') && is_readable('/dev/urandom')) {
 				$this->runRandomSourceTest(new FileRandomSource('/dev/urandom'));
+            }
 		}
 	}
-?>

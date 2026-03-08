@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -21,7 +22,7 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return AtomChannelWorker
 		**/
@@ -29,7 +30,7 @@
 		{
 			return AtomChannelWorker::me();
 		}
-		
+
 		/**
 		 * @return AtomItemWorker
 		**/
@@ -37,10 +38,9 @@
 		{
 			return AtomItemWorker::me();
 		}
-		
+
 		public function isAcceptable(SimpleXMLElement $xmlFeed)
 		{
 			return ($xmlFeed->getName() == 'feed');
 		}
 	}
-?>

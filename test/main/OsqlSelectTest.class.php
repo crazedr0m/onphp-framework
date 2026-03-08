@@ -1,11 +1,11 @@
 <?php
-	
+
 	final class OsqlSelectTest extends TestCaseDB
 	{
 		public function testSelectGet()
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$query = OSQL::select()->
 				from('test_table')->
 				get(DBField::create('field1', 'test_table'), 'alias1')->
@@ -14,7 +14,8 @@
 				get('field4')->
 				get(
 					SQLFunction::create(
-						'count', DBField::create('field5', 'test_table')
+						'count',
+                        DBField::create('field5', 'test_table')
 					)->
 					setAggregateDistinct()->
 					setAlias('alias5')
@@ -30,24 +31,24 @@
 						noBrackets()
 					)
 				);
-			
+
 			$this->assertEquals(
 				$query->toDialectString($dialect),
 				'SELECT '
-					.'"test_table"."field1" AS "alias1", '
-					.'"test_table"."field2", '
-					.'"test_table"."field3" AS "alias3", '
-					.'"test_table"."field4", '
-					.'count(DISTINCT "test_table"."field5") AS "alias5", '
-					.'substring("test_table"."field6" from \'a..b\') '
-				.'FROM "test_table"'
+					. '"test_table"."field1" AS "alias1", '
+					. '"test_table"."field2", '
+					. '"test_table"."field3" AS "alias3", '
+					. '"test_table"."field4", '
+					. 'count(DISTINCT "test_table"."field5") AS "alias5", '
+					. 'substring("test_table"."field6" from \'a..b\') '
+				. 'FROM "test_table"'
 			);
 		}
-		
+
 		public function testSelectSubqueryGet()
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$query = OSQL::select()->
 				from('test_table')->
 				get('field1')->
@@ -57,13 +58,13 @@
 						setName('foo1')->
 						get('id')
 				);
-			
+
 			$this->assertEquals(
 				$query->toDialectString($dialect),
 				'SELECT '
-					.'"test_table"."field1", '
-					.'(SELECT "test_table1"."id" FROM "test_table1") AS "foo1" '
-				.'FROM "test_table"'
+					. '"test_table"."field1", '
+					. '(SELECT "test_table1"."id" FROM "test_table1") AS "foo1" '
+				. 'FROM "test_table"'
 			);
 		}
 
@@ -71,12 +72,12 @@
 		{
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
 
-			$joinTypeList = array(
+			$joinTypeList = [
 				'JOIN ' => 'join',
 				'LEFT JOIN ' => 'leftJoin',
 				'RIGHT JOIN ' => 'rightJoin',
 				'FULL OUTER JOIN ' => 'fullOuterJoin'
-			);
+			];
 
 			$joinExpression =
 				Expression::eq(
@@ -86,9 +87,9 @@
 
 			$baseRawQuery =
 					'SELECT '
-						.'"table1"."field1", '
-						.'"table2"."field2" '
-					.'FROM "table1" ';
+						. '"table1"."field1", '
+						. '"table2"."field2" '
+					. 'FROM "table1" ';
 
 
 			foreach ($joinTypeList as $sqlJoin => $method) {
@@ -97,8 +98,8 @@
 
 				$rawQuery =
 					$baseRawQuery
-					.$sqlJoin
-					.'"table2" ON ("table1"."joinField" = "table2"."joinField")';
+					. $sqlJoin
+					. '"table2" ON ("table1"."joinField" = "table2"."joinField")';
 
 				$this->assertEquals(
 					$rawQuery,
@@ -114,9 +115,9 @@
 
 				$rawQuery =
 					$baseRawQuery
-					.$sqlJoin
-					.'"table2" AS "table2" '
-					.'ON ("table1"."joinField" = "table2"."joinField")';
+					. $sqlJoin
+					. '"table2" AS "table2" '
+					. 'ON ("table1"."joinField" = "table2"."joinField")';
 
 				$this->assertEquals(
 					$rawQuery,
@@ -133,6 +134,4 @@
 				get(DBField::create('field1', 'table1'))->
 				get(DBField::create('field2', 'table2'));
 		}
-
-	}
-?>
+    }

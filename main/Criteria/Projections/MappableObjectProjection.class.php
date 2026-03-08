@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -16,13 +17,13 @@
 	{
 		private $mappable	= null;
 		private $alias		= null;
-		
+
 		public function __construct(MappableObject $mappable, $alias = null)
 		{
 			$this->mappable = $mappable;
 			$this->alias = $alias;
 		}
-		
+
 		/**
 		 * @return JoinCapableQuery
 		**/
@@ -34,4 +35,3 @@
 			);
 		}
 	}
-?>

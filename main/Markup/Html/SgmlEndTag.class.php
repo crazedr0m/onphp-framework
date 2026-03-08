@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -20,7 +21,6 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
 	}
-?>

@@ -1,5 +1,5 @@
 <?php
-	
+
 	final class OqlSelectTest extends TestCaseDB
 	{
 		public function testProperty()
@@ -19,9 +19,9 @@
 				// aggregate functions, distinct, aliases, properties
 				assertCriteria(
 					'avg(id), count(city.id) as count, '
-					.'count(distinct city.id) as distinctCount, '
-					.'sum(id), min(id), max(id), city.Name as cityName, '
-					.'distinct id, city, min from TestUser',
+					. 'count(distinct city.id) as distinctCount, '
+					. 'sum(id), min(id), max(id), city.Name as cityName, '
+					. 'distinct id, city, min from TestUser',
 					Criteria::create(TestUser::dao())->
 						setDistinct(true)->
 						setProjection(
@@ -41,7 +41,7 @@
 				// arithmetic expression in aggregate function
 				assertCriteria(
 					'avg(-id - -1 / -$1), avg((10-id) * -($1+-2.1)), avg(10) as ten '
-					.'from TestUser',
+					. 'from TestUser',
 					Criteria::create(TestUser::dao())->
 						setProjection(
 							Projection::chain()->
@@ -65,12 +65,12 @@
 								)->
 								add(Projection::avg(10, 'ten'))
 						),
-					array(1 => 10)
+					[1 => 10]
 				)->
 				// boolean and arithmetic expressions in count function
 				assertCriteria(
 					'count(distinct -id * 2 / -3 > 10), count(id in (1, -$1, -3) and Name like `test`)'
-					.'from TestUser',
+					. 'from TestUser',
 					Criteria::create(TestUser::dao())->
 						setProjection(
 							Projection::chain()->
@@ -91,18 +91,18 @@
 								add(
 									Projection::count(
 										Expression::expAnd(
-											Expression::in('id', array(1, -2, -3)),
+											Expression::in('id', [1, -2, -3]),
 											Expression::like('Name', 'test')
 										)
 									)
 								)
 						),
-					array(1 => 2)
+					[1 => 2]
 				)->
 				// boolean and arithmetic expressions as property
 				assertCriteria(
 					'(id > 10) and (20 > id) as inInterval, ((2*id + 1) / id), -id '
-					.'from TestUser',
+					. 'from TestUser',
 					Criteria::create(TestUser::dao())->
 						setProjection(
 							Projection::chain()->
@@ -134,12 +134,12 @@
 						)
 				);
 		}
-		
+
 		public function testWhere()
 		{
 			$userId = 1;
 			$user = TestUser::create()->setId($userId);
-			
+
 			$this->
 				// bindings, operator chain
 				assertCriteria(
@@ -157,10 +157,10 @@
 								Expression::eq($userId, $userId)
 							)
 						),
-					array(
+					[
 						1 => $user,
 						2 => $userId
-					)
+					]
 				)->
 				// comparison operators
 				assertCriteria(
@@ -185,7 +185,7 @@
 				// priority
 				assertCriteria(
 					'from TestUser where id = 1 and Name = "some" '
-					.'or Name = "any" or id = 1 > 2 = id * 2 + 1',
+					. 'or Name = "any" or id = 1 > 2 = id * 2 + 1',
 					Criteria::create(TestUser::dao())->
 						add(
 							Expression::expOr(
@@ -293,11 +293,11 @@
 					Criteria::create(TestUser::dao())->
 						add(
 							Expression::expOr(
-								Expression::in('id', array(1)),
-								Expression::notIn('id', array(1, '2', true, true))
+								Expression::in('id', [1]),
+								Expression::notIn('id', [1, '2', true, true])
 							)
 						),
-					array(1 => true)
+					[1 => true]
 				)->
 				// in subquery
 				assertCriteria(
@@ -310,9 +310,9 @@
 									setProjection(Projection::property('id'))
 							)
 						),
-					array(
+					[
 						1 => OQL::select('id from TestUser')->toCriteria()
-					)
+					]
 				)->
 				// in array
 				assertCriteria(
@@ -321,18 +321,18 @@
 						add(
 							Expression::in(
 								'id',
-								array(1, 2)
+								[1, 2]
 							)
 						),
-					array(
-						1 => array(1, 2)
-					)
+					[
+						1 => [1, 2]
+					]
 				)->
 				// [not] (like|ilike|similar to)
 				assertCriteria(
 					'from TestUser where id like $1 or id not like "Ы%" '
-					.'or id ilike $2 or id not ilike "ы%" '
-					.'or Name similar to "s" or Name not similar to $3',
+					. 'or id ilike $2 or id not ilike "ы%" '
+					. 'or Name similar to "s" or Name not similar to $3',
 					Criteria::create(TestUser::dao())->
 						add(
 							Expression::expOr(
@@ -352,16 +352,16 @@
 								Expression::notSimilar('Name', 'S')
 							)
 						),
-					array(
+					[
 						1 => 'ы',
 						2 => 'Ы',
 						3 => 'S'
-					)
+					]
 				)->
 				// between
 				assertCriteria(
 					'from TestUser where created between "2008-08-06 10:00" and $1 '
-					.'or id between id and 10',
+					. 'or id between id and 10',
 					Criteria::create(TestUser::dao())->
 						add(
 							Expression::expOr(
@@ -373,7 +373,7 @@
 								Expression::between('id', 'id', 10)
 							)
 						),
-					array(1 => SQLFunction::create('now'))
+					[1 => SQLFunction::create('now')]
 				)->
 				// arithmetic expression
 				assertCriteria(
@@ -394,10 +394,10 @@
 								'id'
 							)
 						),
-					array(1 => 'id')
+					[1 => 'id']
 				);
 		}
-		
+
 		public function testGroupBy()
 		{
 			$this->
@@ -464,14 +464,14 @@
 									)
 								)
 						),
-					array(
+					[
 						1 => 'id',
 						2 => SQLFunction::create('rand'),
-						3 => 10 
-					)
+						3 => 10
+					]
 				);
 		}
-		
+
 		public function testOrderBy()
 		{
 			$this->
@@ -524,10 +524,10 @@
 									asc()
 								)
 						),
-					array(1 => SQLFunction::create('rand'))
+					[1 => SQLFunction::create('rand')]
 				);
 		}
-		
+
 		public function testHaving()
 		{
 			$this->
@@ -552,7 +552,7 @@
 								)
 							)
 						),
-					array(1 => 'id')
+					[1 => 'id']
 				)->
 				// complex boolean expressions
 				assertCriteria(
@@ -582,10 +582,10 @@
 								)
 							)
 						),
-					array(1 => SQLFunction::create('count', 'id'))
+					[1 => SQLFunction::create('count', 'id')]
 				);
 		}
-		
+
 		public function testLimitOffset()
 		{
 			$this->
@@ -598,7 +598,7 @@
 					'from TestUser limit $1',
 					Criteria::create(TestUser::dao())->
 						setLimit(31),
-					array(1 => 31)
+					[1 => 31]
 				)->
 				assertCriteria(
 					'from TestUser limit 10 offset 0',
@@ -611,32 +611,33 @@
 					Criteria::create(TestUser::dao())->
 						setLimit(10)->
 						setOffset(31),
-					array(1 => 10, 2 => 31)
+					[1 => 10, 2 => 31]
 				);
 		}
-		
+
 		public function testBind()
 		{
 			$user = TestUser::create()->setId(1);
-			
-			$bindingsList = array(
+
+			$bindingsList = [
 				// number
-				array(1 => 1.123),
+				[1 => 1.123],
 				// signed number
-				array(1 => -1),
+				[1 => -1],
 				// string
-				array(1 => 'test'),
+				[1 => 'test'],
 				// Identifiable object
-				array(1 => $user),
+				[1 => $user],
 				// DialectString object
-				array(1 => SQLFunction::create('rand'))
-			);
-			
+				[1 => SQLFunction::create('rand')]
+			];
+
 			foreach ($bindingsList as $bindings) {
 				$value = $bindings[1];
-				if ($value instanceof Identifiable)
+				if ($value instanceof Identifiable) {
 					$value = $value->getId();
-				
+                }
+
 				$this->
 					// in property list
 					assertCriteria(
@@ -665,19 +666,19 @@
 							),
 						$bindings
 					);
-				
+
 				// in 'in' expression
 				if (is_scalar($value)) {
 					$this->assertCriteria(
 						'from TestUser where id in (1, $1)',
 						Criteria::create(TestUser::dao())->
 							add(
-								Expression::in('id', array(1, $value))
+								Expression::in('id', [1, $value])
 							),
 						$bindings
 					);
 				}
-				
+
 				$this->
 					// in order by expression
 					assertCriteria(
@@ -710,8 +711,8 @@
 							),
 						$bindings
 					);
-					
-				if (is_integer($value) && $value >= 0)
+
+				if (is_integer($value) && $value >= 0) {
 					$this->
 						// in limit expression
 						assertCriteria(
@@ -727,9 +728,10 @@
 								setOffset($value),
 							$bindings
 						);
+                }
 			}
 		}
-		
+
 		public function testBindNext()
 		{
 			$this->assertEquals(
@@ -737,14 +739,13 @@
 				bind(1, 'bar')->
 				bind(2, 'foo')->
 				bind(3, 'boo'),
-				
 				OQL::select('from TestCity where foo = $1 and $2 = $3')->
 				bindNext('bar')->
 				bindNext('foo')->
 				bindNext('boo')
 			);
 		}
-		
+
 		public function testQuery()
 		{
 			$criteria = Criteria::create(TestUser::dao())->
@@ -754,7 +755,7 @@
 				add(
 					Expression::isTrue('id')
 				);
-			
+
 			$this->
 				// property and where
 				assertCriteria(
@@ -817,7 +818,7 @@
 						)
 				);
 		}
-		
+
 		public function testSyntaxError()
 		{
 			$this->
@@ -926,27 +927,28 @@
 					"expecting 'offset' expression"
 				);
 		}
-		
+
 		/**
 		 * @return OqlSelectTest
 		**/
 		private function assertCriteria($query, Criteria $criteria, $bindings = null)
 		{
 			$oqlQuery = OQL::select($query);
-			
-			if (is_array($bindings))
+
+			if (is_array($bindings)) {
 				$oqlQuery->bindAll($bindings);
-			
+            }
+
 			$dialect = $this->getDbByType('PgSQL')->getDialect();
-			
+
 			$this->assertEquals(
 				$oqlQuery->toCriteria()->toDialectString($dialect),
 				$criteria->toDialectString($dialect)
 			);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OqlSelectTest
 		**/
@@ -954,12 +956,10 @@
 		{
 			try {
 				OQL::select($query);
-				
 			} catch (SyntaxErrorException $e) {
 				$this->assertEquals($e->getMessage(), $message);
 			}
-			
+
 			return $this;
 		}
 	}
-?>

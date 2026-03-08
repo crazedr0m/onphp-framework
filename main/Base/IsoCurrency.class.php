@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Dmitry E. Pismenny                         *
  *                                                                         *
@@ -26,8 +27,8 @@
 		const SEK	= 752;
 		const NOK	= 578;
 		const KGS	= 417;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::RUB	=> 'Russian Ruble',
 			self::USD	=> 'US Dollar',
 			self::EUR	=> 'Euro',
@@ -43,9 +44,9 @@
 			self::SEK 	=> 'Swedish Krona',
 			self::NOK 	=> 'Norwegian Krone',
 			self::KGS 	=> 'Som'
-		);
-		
-		protected $signs = array(
+		];
+
+		protected $signs = [
 			self::RUB	=> 'руб.',
 			self::USD	=> '$',
 			self::EUR	=> '€',
@@ -61,8 +62,8 @@
 			self::SEK 	=> 'SEK',
 			self::NOK 	=> 'NOK',
 			self::KGS 	=> 'KGS'
-		);
-		
+		];
+
 		/**
 		 * @return Currency
 		**/
@@ -70,15 +71,14 @@
 		{
 			return new self($id);
 		}
-		
+
 		public static function getAnyId()
 		{
 			return self::RUB;
 		}
-		
+
 		public function getSign()
 		{
 			return $this->signs[$this->id];
 		}
 	}
-?>

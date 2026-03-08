@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -12,15 +13,15 @@
 	final class OqlHavingParser extends OqlParser
 	{
 		const CLASS_NAME = 'HavingProjection';
-		
+
 		/**
 		 * @return OqlHavingParser
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return OqlHavingClause
 		**/
@@ -28,7 +29,7 @@
 		{
 			return OqlHavingClause::create();
 		}
-		
+
 		protected function handleState()
 		{
 			if ($this->state == self::INITIAL_STATE) {
@@ -36,12 +37,11 @@
 					$this->oqlObject->setExpression(
 						$this->makeQueryExpression(self::CLASS_NAME, $argument)
 					);
-				
-				} else
-					$this->error("expecting 'having' expression");
+				} else {
+$this->error("expecting 'having' expression");
+                }
 			}
-			
+
 			return self::FINAL_STATE;
 		}
 	}
-?>

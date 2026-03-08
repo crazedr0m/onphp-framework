@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -92,33 +93,33 @@
 		 * cluster master-slave of 2 nodes on single machine
 		 */
 		const PORT_MIRRORED = 5673; // port of slave node
-		
-		protected static $queueList = array(
+
+		protected static $queueList = [
 			// basic queue
-			'basic' => array(
+			'basic' => [
 				'exchange' => 'AMQPPeclTestExchange',
 				'exchangeType' => AMQPExchangeType::DIRECT,
 				'name' => 'AMQPPeclTestQueue',
 				'key' => 'routing.key',
-				'args' => array()
-			),
+				'args' => []
+			],
 			// exchange2exchange binding
-			'exchangeBinded' => array(
+			'exchangeBinded' => [
 				'exchange' => 'AMQPPeclTestExchangeBinded',
 				'exchangeType' => AMQPExchangeType::FANOUT,
 				'name' => 'AMQPPeclTestQueueBinded',
 				'key' => 'routing.key.binded',
-				'args' => array()
-			),
+				'args' => []
+			],
 			// Highly Available Queues
-			'mirrored' => array(
+			'mirrored' => [
 				'exchange' => 'AMQPPeclTestExchange',
 				'exchangeType' => AMQPExchangeType::DIRECT,
 				'name' => 'AMQPPeclTestQueueMirrored',
 				'key' => 'routing.key.mirrored',
-				'args' => array('x-ha-policy' => 'all')
-			)
-		);
+				'args' => ['x-ha-policy' => 'all']
+			]
+		];
 
 		protected function setUp()
 		{
@@ -140,8 +141,10 @@
 		 * @param string $label
 		 * @param int $value
 		 */
-		public static function checkMessageCount(AMQPChannelInterface $channel,
-			$label = 'basic', $value = self::COUNT_OF_PUBLISH
+		public static function checkMessageCount(
+            AMQPChannelInterface $channel,
+			$label = 'basic',
+            $value = self::COUNT_OF_PUBLISH
 		) {
 			usleep(self::MESSAGE_COUNT_WAIT);
 
@@ -165,15 +168,14 @@
 				$c = new AMQPPecl(
 					AMQPCredentials::createDefault()
 				);
-				
+
 				$this->assertInstanceOf('AMQP', $c->connect());
 				$this->assertTrue($c->isConnected());
-				
 			} catch (Exception $e) {
 				$this->fail($e->getMessage());
 			}
 		}
-		
+
 		public function testCustomConnection()
 		{
 			try {
@@ -185,10 +187,9 @@
 						setPassword('guest')->
 						setVirtualHost('/')
 				);
-				
+
 				$this->assertInstanceOf('AMQP', $c->connect());
 				$this->assertTrue($c->isConnected());
-				
 			} catch (Exception $e) {
 				$this->fail($e->getMessage());
 			}
@@ -223,7 +224,6 @@
 
 				$c->getChannel(1);
 				$this->fail("Channel was't dropped");
-
 			} catch (MissingElementException $e) {
 				//ok
 			}
@@ -256,7 +256,6 @@
 				$int = $this->queueDeclare($channel, 'basic');
 
 				$this->assertSame($int, 0);
-
 			} catch (Exception $e) {
 				$this->fail($e->getMessage());
 			}
@@ -275,7 +274,6 @@
 			$this->queueBind($channel, 'basic');
 			$this->queuePurge($channel, 'basic');
 			$this->publishMessages($channel);
-
 		}
 
 		/**
@@ -298,11 +296,11 @@
 				);
 				self::messageTest($mess, $j);
 			}
-			
+
 			$this->assertSame(self::COUNT_OF_PUBLISH, $j - 1);
-			
+
 			$this->checkMessageCount($channel, 'basic', 0);
-			
+
 			$c->disconnect();
 		}
 
@@ -321,8 +319,9 @@
 
 			$i = 0;
 			try {
-				while($mess = $channel->basicGet(self::$queueList['basic']['name']))
+				while ($mess = $channel->basicGet(self::$queueList['basic']['name'])) {
 					self::messageTest($mess, ++$i);
+                }
 			} catch (ObjectNotFoundException $e) {
 				//it's ok, because queue is empty
 				$this->assertSame(self::COUNT_OF_PUBLISH, $i);
@@ -386,7 +385,7 @@
 				setCurrent('slave');
 
 			$channel = $c->createChannel(1);
-			
+
 			$this->exchangeDeclare($channel, 'mirrored');
 			$this->queueDeclare($channel, 'mirrored');
 			$this->queueBind($channel, 'mirrored');
@@ -407,7 +406,6 @@
 			);
 
 			$this->checkMessageCount($channel, 'mirrored');
-
 		}
 
 		/**
@@ -432,23 +430,25 @@
 				setCurrent('slave');
 
 			$c->dropLink('slave');
-			
+
 			$channel = $c->createChannel(1);
-			
+
 			$this->checkMessageCount($channel, 'mirrored');
 
 			$i = 0;
 			try {
-				while($mess = $channel->basicGet(self::$queueList['mirrored']['name']))
+				while ($mess = $channel->basicGet(self::$queueList['mirrored']['name'])) {
 					self::messageTest($mess, ++$i);
-			} catch (ObjectNotFoundException $e) {/**/}
+                }
+			} catch (ObjectNotFoundException $e) {
+/**/
+            }
 			$this->assertSame(self::COUNT_OF_PUBLISH, $i);
 
 			AMQPPeclTest::assertEquals(
 				AMQPCredentials::DEFAULT_PORT,
 				$c->getCredentials()->getPort()
 			);
-				
 		}
 
 		public function testCleanup()
@@ -459,7 +459,7 @@
 
 			$channel = $c->createChannel(1);
 
-			foreach (array('basic', 'mirrored') as $label) {
+			foreach (['basic', 'mirrored'] as $label) {
 				$this->exchangeDeclare($channel, $label);
 				$this->queueDeclare($channel, $label);
 				$this->queueBind($channel, $label);
@@ -549,11 +549,11 @@
 			$this->assertSame(0, $inQueueCount);
 		}
 
-		
+
 		public function testExchangeToExchangeProducerLogic()
 		{
 			$this->exchangeToExchangeCleanup();
-			
+
 			$c = new AMQPPecl(
 				AMQPCredentials::createDefault()
 			);
@@ -584,7 +584,7 @@
 			 * publish messages to 2 queues throw exchangeBinded-exchange
 			 * with basic-key
 			 */
-			for($i = 1; $i <= self::COUNT_OF_PUBLISH; $i++) {
+			for ($i = 1; $i <= self::COUNT_OF_PUBLISH; $i++) {
 				$channelInterface = $channel->basicPublish(
 					self::$queueList['exchangeBinded']['exchange'],
 					self::$queueList['basic']['key'],
@@ -620,22 +620,25 @@
 
 			$channel = $c->createChannel(1);
 
-			$names = array(
+			$names = [
 				self::$queueList['basic']['name'],
 				self::$queueList['exchangeBinded']['name']
-			);
+			];
 			foreach ($names as $name) {
 				$i = 0;
 				try {
-					while($mess = $channel->basicGet($name)) 
+					while ($mess = $channel->basicGet($name)) {
 						self::messageTest($mess, ++$i);
-				} catch (ObjectNotFoundException $e) {/**/}
-				
+                    }
+				} catch (ObjectNotFoundException $e) {
+/**/
+                }
+
 				$this->assertSame(
 					self::COUNT_OF_PUBLISH,
 					$i,
 					"message count={$i} in {$name}-queue, must be equal to "
-						.self::COUNT_OF_PUBLISH
+						. self::COUNT_OF_PUBLISH
 				);
 			}
 		}
@@ -691,10 +694,12 @@
 		 * @param string $key
 		 * @param string $queueName
 		 */
-		protected function publishMessages(AMQPChannelInterface $channel, $check = true,
+		protected function publishMessages(
+            AMQPChannelInterface $channel,
+            $check = true,
 			$label = 'basic'
 		) {
-			for($i = 1; $i <= self::COUNT_OF_PUBLISH; $i++) {
+			for ($i = 1; $i <= self::COUNT_OF_PUBLISH; $i++) {
 				$channelInterface = $channel->basicPublish(
 					self::$queueList[$label]['exchange'],
 					self::$queueList[$label]['key'],
@@ -706,15 +711,17 @@
 						setContentEncoding('utf-8')
 				);
 
-				if ($check)
+				if ($check) {
 					$this->assertInstanceOf(
 						'AMQPChannelInterface',
 						$channelInterface
 					);
+                }
 			}
 
-			if ($check)
+			if ($check) {
 				$this->checkMessageCount($channel, $label);
+            }
 		}
 
 		protected static function messageAssertion(AMQPIncomingMessage $mess, $i)
@@ -772,7 +779,7 @@
 		protected function exchangeDeclare(AMQPChannelInterface $channel, $label)
 		{
 			$this->assertTrue(isset(self::$queueList[$label]));
-			
+
 			$interface = $channel->exchangeDeclare(
 				self::$queueList[$label]['exchange'],
 				AMQPExchangeConfig::create()->
@@ -807,7 +814,7 @@
 
 			return $channelInterface;
 		}
-		
+
 		/**
 		 * @param AMQPChannelInterface $channel
 		 * @param string $label
@@ -841,7 +848,7 @@
 				self::$queueList[$label]['exchange'],
 				self::$queueList[$label]['key']
 			);
-			
+
 			$this->assertInstanceOf('AMQPChannelInterface', $channelInterface);
 
 			return $channelInterface;
@@ -906,6 +913,4 @@
 
 			return $channelInterface;
 		}
-
-	}
-?>
+    }

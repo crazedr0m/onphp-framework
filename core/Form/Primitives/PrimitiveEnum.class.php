@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -16,18 +17,18 @@
 	{
 		public function getList()
 		{
-			if ($this->value)
-				return ClassUtils::callStaticMethod(get_class($this->value).'::getList');
-			elseif ($this->default)
-				return ClassUtils::callStaticMethod(get_class($this->default).'::getList');
-			else {
+			if ($this->value) {
+				return ClassUtils::callStaticMethod(get_class($this->value) . '::getList');
+			} elseif ($this->default) {
+				return ClassUtils::callStaticMethod(get_class($this->default) . '::getList');
+			} else {
 				$object = new $this->className(
-					ClassUtils::callStaticMethod($this->className.'::getAnyId')
+					ClassUtils::callStaticMethod($this->className . '::getAnyId')
 				);
-				
+
 				return $object->getObjectList();
 			}
-			
+
 			Assert::isUnreachable();
 		}
 
@@ -38,42 +39,43 @@
 		public function of($class)
 		{
 			$className = $this->guessClassName($class);
-			
+
 			Assert::classExists($className);
-			
+
 			Assert::isInstance($className, 'Enum');
-			
+
 			$this->className = $className;
-			
+
 			return $this;
 		}
-		
+
 		public function importValue(/* Identifiable */ $value)
 		{
-			if ($value)
+			if ($value) {
 				Assert::isEqual(get_class($value), $this->className);
-			else
-				return parent::importValue(null);
-			
-			return $this->import(array($this->getName() => $value->getId()));
+			} else {
+return parent::importValue(null);
+            }
+
+			return $this->import([$this->getName() => $value->getId()]);
 		}
-		
+
 		public function import($scope)
 		{
 			$result = parent::import($scope);
-			
+
 			if ($result === true) {
 				try {
 					$this->value = $this->makeEnumById($this->value);
 				} catch (MissingElementException $e) {
 					$this->value = null;
-					
+
 					return false;
 				}
-				
+
 				return true;
 			}
-			
+
 			return $result;
 		}
 
@@ -91,11 +93,12 @@
 		 */
 		public function getChoiceValue()
 		{
-			if(
+			if (
 				($value = $this->getValue() ) &&
 				$value instanceof Enum
-			)
+			) {
 				return $value->getName();
+            }
 
 			return null;
 		}
@@ -106,11 +109,12 @@
 		 */
 		public function getActualChoiceValue()
 		{
-			if(
+			if (
 				!$this->getChoiceValue() &&
 				$this->getDefault()
-			)
+			) {
 				return $this->getDefault()->getName();
+            }
 
 			return null;
 		}
@@ -121,12 +125,12 @@
 		 */
 		protected function makeEnumById($id)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveEnum '{$this->name}'"
 				);
+            }
 
 			return new $this->className($id);
 		}
 	}
-?>

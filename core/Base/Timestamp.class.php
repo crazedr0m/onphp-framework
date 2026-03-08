@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2009 by Garmonbozia Research Group,                *
  *   Anton E. Lebedevich, Konstantin V. Arkhipov                           *
@@ -22,11 +23,11 @@
 		/**
 		 * @return Timestamp
 		**/
-		public static function create($timestamp, DateTimeZone $zone=null)
+		public static function create($timestamp, DateTimeZone $zone = null)
 		{
 			return new static($timestamp, $zone);
 		}
-		
+
 		/**
 		 * @return string
 		**/
@@ -34,7 +35,7 @@
 		{
 			return date(static::getFormat());
 		}
-		
+
 		/**
 		 * @return Timestamp
 		**/
@@ -42,7 +43,7 @@
 		{
 			return new static(time());
 		}
-		
+
 		/**
 		 * @return Timestamp
 		**/
@@ -51,14 +52,13 @@
 			return new static(static::today());
 		}
 
-		public function __construct($dateTime, DateTimeZone $zone=null)
+		public function __construct($dateTime, DateTimeZone $zone = null)
 		{
 			parent::__construct($dateTime);
 
-			if($zone) {
+			if ($zone) {
 				$this->dateTime->setTimezone($zone);
 			}
-
 		}
 
 		private function getDefaultTimeZone()
@@ -66,14 +66,14 @@
 			try {
 				$defaultTimeZoneName = date_default_timezone_get();
 				return new DateTimeZone($defaultTimeZoneName);
-			} catch(Exception $e) {
+			} catch (Exception $e) {
 				throw new WrongStateException(
-					"strange default time zone given - '{$defaultTimeZoneName}'!".
+					"strange default time zone given - '{$defaultTimeZoneName}'!" .
 					'Use date_default_timezone_set() for set valid default time zone.'
 				);
 			}
 		}
-		
+
 		/**
 		 * @return string
 		**/
@@ -81,12 +81,12 @@
 		{
 			return
 				$this->getHour()
-				.$timeDelimiter
-				.$this->getMinute()
-				.$secondDelimiter
-				.$this->getSecond();
+				. $timeDelimiter
+				. $this->getMinute()
+				. $secondDelimiter
+				. $this->getSecond();
 		}
-		
+
 		/**
 		 * @return string
 		**/
@@ -94,28 +94,27 @@
 			$dateDelimiter = '-',
 			$timeDelimiter = ':',
 			$secondDelimiter = '.'
-		)
-		{
+		) {
 			return
-				$this->toDate($dateDelimiter).' '
-				.$this->toTime($timeDelimiter, $secondDelimiter);
+				$this->toDate($dateDelimiter) . ' '
+				. $this->toTime($timeDelimiter, $secondDelimiter);
 		}
-		
+
 		public function getHour()
 		{
 			return $this->dateTime->format('H');
 		}
-		
+
 		public function getMinute()
 		{
 			return $this->dateTime->format('i');
 		}
-		
+
 		public function getSecond()
 		{
 			return $this->dateTime->format('s');
 		}
-		
+
 		public function equals(Timestamp $timestamp)
 		{
 			return ($this->toDateTime() === $timestamp->toDateTime());
@@ -126,10 +125,11 @@
 		**/
 		public function getDayStartStamp()
 		{
-			if (!$this->getHour() && !$this->getMinute() && !$this->getSecond())
+			if (!$this->getHour() && !$this->getMinute() && !$this->getSecond()) {
 				return $this->dateTime->getTimestamp();
-			else
-				return parent::getDayStartStamp();
+			} else {
+return parent::getDayStartStamp();
+            }
 		}
 
 		/**
@@ -137,9 +137,10 @@
 		**/
 		public function getHourStartStamp()
 		{
-			if (!$this->getMinute() && !$this->getSecond())
+			if (!$this->getMinute() && !$this->getSecond()) {
 				return $this->dateTime->getTimestamp();
-			
+            }
+
 			return
 				mktime(
 					$this->getHour(),
@@ -150,18 +151,19 @@
 					$this->getYear()
 				);
 		}
-		
+
 		/**
 		 * ISO 8601 time string
 		**/
 		public function toIsoString($convertToUtc = true)
 		{
-			if ($convertToUtc)
+			if ($convertToUtc) {
 				return date('Y-m-d\TH:i:s\Z', $this->dateTime->getTimestamp() - date('Z', $this->dateTime->getTimestamp()));
-			else
-				return date('Y-m-d\TH:i:sO', $this->dateTime->getTimestamp());
+			} else {
+return date('Y-m-d\TH:i:sO', $this->dateTime->getTimestamp());
+            }
 		}
-		
+
 		/**
 		 * @return Timestamp
 		**/
@@ -169,10 +171,9 @@
 		{
 			return $this->spawn();
 		}
-		
+
 		protected static function getFormat()
 		{
 			return 'Y-m-d H:i:s';
 		}
 	}
-?>

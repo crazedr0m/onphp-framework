@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -17,35 +18,35 @@
 	{
 		private $what = null;
 		private $from = null;
-		
+
 		public static function create(
 			/* DatePart */ $what,
 			/* DialectString */ $from
-		)
-		{
+		) {
 			return new self($what, $from);
 		}
-		
+
 		public function __construct(
 			/* DatePart */ $what,
 			/* DialectString */ $from
-		)
-		{
-			if ($from instanceof DialectString)
+		) {
+			if ($from instanceof DialectString) {
 				Assert::isTrue(
 					($from instanceof DBValue)
 					|| ($from instanceof DBField)
 				);
-			else
-				$from = new DBField($from);
-			
-			if (!$what instanceof DatePart)
+			} else {
+$from = new DBField($from);
+            }
+
+			if (!$what instanceof DatePart) {
 				$what = new DatePart($what);
-			
+            }
+
 			$this->what = $what;
 			$this->from = $from;
 		}
-		
+
 		/**
 		 * @return ExtractPart
 		**/
@@ -56,15 +57,14 @@
 				$dao->guessAtom($this->from, $query)
 			);
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return
 				'EXTRACT('
-				.$this->what->toString()
-				.' FROM '
-				.$this->from->toDialectString($dialect)
-				.')';
+				. $this->what->toString()
+				. ' FROM '
+				. $this->from->toDialectString($dialect)
+				. ')';
 		}
 	}
-?>

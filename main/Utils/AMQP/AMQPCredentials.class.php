@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -22,7 +23,7 @@
 		protected $virtualHost = null;
 		protected $login = null;
 		protected $password = null;
-		
+
 		/**
 		 * @return AMQPCredentials
 		**/
@@ -56,7 +57,7 @@
 		public function setHost($host)
 		{
 			$this->host = $host;
-			
+
 			return $this;
 		}
 
@@ -71,7 +72,7 @@
 		public function setPort($port)
 		{
 			$this->port = $port;
-			
+
 			return $this;
 		}
 
@@ -86,7 +87,7 @@
 		public function setVirtualHost($virtualHost)
 		{
 			$this->virtualHost = $virtualHost;
-			
+
 			return $this;
 		}
 
@@ -101,7 +102,7 @@
 		public function setLogin($login)
 		{
 			$this->login = $login;
-			
+
 			return $this;
 		}
 
@@ -116,8 +117,7 @@
 		public function setPassword($password)
 		{
 			$this->password = $password;
-			
+
 			return $this;
 		}
 	}
-?>

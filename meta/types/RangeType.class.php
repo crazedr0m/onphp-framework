@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -18,10 +19,9 @@
 		{
 			return 'range';
 		}
-		
+
 		public function toColumnType()
 		{
 			return null;
 		}
 	}
-?>

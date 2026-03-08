@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -14,44 +15,44 @@
 	**/
 	class OqlQueryExpression extends OqlQueryParameter
 	{
-		private static $classes = array();
-		
+		private static $classes = [];
+
 		private $className	= null;
-		private $parameters	= array();
-		
+		private $parameters	= [];
+
 		/**
 		 * @return OqlQueryExpression
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function getClassName()
 		{
 			return $this->className;
 		}
-		
+
 		/**
 		 * @return OqlQueryExpression
 		**/
 		public function setClassName($className)
 		{
 			$this->className = $className;
-			
+
 			return $this;
 		}
-		
+
 		public function getParameters()
 		{
 			return $this->parameters;
 		}
-		
+
 		public function hasParameter($index)
 		{
 			return isset($this->parameters[$index]);
 		}
-		
+
 		/**
 		 * @return OqlQueryParameter
 		**/
@@ -59,46 +60,47 @@
 		{
 			return $this->parameters[$index];
 		}
-		
+
 		/**
 		 * @return OqlQueryExpression
 		**/
 		public function addParameter(OqlQueryParameter $parameter)
 		{
 			$this->parameters[] = $parameter;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return OqlQueryExpression
 		**/
 		public function setParameter($index, OqlQueryParameter $parameter)
 		{
 			$this->parameters[$index] = $parameter;
-			
+
 			return $this;
 		}
-		
+
 		public function evaluate($values)
 		{
 			$className = $this->getClassName();
-			
-			if (!isset(self::$classes[$className]))
+
+			if (!isset(self::$classes[$className])) {
 				self::$classes[$className] = new ReflectionClass($className);
-			
+            }
+
 			$class = self::$classes[$className];
 			$parametersCount = count($class->getConstructor()->getParameters());
-			$parameters = array();
-			
+			$parameters = [];
+
 			for ($i = 0; $i < $parametersCount; $i++) {
-				if (!$this->hasParameter($i))
+				if (!$this->hasParameter($i)) {
 					break;
-					
+                }
+
 				$parameters[$i] = $this->getParameter($i)->evaluate($values);
 			}
-			
+
 			return $class->newInstanceArgs($parameters);
 		}
 	}
-?>

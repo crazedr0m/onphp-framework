@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2009 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,7 +16,7 @@
 	abstract class OqlQueryExpressionClause extends OqlQueryClause
 	{
 		protected $expression = null;
-		
+
 		/**
 		 * @return OqlQueryExpression
 		**/
@@ -23,7 +24,7 @@
 		{
 			return $this->expression;
 		}
-		
+
 		/**
 		 * @return OqlQueryExpressionClause
 		**/
@@ -31,19 +32,18 @@
 		{
 			$this->checkExpression($expression);
 			$this->expression = $expression;
-			
+
 			return $this;
 		}
-		
+
 		public function toLogic()
 		{
 			Assert::isNotNull($this->expression);
-			
+
 			return $this->expression->evaluate($this->parameters);
 		}
-		
+
 		protected static function checkExpression(OqlQueryExpression $expression)
 		{
 		}
 	}
-?>

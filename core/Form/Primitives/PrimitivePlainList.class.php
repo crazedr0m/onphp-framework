@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -20,8 +21,7 @@
 		public function setList($list)
 		{
 			$this->list = array_combine($list, $list);
-			
+
 			return $this;
 		}
 	}
-?>

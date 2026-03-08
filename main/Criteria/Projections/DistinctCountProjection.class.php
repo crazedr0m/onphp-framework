@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -20,11 +21,9 @@
 		protected function getFunction(
 			Criteria $criteria,
 			JoinCapableQuery $query
-		)
-		{
+		) {
 			return
 				parent::getFunction($criteria, $query)->
 				setAggregateDistinct();
 		}
 	}
-?>

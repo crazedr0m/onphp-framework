@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -13,9 +14,8 @@
 	{
 		public function get($name)
 		{
-			$method = 'get'.ucfirst($name);
-			
+			$method = 'get' . ucfirst($name);
+
 			return $this->object->$method();
 		}
 	}
-?>

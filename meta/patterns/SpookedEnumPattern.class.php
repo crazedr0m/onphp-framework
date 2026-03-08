@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -21,10 +22,9 @@
 		{
 			return $this;
 		}
-		
+
 		public function daoExists()
 		{
 			return false;
 		}
 	}
-?>

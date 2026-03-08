@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	final class RouterChainRule extends RouterBaseRule
 	{
-		protected $routes		= array();
-		protected $separators	= array();
-		
+		protected $routes		= [];
+		protected $separators	= [];
+
 		/**
 		 * @return RouterChainRule
 		**/
@@ -21,7 +22,7 @@
 		{
 			return new self();
 		}
-		
+
 		/**
 		 * @return RouterChainRule
 		**/
@@ -29,45 +30,46 @@
 		{
 			$this->routes[] = $route;
 			$this->separators[] = $separator;
-			
+
 			return $this;
 		}
-		
+
 		public function getCount()
 		{
 			return count($this->routes);
 		}
-		
+
 		public function match(HttpRequest $request)
 		{
-			$values = array();
-			
+			$values = [];
+
 			foreach ($this->routes as $key => $route) {
 				$res = $route->match($request);
-				
-				if (empty($res))
-					return array();
-				
+
+				if (empty($res)) {
+					return [];
+                }
+
 				$values = $res + $values;
 			}
-			
+
 			return $values;
 		}
-		
+
 		public function assembly(
-			array $data = array(),
+			array $data = [],
 			$reset = false,
 			$encode = false
-		)
-		{
+		) {
 			$value = null;
-			
+
 			foreach ($this->routes as $key => $route) {
-				if ($key > 0)
+				if ($key > 0) {
 					$value .= $this->separators[$key];
-				
+                }
+
 				$value .= $route->assembly($data, $reset, $encode);
-				
+
 				if (
 					$route instanceof RouterHostnameRule
 					&& $key > 0
@@ -75,8 +77,7 @@
 					throw new RouterException('wrong chain route');
 				}
 			}
-			
+
 			return $value;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -15,22 +16,22 @@
 	class ModelAndView
 	{
 		private $model 	= null;
-		
+
 		private $view	= null;
-		
+
 		/**
 		 * @return ModelAndView
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function __construct()
 		{
 			$this->model = new Model();
 		}
-		
+
 		/**
 		 * @return Model
 		**/
@@ -38,14 +39,14 @@
 		{
 			return $this->model;
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
 		public function setModel(Model $model)
 		{
 			$this->model = $model;
-			
+
 			return $this;
 		}
 
@@ -56,7 +57,7 @@
 		{
 			return $this->view;
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -66,16 +67,16 @@
 				($view instanceof View)	|| is_string($view),
 				'do not know, what to do with such view'
 			);
-			
+
 			$this->view = $view;
-			
+
 			return $this;
 		}
-		
+
 		public function dropView()
 		{
 			$this->view = null;
-			
+
 			return $this;
 		}
 
@@ -89,7 +90,7 @@
 					&& strpos($this->view, 'redirect') === 0
 				);
 		}
-		
+
 		public function viewIsNormal()
 		{
 			return (
@@ -98,4 +99,3 @@
 			);
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2011 by Evgeny V. Kokovikhin                             *
  *                                                                          *
@@ -16,18 +17,18 @@
 	{
 		private $range = null;
 		private $ip = null;
-		
+
 		public function __construct($range, $ip)
 		{
 			$this->range = $range;
 			$this->ip = $ip;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			return $dialect->quoteIpInRange($this->range, $this->ip);
 		}
-		
+
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
 			return new self(
@@ -35,10 +36,9 @@
 				$dao->guessAtom($this->ip, $query)
 			);
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			throw new UnimplementedFeatureException('Author was too lazy to make it');
 		}
 	}
-?>

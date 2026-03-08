@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,22 +12,21 @@
 
 	/**
 	 * Cast-able SQL parts.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
 	abstract class Castable implements DialectString
 	{
 		protected $cast	= null;
-		
+
 		/**
 		 * @return Castable
 		**/
 		public function castTo($cast)
 		{
 			$this->cast = $cast;
-			
+
 			return $this;
 		}
 	}
-?>

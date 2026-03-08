@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -21,14 +22,13 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		public function apply($value)
 		{
 			return preg_replace(
 				'~^([^<].+)\s$~Uums',
-				'<p>$1</p>'."\n",
+				'<p>$1</p>' . "\n",
 				$value
 			);
 		}
 	}
-?>

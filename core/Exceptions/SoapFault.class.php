@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Konstantin V. Arkhipov                           *
  *                                                                          *
@@ -11,8 +12,10 @@
 
 	/**
 	 * In case we're soapless.
-	 * 
+	 *
 	 * @ingroup Exceptions
 	**/
-	class SoapFault extends Exception {/*_*/}
-?>
+	class SoapFault extends Exception
+    {
+/*_*/
+    }

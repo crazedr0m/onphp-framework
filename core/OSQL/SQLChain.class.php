@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -14,9 +15,9 @@
 	**/
 	abstract class SQLChain implements LogicalObject, MappableObject
 	{
-		protected $chain = array();
-		protected $logic = array();
-		
+		protected $chain = [];
+		protected $logic = [];
+
 		/**
 		 * @return SQLChain
 		**/
@@ -24,68 +25,69 @@
 		{
 			$this->chain[] = $exp;
 			$this->logic[] = $logic;
-			
+
 			return $this;
 		}
-		
+
 		public function getSize()
 		{
 			return count($this->chain);
 		}
-		
+
 		public function getChain()
 		{
 			return $this->chain;
 		}
-		
+
 		public function getLogic()
 		{
 			return $this->logic;
 		}
-		
+
 		/**
 		 * @return SQLChain
 		**/
 		public function toMapped(ProtoDAO $dao, JoinCapableQuery $query)
 		{
 			$size = count($this->chain);
-			
+
 			Assert::isTrue($size > 0, 'empty chain');
-			
-			$chain = new $this;
-			
+
+			$chain = new $this();
+
 			for ($i = 0; $i < $size; ++$i) {
 				$chain->exp(
 					$dao->guessAtom($this->chain[$i], $query),
 					$this->logic[$i]
 				);
 			}
-			
+
 			return $chain;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			if ($this->chain) {
-				$out = $this->chain[0]->toDialectString($dialect).' ';
+				$out = $this->chain[0]->toDialectString($dialect) . ' ';
 				for ($i = 1, $size = count($this->chain); $i < $size; ++$i) {
 					$out .=
 						$this->logic[$i]
-						.' '
-						.$this->chain[$i]->toDialectString($dialect)
-						.' ';
+						. ' '
+						. $this->chain[$i]->toDialectString($dialect)
+						. ' ';
 				}
-				
-				if ($size > 1)
+
+				if ($size > 1) {
 					$out = rtrim($out); // trailing space
-				
-				if ($size === 1)
+                }
+
+				if ($size === 1) {
 					return $out;
-				
-				return '('.$out.')';
+                }
+
+				return '(' . $out . ')';
 			}
-			
+
 			return null;
 		}
 	}
-?>

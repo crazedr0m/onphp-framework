@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,23 +18,23 @@
 		const JOIN		= 1;
 		const CASCADE	= 2;
 		const LAZY		= 3;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::JOIN		=> 'join',
 			self::CASCADE	=> 'cascade',
 			self::LAZY		=> 'lazy'
-		);
-		
+		];
+
 		/**
 		 * @return FetchStrategy
 		**/
 		public function setId($id)
 		{
 			Assert::isNull($this->id, 'i am immutable one!');
-			
+
 			return parent::setId($id);
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
@@ -41,7 +42,7 @@
 		{
 			return self::getInstance(self::JOIN);
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
@@ -49,7 +50,7 @@
 		{
 			return self::getInstance(self::CASCADE);
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
@@ -57,17 +58,18 @@
 		{
 			return self::getInstance(self::LAZY);
 		}
-		
+
 		/**
 		 * @return FetchStrategy
 		**/
 		private static function getInstance($id)
 		{
-			static $instances = array();
-			
-			if (!isset($instances[$id]))
+			static $instances = [];
+
+			if (!isset($instances[$id])) {
 				$instances[$id] = new self($id);
-			
+            }
+
 			return $instances[$id];
 		}
 
@@ -76,4 +78,3 @@
 			return ($this->id == self::JOIN);
 		}
 	}
-?>

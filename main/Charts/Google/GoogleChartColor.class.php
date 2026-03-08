@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,37 +16,37 @@
 	final class GoogleChartColor extends BaseGoogleChartParameter
 	{
 		protected $name = 'chco';
-		
-		private $colors = array();
-		
+
+		private $colors = [];
+
 		/**
 		 * @return GoogleChartColor
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleChartColor
 		**/
 		public function addColor(Color $color)
 		{
 			$this->colors[] = $color;
-			
+
 			return $this;
 		}
-		
+
 		public function toString()
 		{
 			$queryString = "{$this->name}=";
-			
+
 			Assert::isNotEmptyArray($this->colors);
-			
-			foreach ($this->colors as $color)
-				$queryString .= $color->toString().',';
-			
+
+			foreach ($this->colors as $color) {
+				$queryString .= $color->toString() . ',';
+            }
+
 			return rtrim($queryString, ',');
 		}
 	}
-?>

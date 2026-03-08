@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -16,16 +17,17 @@
 	{
 		public static function makeRanges(array $ips)
 		{
-			$ipsAsIntegers = array();
+			$ipsAsIntegers = [];
 
-			foreach ($ips as $ip)
+			foreach ($ips as $ip) {
 				$ipsAsIntegers[] = ip2long($ip);
+            }
 
 			sort($ipsAsIntegers);
-			
+
 			$size = count($ipsAsIntegers);
 
-			$ranges = array();
+			$ranges = [];
 
 			$j = 0;
 
@@ -34,11 +36,11 @@
 			for ($i = 1; $i < $size; ++$i) {
 				if ($ipsAsIntegers[$i] != $ipsAsIntegers[$i - 1] + 1) {
 					$ranges[++$j][] = long2ip($ipsAsIntegers[$i]); // start new range
-				} else
-					$ranges[$j][] = long2ip($ipsAsIntegers[$i]);
+				} else {
+$ranges[$j][] = long2ip($ipsAsIntegers[$i]);
+                }
 			}
-			
+
 			return $ranges;
 		}
 	}
-?>

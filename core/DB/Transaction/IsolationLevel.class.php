@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Transaction isolation levels.
-	 * 
+	 *
 	 * @see http://www.postgresql.org/docs/current/interactive/sql-start-transaction.html
-	 * 
+	 *
 	 * @ingroup Transaction
 	**/
 	final class IsolationLevel extends Enumeration
@@ -22,12 +23,11 @@
 		const READ_UNCOMMITTED	= 0x02;
 		const REPEATABLE_READ	= 0x03;
 		const SERIALIZABLE		= 0x04;
-		
-		protected $names	= array(
+
+		protected $names	= [
 			self::READ_COMMITTED	=> 'read commited',
 			self::READ_UNCOMMITTED	=> 'read uncommitted',
 			self::REPEATABLE_READ	=> 'repeatable read',
 			self::SERIALIZABLE		=> 'serializable'
-		);
+		];
 	}
-?>

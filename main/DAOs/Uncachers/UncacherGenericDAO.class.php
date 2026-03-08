@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Aleksey S. Denisov                              *
  *                                                                         *
@@ -14,23 +15,23 @@
 	**/
 	class UncacherGenericDAO implements UncacherBase
 	{
-		private $daoMap = array();
-		
+		private $daoMap = [];
+
 		public static function create(GenericDAO $dao, $id, UncacherBase $workerUncacher)
 		{
 			return new self($dao, $id, $workerUncacher);
 		}
-		
+
 		public function __construct(GenericDAO $dao, $id, UncacherBase $workerUncacher)
 		{
-			$this->daoMap[get_class($dao)] = array(array($id), $workerUncacher);
+			$this->daoMap[get_class($dao)] = [[$id], $workerUncacher];
 		}
-		
+
 		public function getDaoMap()
 		{
 			return $this->daoMap;
 		}
-		
+
 		/**
 		 * @param $uncacher UncacherGenericDAO same as self class
 		 * @return UncacherBase (this)
@@ -40,7 +41,7 @@
 			Assert::isInstance($uncacher, 'UncacherGenericDAO');
 			return $this->mergeSelf($uncacher);
 		}
-		
+
 		public function uncache()
 		{
 			foreach ($this->daoMap as $daoClass => $uncacheData) {
@@ -48,15 +49,17 @@
 				/* @var $dao GenericDAO */
 				list($dropIdentityIds, $workerUncacher) = $uncacheData;
 				/* @var $workerUncacher UncacherBase */
-				
-				foreach ($dropIdentityIds as $id)
+
+				foreach ($dropIdentityIds as $id) {
 					$dao->dropObjectIdentityMapById($id);
-				
+                }
+
 				$dao->registerWorkerUncacher($workerUncacher);
 			}
 		}
-		
-		private function mergeSelf(UncacherGenericDAO $uncacher) {
+
+		private function mergeSelf(UncacherGenericDAO $uncacher)
+        {
 			foreach ($uncacher->getDaoMap() as $daoClass => $daoMap) {
 				if (isset($this->daoMap[$daoClass])) {
 					//merge identities
@@ -70,8 +73,7 @@
 					$this->daoMap[$daoClass] = $daoMap;
 				}
 			}
-			
+
 			return $this;
 		}
 	}
-?>

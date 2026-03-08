@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -15,15 +16,13 @@
 		 * @return string
 		**/
 		public static function url(
-			array $urlOptions = array(),
+			array $urlOptions = [],
 			$name,
 			$reset = false,
 			$encode = true
-		)
-		{
+		) {
 			return
 				RouterRewrite::me()->
 				assembly($urlOptions, $name, $reset, $encode);
 		}
 	}
-?>

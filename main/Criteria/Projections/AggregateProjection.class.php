@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,14 +16,14 @@
 	abstract class AggregateProjection extends BaseProjection
 	{
 		abstract public function getFunctionName();
-		
+
 		/**
 		 * @return JoinCapableQuery
 		**/
 		public function process(Criteria $criteria, JoinCapableQuery $query)
 		{
 			Assert::isNotNull($this->property);
-			
+
 			return
 				$query->
 				get(
@@ -34,4 +35,3 @@
 				);
 		}
 	}
-?>

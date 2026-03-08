@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -17,23 +18,22 @@
 		const X	= 0x1;
 		const Y	= 0x2;
 		const R	= 0x3; // aka right y
-		
-		protected $names = array(
+
+		protected $names = [
 			self::X	=> 'x',
 			self::Y	=> 'y',
 			self::R	=> 'r'
-		);
-		
+		];
+
 		private static $paramName = 'chxt';
-		
+
 		public static function getParamName()
 		{
 			return self::$paramName;
 		}
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

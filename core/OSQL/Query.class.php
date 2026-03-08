@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -13,5 +14,7 @@
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
-	interface Query extends DialectString, Identifiable, Stringable {/*_*/}
-?>
+	interface Query extends DialectString, Identifiable, Stringable
+    {
+/*_*/
+    }

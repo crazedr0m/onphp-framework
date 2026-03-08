@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -15,13 +16,13 @@
 	final class GoogleChartAxis
 	{
 		private $type = null;
-		
+
 		private $range = null;
-		
+
 		private $label = null;
-		
+
 		private $interval = null;
-		
+
 		/**
 		 * @return GoogleChartAxis
 		**/
@@ -29,12 +30,12 @@
 		{
 			return new self($type);
 		}
-		
+
 		public function __construct(GoogleChartAxisType $type)
 		{
 			$this->type = $type;
 		}
-		
+
 		/**
 		 * @return GoogleChartAxisType
 		**/
@@ -42,22 +43,22 @@
 		{
 			return $this->type;
 		}
-		
+
 		/**
 		 * @return GoogleChartAxis
 		**/
 		public function setRange(BaseRange $range)
 		{
 			$this->range = $range;
-			
+
 			return $this;
 		}
-		
+
 		public function hasRange()
 		{
 			return ($this->range !== null);
 		}
-		
+
 		/**
 		 * @return IntegerSet
 		**/
@@ -65,17 +66,17 @@
 		{
 			return $this->range;
 		}
-		
+
 		/**
 		 * @return GoogleChartAxis
 		**/
 		public function setLabel(GoogleChartAxisLabel $label)
 		{
 			$this->label = $label;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleChartAxisLabel
 		**/
@@ -83,22 +84,21 @@
 		{
 			return $this->label;
 		}
-		
+
 		/**
 		 * @return GoogleChartAxis
 		**/
 		public function setInterval($interval)
 		{
 			Assert::isTrue(is_numeric($interval));
-			
+
 			$this->interval = $interval;
-			
+
 			return $this;
 		}
-		
+
 		public function getInterval()
 		{
 			return $this->interval;
 		}
 	}
-?>

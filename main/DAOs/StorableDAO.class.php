@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,7 +22,7 @@
 					? $this->merge($object, true)
 					: $this->add($object);
 		}
-		
+
 		public function add(Identifiable $object)
 		{
 			return
@@ -34,7 +35,7 @@
 					)
 				);
 		}
-		
+
 		public function save(Identifiable $object)
 		{
 			return
@@ -43,7 +44,7 @@
 					$object
 				);
 		}
-		
+
 		public function import(Identifiable $object)
 		{
 			return
@@ -52,51 +53,52 @@
 					$object
 				);
 		}
-		
+
 		public function merge(Identifiable $object, $cacheOnly = true)
 		{
 			Assert::isNotNull($object->getId());
-			
+
 			$this->checkObjectType($object);
-			
+
 			$old = Cache::worker($this)->getCachedById($object->getId());
-			
+
 			if (!$old) { // unlikely
-				if ($cacheOnly)
+				if ($cacheOnly) {
 					return $this->save($object);
-				else
-					$old = Cache::worker($this)->getById($object->getId());
+				} else {
+$old = Cache::worker($this)->getById($object->getId());
+                }
 			}
-			if ($object === $old)
+			if ($object === $old) {
 				return $this->save($object);
-			
+            }
+
 			return $this->unite($object, $old);
 		}
-		
+
 		public function unite(
-			Identifiable $object, Identifiable $old
-		)
-		{
+			Identifiable $object,
+            Identifiable $old
+		) {
 			$query = $this->getProtoClass()->
 				fillQuery(OSQL::update($this->getTable()), $object, $old);
-			if (!$query->getFieldsCount())
+			if (!$query->getFieldsCount()) {
 				return $object;
-			
+            }
+
 			return $this->doInject(
 				$this->targetizeUpdateQuery($query, $object),
 				$object
 			);
 		}
-		
+
 		/**
 		 * @return UpdateQuery
 		**/
 		private function targetizeUpdateQuery(
 			UpdateQuery $query,
 			Identifiable $object
-		)
-		{
+		) {
 			return $query->where(Expression::eqId($this->getIdName(), $object));
 		}
 	}
-?>

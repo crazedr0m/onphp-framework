@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,13 +18,13 @@
 		const ONE_TO_ONE		= 1;
 		const ONE_TO_MANY		= 2;
 		const MANY_TO_MANY		= 3;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::ONE_TO_ONE		=> 'OneToOne',
 			self::ONE_TO_MANY		=> 'OneToMany',
 			self::MANY_TO_MANY		=> 'ManyToMany'
-		);
-		
+		];
+
 		/**
 		 * @return MetaRelation
 		**/
@@ -31,7 +32,7 @@
 		{
 			return new self($id);
 		}
-		
+
 		/**
 		 * @return MetaRelation
 		**/
@@ -39,11 +40,11 @@
 		{
 			$self = self::create(self::getAnyId());
 			$id = array_search($name, $self->getNameList());
-			
-			if ($id)
+
+			if ($id) {
 				return $self->setId($id);
-			
+            }
+
 			throw new WrongArgumentException();
 		}
 	}
-?>

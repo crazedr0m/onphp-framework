@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,18 +12,18 @@
 
 	/**
 	 * SHA-1 based filter: passwords.
-	 * 
+	 *
 	 * @ingroup Filters
 	**/
 	final class HashFilter implements Filtrator
 	{
 		private $binary = false;
-		
+
 		public function __construct($binary = false)
 		{
 			$this->binary = ($binary === true);
 		}
-		
+
 		/**
 		 * @return HashFilter
 		**/
@@ -30,15 +31,14 @@
 		{
 			return new self($binary);
 		}
-		
+
 		public function isBinary()
 		{
 			return $this->binary;
 		}
-		
+
 		public function apply($value)
 		{
 			return sha1($value, $this->binary);
 		}
 	}
-?>

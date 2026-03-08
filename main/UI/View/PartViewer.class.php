@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -16,44 +17,45 @@
 	{
 		protected $viewResolver 	= null;
 		protected $model			= null;
-		
+
 		public function __construct(ViewResolver $resolver, $model = null)
 		{
 			$this->viewResolver = $resolver;
 			$this->model = $model;
 		}
-		
+
 		/**
 		 * @return PartViewer
 		**/
 		public function view($partName, $model = null)
 		{
 			Assert::isTrue($model === null || $model instanceof Model);
-			
+
 			// use model from outer template if none specified
 			if ($model === null) {
 				$model = $this->model;
-				
+
 				$parentModel = $this->model->has('parentModel')
 					? $this->model->get('parentModel')
 					: null;
-				
-			} else
-				$parentModel = $this->model;
-			
+			} else {
+$parentModel = $this->model;
+            }
+
 			$model->set('parentModel', $parentModel);
-			
+
 			$rootModel = $this->model->has('rootModel')
 				? $this->model->get('rootModel')
 				: $this->model;
-			
+
 			$model->set('rootModel', $rootModel);
-			
-			if ($partName instanceof View)
+
+			if ($partName instanceof View) {
 				$partName->render($model);
-			else
-				$this->viewResolver->resolveViewName($partName)->render($model);
-			
+			} else {
+$this->viewResolver->resolveViewName($partName)->render($model);
+            }
+
 			return $this;
 		}
 
@@ -71,12 +73,12 @@
 				throw $e;
 			}
 		}
-		
+
 		public function partExists($partName)
 		{
 			return $this->viewResolver->viewExists($partName);
 		}
-		
+
 		/**
 		 * @return Model
 		**/
@@ -85,4 +87,3 @@
 			return $this->model;
 		}
 	}
-?>

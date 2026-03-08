@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,13 +12,13 @@
 
 	/**
 	 * Values row implementation.
-	 * 
+	 *
 	 * @ingroup OSQL
 	**/
 	final class SQLArray implements DialectString
 	{
-		private $array = array();
-		
+		private $array = [];
+
 		/**
 		 * @return SQLArray
 		**/
@@ -25,24 +26,24 @@
 		{
 			return new self($array);
 		}
-		
+
 		public function __construct($array)
 		{
 			$this->array = $array;
 		}
-		
+
 		public function getArray()
 		{
 			return $this->array;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$array = $this->array;
-			
+
 			if (is_array($array)) {
-				$quoted = array();
-				
+				$quoted = [];
+
 				foreach ($array as $item) {
 					if ($item instanceof DialectString) {
 						$quoted[] = $item->toDialectString($dialect);
@@ -50,12 +51,12 @@
 						$quoted[] = $dialect->valueToString($item);
 					}
 				}
-				
+
 				$value = implode(', ', $quoted);
-			} else
-				$value = $dialect->quoteValue($array);
-			
+			} else {
+$value = $dialect->quoteValue($array);
+            }
+
 			return "({$value})";
 		}
 	}
-?>

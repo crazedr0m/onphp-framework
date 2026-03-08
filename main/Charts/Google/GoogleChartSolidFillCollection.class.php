@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -14,38 +15,38 @@
 	**/
 	final class GoogleChartSolidFillCollection extends BaseGoogleChartParameter
 	{
-		private $fillers = array();
-		
+		private $fillers = [];
+
 		/**
 		 * @return GoogleChartSolidFillCollection
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function addFiller(GoogleChartSolidFillType $type, Color $color)
 		{
 			$this->fillers[] =
 				GoogleChartSolidFill::create($type)->
 				setColor($color);
-			
+
 			return $this;
 		}
-		
+
 		public function hasFillers()
 		{
 			return !empty($this->fillers);
 		}
-		
+
 		public function toString()
 		{
-			$fillerString = GoogleChartSolidFill::getParamName().'=';
-			
-			foreach ($this->fillers as $filler)
+			$fillerString = GoogleChartSolidFill::getParamName() . '=';
+
+			foreach ($this->fillers as $filler) {
 				$fillers[] = $filler->toString();
-			
-			return $fillerString.implode('|', $fillers);
+            }
+
+			return $fillerString . implode('|', $fillers);
 		}
 	}
-?>

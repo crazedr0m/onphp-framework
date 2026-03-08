@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -14,21 +15,21 @@
 	**/
 	final class PrimitiveEnumList extends PrimitiveEnum
 	{
-		protected $value = array();
-		
+		protected $value = [];
+
 		/**
 		 * @return PrimitiveEnumList
 		**/
 		public function clean()
 		{
 			parent::clean();
-			
+
 			// restoring our very own default
-			$this->value = array();
-			
+			$this->value = [];
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return PrimitiveEnumList
 		**/
@@ -38,76 +39,80 @@
 				Assert::isArray($value);
 				Assert::isInstance(current($value), 'Enum');
 			}
-			
+
 			$this->value = $value;
-			
+
 			return $this;
 		}
-		
+
 		public function importValue($value)
 		{
 			if (is_array($value)) {
 				try {
 					Assert::isInteger(current($value));
-					
+
 					return $this->import(
-						array($this->name => $value)
+						[$this->name => $value]
 					);
 				} catch (WrongArgumentException $e) {
 					return $this->import(
-						array($this->name => ArrayUtils::getIdsArray($value))
+						[$this->name => ArrayUtils::getIdsArray($value)]
 					);
 				}
 			}
-			
+
 			return parent::importValue($value);
 		}
-		
+
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveIdentifierList '{$this->name}'"
 				);
-			
-			if (!BasePrimitive::import($scope))
+            }
+
+			if (!BasePrimitive::import($scope)) {
 				return null;
-			
-			if (!is_array($scope[$this->name]))
+            }
+
+			if (!is_array($scope[$this->name])) {
 				return false;
-			
+            }
+
 			$list = array_unique($scope[$this->name]);
-			
-			$values = array();
-			
+
+			$values = [];
+
 			foreach ($list as $id) {
-				if (!Assert::checkInteger($id))
+				if (!Assert::checkInteger($id)) {
 					return false;
-				
+                }
+
 				$values[] = $id;
 			}
-			
-			$objectList = array();
-			
+
+			$objectList = [];
+
 			foreach ($values as $value) {
 				$className = $this->className;
 				$objectList[] = new $className($value);
 			}
-			
+
 			if (count($objectList) == count($values)) {
 				$this->value = $objectList;
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function exportValue()
 		{
-			if (!$this->value)
+			if (!$this->value) {
 				return null;
-			
+            }
+
 			return ArrayUtils::getIdsArray($this->value);
 		}
 	}
-?>

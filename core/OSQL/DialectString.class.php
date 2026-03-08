@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * Basis for almost all implementations of SQL parts.
-	 * 
+	 *
 	 * @ingroup OSQL
 	 * @ingroup Module
 	**/
@@ -19,4 +20,3 @@
 	{
 		public function toDialectString(Dialect $dialect);
 	}
-?>

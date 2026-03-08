@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,13 +12,13 @@
 
 	/**
 	 * PHP's image type constants.
-	 * 
+	 *
 	 * @ingroup Helpers
 	**/
 	final class ImageType extends Enumeration
 	{
 		const IMAGETYPE_PJPEG	= 100;
-		
+
 		const GIF		= IMAGETYPE_GIF;
 		const JPEG		= IMAGETYPE_JPEG;
 		const PNG		= IMAGETYPE_PNG;
@@ -36,8 +37,8 @@
 		const JPEG2000	= IMAGETYPE_JPEG2000;
 		const XBM		= IMAGETYPE_XBM;
 		const PJPEG		= self::IMAGETYPE_PJPEG;
-		
-		protected $names = array(
+
+		protected $names = [
 			IMAGETYPE_GIF			=> 'gif',
 			IMAGETYPE_JPEG			=> 'jpeg',
 			IMAGETYPE_PNG			=> 'png',
@@ -56,9 +57,9 @@
 			IMAGETYPE_JPEG2000		=> 'jpc',
 			IMAGETYPE_XBM			=> 'xbm',
 			self::IMAGETYPE_PJPEG	=> 'jpeg'
-		);
-		
-		protected $extensions = array(
+		];
+
+		protected $extensions = [
 			'gif'	=> IMAGETYPE_GIF,
 			'jpg'	=> IMAGETYPE_JPEG,
 			'jpeg'	=> IMAGETYPE_JPEG,
@@ -78,9 +79,9 @@
 			'wbmp'	=> IMAGETYPE_WBMP,
 			'jpc'	=> IMAGETYPE_JPEG2000,
 			'xbm'	=> IMAGETYPE_XBM
-		);
-		
-		protected $mimeTypes = array(
+		];
+
+		protected $mimeTypes = [
 			IMAGETYPE_GIF			=> 'image/gif',
 			IMAGETYPE_JPEG			=> 'image/jpeg',
 			IMAGETYPE_PNG			=> 'image/png',
@@ -99,46 +100,46 @@
 			IMAGETYPE_JPEG2000		=> 'image/jpeg',
 			IMAGETYPE_XBM			=> 'image/xbm',
 			self::IMAGETYPE_PJPEG	=> 'image/pjpeg'
-		);
-		
+		];
+
 		public static function getAnyId()
 		{
 			return self::GIF;
 		}
-		
+
 		public function getMimeType()
 		{
 			return $this->mimeTypes[$this->id];
 		}
-		
+
 		public function getExtension()
 		{
 			$flippedExensions = array_flip($this->extensions);
-			
+
 			return $flippedExensions[$this->id];
 		}
-		
+
 		public function getExtensionList()
 		{
 			return $this->extensions;
 		}
-		
+
 		public static function createByFileName($fileName)
 		{
 			$ext =
 				strtolower(
 					pathinfo($fileName, PATHINFO_EXTENSION)
 				);
-			
+
 			$anyImageType = new self(self::getAnyId());
 			$extensionList = $anyImageType->getExtensionList();
-			
-			if (isset($extensionList[$ext]))
+
+			if (isset($extensionList[$ext])) {
 				return new self($extensionList[$ext]);
-			
+            }
+
 			throw new WrongArgumentException(
 				"don't know type for '{$ext}' extension"
 			);
 		}
 	}
-?>

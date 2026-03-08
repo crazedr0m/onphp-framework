@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -35,10 +36,10 @@
 			if (
 				mb_check_encoding($value, 'UTF-16')
 				&& mb_substr_count($value, "\000") > 0
-			)
+			) {
 				$value = mb_convert_encoding($value, 'UTF-8', 'UTF-16');
+            }
 
 			return $value;
 		}
 	}
-?>

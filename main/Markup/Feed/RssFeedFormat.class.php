@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Dmitry A. Lomash, Dmitry E. Demidov             *
  *                                                                         *
@@ -15,7 +16,7 @@
 	final class RssFeedFormat extends FeedFormat
 	{
 		const VERSION = '2.0';
-		
+
 		/**
 		 * @return RssFeedFormat
 		**/
@@ -23,7 +24,7 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return RssChannelWorker
 		**/
@@ -31,7 +32,7 @@
 		{
 			return RssChannelWorker::me();
 		}
-		
+
 		/**
 		 * @return RssItemWorker
 		**/
@@ -39,7 +40,7 @@
 		{
 			return RssItemWorker::me();
 		}
-		
+
 		public function isAcceptable(SimpleXMLElement $xmlFeed)
 		{
 			return (
@@ -49,4 +50,3 @@
 			);
 		}
 	}
-?>

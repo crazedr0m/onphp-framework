@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -16,12 +17,12 @@
 		const TOPIC = 3;
 		const HEADER = 4;
 
-		protected $names = array(
+		protected $names = [
 			self::DIRECT => "direct",
 			self::FANOUT => "fanout",
 			self::TOPIC => "topic",
 			self::HEADER => "header"
-		);
+		];
 
 		public function getDefault()
 		{
@@ -48,4 +49,3 @@
 			return $this->id == self::HEADER;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -13,4 +14,3 @@
 	{
 		public function getBitmask($config);
 	}
-?>

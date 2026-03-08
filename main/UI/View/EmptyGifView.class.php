@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Alexander A. Zaytsev                            *
  *                                                                         *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return EmptyGifView
 		**/
@@ -30,14 +31,13 @@
 			header('Content-Type: image/gif');
 			header('Content-Length: 43');
 			header('Accept-Ranges: none');
-			
+
 			// NOTE: this is hardcoded empty gif 1x1 image
 			print
 				"GIF89\x61\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00"
-				."\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00"
-				."\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b";
-			
+				. "\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00"
+				. "\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b";
+
 			return $this;
 		}
 	}
-?>

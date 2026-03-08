@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -19,9 +20,9 @@
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return ModelAndView
 		**/
@@ -29,18 +30,17 @@
 		{
 			if (!$form->getErrors()) {
 				ClassUtils::copyProperties($form->getValue('id'), $subject);
-				
+
 				FormUtils::form2object($form, $subject, false);
-				
+
 				return parent::run($subject, $form, $request);
 			}
-			
+
 			return new ModelAndView();
 		}
-		
+
 		protected function daoMethod()
 		{
 			return 'save';
 		}
 	}
-?>

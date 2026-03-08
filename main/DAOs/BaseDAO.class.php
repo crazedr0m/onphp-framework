@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -21,7 +22,7 @@
 		public function getByQuery(SelectQuery $query);
 		public function getCustom(SelectQuery $query);
 		//@}
-		
+
 		/// object's list getters
 		//@{
 		public function getListByIds(array $ids);
@@ -29,7 +30,7 @@
 		public function getListByLogic(LogicalObject $logic);
 		public function getPlainList();
 		//@}
-		
+
 		/// custom list getters
 		//@{
 		public function getCustomList(SelectQuery $query);
@@ -40,14 +41,14 @@
 		//@{
 		public function getQueryResult(SelectQuery $query);
 		//@}
-		
+
 		/// erasers
 		//@{
 		public function drop(Identifiable $object);
 		public function dropById($id);
 		public function dropByIds(array $ids);
 		//@}
-		
+
 		/// uncachers
 		//@{
 		public function uncacheById($id);
@@ -59,4 +60,3 @@
 		public function uncacheLists();
 		//@}
 	}
-?>

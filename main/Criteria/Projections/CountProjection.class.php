@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Konstantin V. Arkhipov                          *
  *                                                                         *
@@ -25,17 +26,16 @@
 					$this->alias
 				);
 		}
-		
+
 		/**
 		 * @return SQLFunction
 		**/
 		protected function getFunction(
 			Criteria $criteria,
 			JoinCapableQuery $query
-		)
-		{
+		) {
 			Assert::isNotNull($this->property);
-			
+
 			return
 				SQLFunction::create(
 					'count',
@@ -45,4 +45,3 @@
 				);
 		}
 	}
-?>

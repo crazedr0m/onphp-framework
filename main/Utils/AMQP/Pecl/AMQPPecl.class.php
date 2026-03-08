@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -40,11 +41,11 @@
 		public function connect()
 		{
 			try {
-				if ($this->isConnected())
+				if ($this->isConnected()) {
 					return $this;
+                }
 
 				$this->link->connect();
-
 			} catch (AMQPConnectionException $e) {
 				$this->alive = false;
 
@@ -77,7 +78,7 @@
 				);
 			}
 		}
-		
+
 		/**
 		 * @throws AMQPServerConnectionException
 		 * @return AMQP
@@ -91,7 +92,7 @@
 				}
 			} catch (AMQPConnectionException $e) {
 				$this->alive = false;
-				
+
 				throw new AMQPServerConnectionException(
 					$e->getMessage(),
 					$e->getCode(),
@@ -125,4 +126,3 @@
 			return $this;
 		}
 	}
-?>

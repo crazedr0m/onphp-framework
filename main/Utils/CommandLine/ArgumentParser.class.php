@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -13,7 +14,7 @@
 	{
 		private $form = null;
 		private $result = null;
-		
+
 		/**
 		 * @return ArgumentParser
 		**/
@@ -21,17 +22,17 @@
 		{
 			return Singleton::getInstance(__CLASS__);
 		}
-		
+
 		/**
 		 * @return ArgumentParser
 		**/
 		public function setForm(Form $form)
 		{
 			$this->form = $form;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Form
 		**/
@@ -39,46 +40,47 @@
 		{
 			return $this->form;
 		}
-		
+
 		/**
 		 * @return ArgumentParser
 		**/
 		public function parse()
 		{
 			Assert::isNotNull($this->form);
-			
+
 			$long = FormToArgumentsConverter::getLong($this->form);
-			
+
 			// NOTE: stupid php, see man about long params
-			if (empty($long))
+			if (empty($long)) {
 				$this->result = getopt(
 					FormToArgumentsConverter::getShort($this->form)
 				);
-			else
-				$this->result = getopt(
-					FormToArgumentsConverter::getShort($this->form),
-					$long
-				);
-			
+			} else {
+$this->result = getopt(
+    FormToArgumentsConverter::getShort($this->form),
+    $long
+);
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return ArgumentParser
 		**/
 		public function validate()
 		{
 			Assert::isNotNull($this->result);
-			
+
 			$this->form->import($this->result);
-			
-			if ($errors = $this->form->getErrors())
+
+			if ($errors = $this->form->getErrors()) {
 				throw new WrongArgumentException(
 					"\nArguments wrong:\n"
-					.print_r($errors, true)
+					. print_r($errors, true)
 				);
-			
+            }
+
 			return $this;
 		}
 	}
-?>

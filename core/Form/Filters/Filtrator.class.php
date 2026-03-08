@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich                        *
  *                                                                         *
@@ -11,9 +12,9 @@
 
 	/**
 	 * Interface for primitive's filters.
-	 * 
+	 *
 	 * @see FiltrablePrimitive::getDisplayValue()
-	 * 
+	 *
 	 * @ingroup Filters
 	 * @ingroup Module
 	**/
@@ -21,4 +22,3 @@
 	{
 		public function apply($value);
 	}
-?>

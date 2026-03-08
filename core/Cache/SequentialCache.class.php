@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2012 by Artem Naumenko                                   *
  *                                                                          *
@@ -15,14 +16,14 @@
 		 * List of all peers, including master
 		 * @var array of CachePeer
 		 */
-		private $list		= array();
-		
+		private $list		= [];
+
 		/**
 		 * List of slaves only
 		 * @var array of CachePeer
 		 */
-		private $slaves	= array();
-		
+		private $slaves	= [];
+
 		/**
 		 * @var CachePeer
 		 */
@@ -31,42 +32,42 @@
 		/**
 		 * @param CachePeer $master
 		 * @param array $slaves or CachePeer
-		 * @return SequentialCache 
+		 * @return SequentialCache
 		 */
-		public static function create(CachePeer $master, array $slaves = array())
+		public static function create(CachePeer $master, array $slaves = [])
 		{
 			return new self($master, $slaves);
 		}
-		
+
 		/**
 		 * @param CachePeer $master
 		 * @param array $slaves or CachePeer
 		 */
-		public function __construct(CachePeer $master, array $slaves = array())
+		public function __construct(CachePeer $master, array $slaves = [])
 		{
 			$this->setMaster($master);
-			
+
 			foreach ($slaves as $cache) {
 				$this->addPeer($cache);
 			}
 		}
-		
+
 		/**
 		 * @param CachePeer $master
-		 * @return \SequentialCache 
+		 * @return \SequentialCache
 		 */
 		public function setMaster(CachePeer $master)
 		{
 			$this->master = $master;
 			$this->list = $this->slaves;
 			array_unshift($this->list, $this->master);
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @param CachePeer $master
-		 * @return \SequentialCache 
+		 * @return \SequentialCache
 		 */
 		public function addPeer(CachePeer $peer)
 		{
@@ -81,7 +82,7 @@
 			foreach ($this->list as $val) {
 				/* @var $val CachePeer */
 				$result = $val->get($key);
-				
+
 				if (
 					!empty($result)
 					|| $val->isAlive()
@@ -89,7 +90,7 @@
 					return $result;
 				}
 			}
-			
+
 			throw new RuntimeException('All peers are dead');
 		}
 
@@ -112,7 +113,7 @@
 		{
 			throw new UnsupportedMethodException('increment is not supported');
 		}
-		
+
 		protected function store($action, $key, $value, $expires = Cache::EXPIRES_MEDIUM)
 		{
 			return $this->foreachItem(__METHOD__, func_get_args());
@@ -121,12 +122,12 @@
 		private function foreachItem($method, array $args)
 		{
 			$result = true;
-			
+
 			foreach ($this->list as $peer) {
 				/* @var $peer CachePeer */
-				$result = call_user_func_array(array($peer, $method), $args) && $result;
+				$result = call_user_func_array([$peer, $method], $args) && $result;
 			}
-			
+
 			return $result;
 		}
 	}

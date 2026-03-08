@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2011 by Sergey S. Sergeev                               *
  *                                                                         *
@@ -9,5 +10,7 @@
  *                                                                         *
  ***************************************************************************/
 
-	class AMQPServerException extends BaseException {/**/}
-?>
+	class AMQPServerException extends BaseException
+    {
+/**/
+    }

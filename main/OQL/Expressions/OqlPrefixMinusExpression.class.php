@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,7 +16,7 @@
 	final class OqlPrefixMinusExpression extends OqlQueryExpression
 	{
 		const CLASS_NAME = 'PrefixUnaryExpression';
-		
+
 		public function __construct(OqlQueryParameter $subject)
 		{
 			$this->
@@ -26,15 +27,15 @@
 				)->
 				addParameter($subject);
 		}
-		
+
 		public function evaluate($values)
 		{
 			$value = $this->getParameter(1)->evaluate($values);
-			
-			if (is_numeric($value))
+
+			if (is_numeric($value)) {
 				return -$value;
-			else
-				return parent::evaluate($values);
+			} else {
+return parent::evaluate($values);
+            }
 		}
 	}
-?>

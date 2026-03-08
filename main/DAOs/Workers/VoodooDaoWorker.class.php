@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,19 +12,19 @@
 
 	/**
 	 * Transparent though quite obscure and greedy DAO worker.
-	 * 
+	 *
 	 * @warning Do not ever think about using it on production systems, unless
 	 * you're fully understand every line of code here.
-	 * 
+	 *
 	 * @magic you'll probably want to tweak your
 	 * sysctl when using MessageSegmentHandler:
-	 * 
+	 *
 	 * kernel.msgmni = (total number of DAOs + 2)
 	 * kernel.msgmnb = 32767
-	 * 
+	 *
 	 * @see CommonDaoWorker for manual-caching one.
 	 * @see SmartDaoWorker for less obscure, but locking-based worker.
-	 * 
+	 *
 	 * @ingroup DAOs
 	**/
 	final class VoodooDaoWorker extends TransparentDaoWorker
@@ -33,71 +34,71 @@
 		 * @var SegmentHandler
 		 */
 		private $handler = null;
-		
+
 		// will trigger auto-detect
 		private static $defaultHandler = null;
-		
+
 		public static function setDefaultHandler($handler)
 		{
 			Assert::classExists($handler);
-			
+
 			self::$defaultHandler = $handler;
 		}
-		
+
 		public function __construct(GenericDAO $dao)
 		{
 			parent::__construct($dao);
-			
-			if (($cache = Cache::me()) instanceof WatermarkedPeer)
+
+			if (($cache = Cache::me()) instanceof WatermarkedPeer) {
 				$watermark = $cache->mark($this->className)->getActualWatermark();
-			else
-				$watermark = null;
-			
-			$this->classKey = $this->keyToInt($watermark.$this->className);
-			
+			} else {
+$watermark = null;
+            }
+
+			$this->classKey = $this->keyToInt($watermark . $this->className);
+
 			$this->handler = $this->spawnHandler($this->classKey);
 		}
-		
+
 		/// cachers
 		//@{
 		protected function cacheByQuery(
 			SelectQuery $query,
 			/* Identifiable */ $object,
 			$expires = Cache::EXPIRES_FOREVER
-		)
-		{
+		) {
 			$key = $this->makeQueryKey($query, self::SUFFIX_QUERY);
-			
-			if ($this->handler->touch($this->keyToInt($key)))
+
+			if ($this->handler->touch($this->keyToInt($key))) {
 				Cache::me()->mark($this->className)->
 					add($key, $object, $expires);
-			
+            }
+
 			return $object;
 		}
-		
+
 		protected function cacheListByQuery(
 			SelectQuery $query,
 			/* array || Cache::NOT_FOUND */ $array
-		)
-		{
+		) {
 			if ($array !== Cache::NOT_FOUND) {
 				Assert::isArray($array);
 				Assert::isTrue(current($array) instanceof Identifiable);
 			}
-			
+
 			$cache = Cache::me();
-			
+
 			$key = $this->makeQueryKey($query, self::SUFFIX_LIST);
-			
+
 			if ($this->handler->touch($this->keyToInt($key))) {
 				$cache->mark($this->className)->
 					add($key, $array, Cache::EXPIRES_FOREVER);
 			}
-			
+
 			return $array;
 		}
 		//@}
-		
+
 		/// uncachers
 		//@{
 		public function uncacheLists()
@@ -107,19 +108,19 @@
 			);
 		}
 		//@}
-		
+
 		/// internal helpers
 		//@{
 		protected function gentlyGetByKey($key)
 		{
-			if ($this->handler->ping($this->keyToInt($key)))
+			if ($this->handler->ping($this->keyToInt($key))) {
 				return Cache::me()->mark($this->className)->get($key);
-			else {
+			} else {
 				Cache::me()->mark($this->className)->delete($key);
 				return null;
 			}
 		}
-		
+
 		private function spawnHandler($classKey)
 		{
 			if (!self::$defaultHandler) {
@@ -141,12 +142,12 @@
 			} else {
 				$handlerName = self::$defaultHandler;
 			}
-			
-			if (!self::$defaultHandler)
+
+			if (!self::$defaultHandler) {
 				self::$defaultHandler = $handlerName;
-			
+            }
+
 			return new self::$defaultHandler($classKey);
 		}
 		//@}
 	}
-?>

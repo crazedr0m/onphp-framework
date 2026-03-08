@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich, Konstantin V. Arkhipov *
  *                                                                          *
@@ -11,20 +12,20 @@
 
 	/**
 	 * Atom for using in LogicalExpression.
-	 * 
+	 *
 	 * @see DBField
-	 * 
+	 *
 	 * @ingroup Form
 	**/
 	final class FormField
 	{
 		private $primitiveName	= null;
-		
+
 		public function __construct($name)
 		{
 			$this->primitiveName = $name;
 		}
-		
+
 		/**
 		 * @return FormField
 		**/
@@ -37,10 +38,9 @@
 		{
 			return $this->primitiveName;
 		}
-		
+
 		public function toValue(Form $form)
 		{
 			return $form->getValue($this->primitiveName);
 		}
 	}
-?>

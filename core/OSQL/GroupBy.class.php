@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2007 by Anton E. Lebedevich, Konstantin V. Arkhipov *
  *                                                                          *
@@ -22,7 +23,7 @@
 		{
 			return new self($field);
 		}
-		
+
 		/**
 		 * @return GroupBy
 		**/
@@ -30,16 +31,16 @@
 		{
 			return self::create($dao->guessAtom($this->field, $query));
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			if (
 				$this->field instanceof SelectQuery
 				|| $this->field instanceof LogicalObject
-			)
-				return '('.$dialect->fieldToString($this->field).')';
-			else
-				return parent::toDialectString($dialect);
+			) {
+				return '(' . $dialect->fieldToString($this->field) . ')';
+			} else {
+return parent::toDialectString($dialect);
+            }
 		}
 	}
-?>

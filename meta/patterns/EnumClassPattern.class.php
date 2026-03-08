@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Georgiy T. Kutsurua                             *
  *                                                                         *
@@ -18,12 +19,12 @@
 		{
 			return false;
 		}
-		
+
 		public function tableExists()
 		{
 			return false;
 		}
-		
+
 		/**
 		 * @return EnumClassPattern
 		**/
@@ -31,18 +32,18 @@
 		{
 			$ns = $class->getNameSpace();
 			$userFile = $ns ? $ns->buildFilePath('business') : ONPHP_META_BUSINESS_DIR
-				.$class->getName().EXT_CLASS;
+				. $class->getName() . EXT_CLASS;
 
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
 				|| !file_exists($userFile)
-			)
+			) {
 				$this->dumpFile(
 					$userFile,
 					Format::indentize(EnumClassBuilder::build($class))
 				);
-			
+            }
+
 			return $this;
 		}
 	}
-?>

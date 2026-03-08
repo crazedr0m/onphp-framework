@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -15,19 +16,18 @@
 	interface OpenIdConsumerAssociation
 	{
 		public function getHandle();
-		
+
 		public function getType();
-		
+
 		public function getSecret();
-		
+
 		/**
 		 * @return Timestamp
 		**/
 		public function getExpires();
-		
+
 		/**
 		 * @return HttpUrl
 		**/
 		public function getServer();
 	}
-?>

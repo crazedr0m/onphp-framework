@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -15,16 +16,17 @@
 	final class FormUtils extends StaticFactory
 	{
 		/* void */ public static function object2form(
-			$object, Form $form, $ignoreNull = true
-		)
-		{
+			$object,
+            Form $form,
+            $ignoreNull = true
+		) {
 			Assert::isTrue(is_object($object));
-			
+
 			$primitives = $form->getPrimitiveList();
-			
+
 			if ($object instanceof Prototyped) {
 				$proto = $object->proto();
-				
+
 				foreach (array_keys($proto->getExpandedPropertyList()) as $name) {
 					if ($form->primitiveExists($name)) {
 						$proto->importPrimitive(
@@ -38,12 +40,12 @@
 				}
 			} else {
 				$class = new ReflectionClass($object);
-				
+
 				foreach ($class->getProperties() as $property) {
 					$name = $property->getName();
-					
+
 					if (isset($primitives[$name])) {
-						$getter = 'get'.ucfirst($name);
+						$getter = 'get' . ucfirst($name);
 						if ($class->hasMethod($getter)) {
 							$value = $object->$getter();
 							if (!$ignoreNull || ($value !== null)) {
@@ -54,16 +56,17 @@
 				}
 			}
 		}
-		
+
 		/* void */ public static function form2object(
-			Form $form, $object, $ignoreNull = true
-		)
-		{
+			Form $form,
+            $object,
+            $ignoreNull = true
+		) {
 			Assert::isTrue(is_object($object));
 			if ($object instanceof Prototyped) {
 				$proto = $object->proto();
 				$list = $proto->getExpandedPropertyList();
-				
+
 				foreach ($form->getPrimitiveList() as $name => $prm) {
 					if (isset($list[$name])) {
 						$proto->exportPrimitive($name, $prm, $object, $ignoreNull);
@@ -71,20 +74,22 @@
 				}
 			} else {
 				$class = new ReflectionClass($object);
-				
+
 				foreach ($form->getPrimitiveList() as $name => $prm) {
-					$setter = 'set'.ucfirst($name);
-					
-					if ($prm instanceof ListedPrimitive)
+					$setter = 'set' . ucfirst($name);
+
+					if ($prm instanceof ListedPrimitive) {
 						$value = $prm->getChoiceValue();
-					else
-						$value = $prm->getValue();
-					
+					} else {
+$value = $prm->getValue();
+                    }
+
 					if (
 						$class->hasMethod($setter)
 						&& (!$ignoreNull || ($value !== null))
 					) {
-						if ( // magic!
+						if (
+                            // magic!
 							$prm->getName() == 'id'
 							&& (
 								$value instanceof Identifiable
@@ -92,31 +97,31 @@
 						) {
 							$value = $value->getId();
 						}
-						
+
 						if ($value === null) {
-							$dropper = 'drop'.ucfirst($name);
-							
+							$dropper = 'drop' . ucfirst($name);
+
 							if ($class->hasMethod($dropper)) {
 								$object->$dropper();
 								continue;
 							}
 						}
-						
+
 						$object->$setter($value);
 					}
 				}
 			}
 		}
-		
+
 		public static function checkPrototyped(Prototyped $object)
 		{
 			$form = $object->proto()->makeForm();
-			
+
 			self::object2form($object, $form, false);
-			
+
 			return $form->getErrors();
 		}
-		
+
 		/**
 		 * @return Form
 		 */
@@ -128,14 +133,13 @@
 				$primitive->setName(
 					strtr(
 						$primitive->getName(),
-						array($prefix => '')
+						[$prefix => '']
 					)
 				);
 
 				$newForm->add($primitive);
 			}
-			
+
 			return $newForm;
 		}
 	}
-?>

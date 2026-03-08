@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -21,8 +22,8 @@
 		const FINE		= 5;
 		const FINER		= 6;
 		const FINEST	= 7; // lowest value
-		
-		protected $names = array(
+
+		protected $names = [
 			self::SEVERE	=> 'severe',
 			self::WARNING	=> 'warning',
 			self::INFO		=> 'info',
@@ -30,18 +31,18 @@
 			self::FINE		=> 'fine',
 			self::FINER		=> 'finer',
 			self::FINEST	=> 'finest'
-		);
-		
+		];
+
 		/**
 		 * @return LogLevel
 		**/
 		public function setId($id)
 		{
 			Assert::isNull($this->id, 'i am immutable one!');
-			
+
 			return parent::setId($id);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -49,7 +50,7 @@
 		{
 			return self::getInstance(self::SEVERE);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -57,7 +58,7 @@
 		{
 			return self::getInstance(self::WARNING);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -65,7 +66,7 @@
 		{
 			return self::getInstance(self::INFO);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -73,7 +74,7 @@
 		{
 			return self::getInstance(self::CONFIG);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -81,7 +82,7 @@
 		{
 			return self::getInstance(self::FINE);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -89,7 +90,7 @@
 		{
 			return self::getInstance(self::FINER);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
@@ -97,18 +98,18 @@
 		{
 			return self::getInstance(self::FINEST);
 		}
-		
+
 		/**
 		 * @return LogLevel
 		**/
 		private static function getInstance($id)
 		{
-			static $instances = array();
-			
-			if (!isset($instances[$id]))
+			static $instances = [];
+
+			if (!isset($instances[$id])) {
 				$instances[$id] = new self($id);
-			
+            }
+
 			return $instances[$id];
 		}
 	}
-?>

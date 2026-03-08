@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2005-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -11,20 +12,18 @@
 
 	/**
 	 * @see NamedTree
-	 * 
+	 *
 	 * @ingroup Helpers
 	**/
-	abstract class IdentifiableTree
-		extends IdentifiableObject
-		implements Stringable
+	abstract class IdentifiableTree extends IdentifiableObject implements Stringable
 	{
 		private $parent	= null;
-		
+
 		public function __toString()
 		{
 			return $this->toString();
 		}
-		
+
 		/**
 		 * @return IdentifiableTree
 		**/
@@ -32,29 +31,29 @@
 		{
 			return $this->parent;
 		}
-		
+
 		/**
 		 * @return IdentifiableTree
 		**/
 		public function setParent(IdentifiableTree $parent)
 		{
 			Assert::brothers($this, $parent);
-			
+
 			$this->parent = $parent;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return IdentifiableTree
 		**/
 		public function dropParent()
 		{
 			$this->parent = null;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return IdentifiableTree
 		**/
@@ -62,27 +61,27 @@
 		{
 			$current = $this;
 			$next = $this;
-			
+
 			while ($next) {
 				$current = $next;
 				$next = $next->getParent();
 			}
-			
+
 			return $current;
 		}
-		
+
 		public function toString($delimiter = ', ')
 		{
-			$ids = array($this->getId());
-			
+			$ids = [$this->getId()];
+
 			$parent = $this;
-			
-			while ($parent = $parent->getParent())
+
+			while ($parent = $parent->getParent()) {
 				$ids[] = $parent->getId();
-			
+            }
+
 			$ids = array_reverse($ids);
-			
+
 			return implode($delimiter, $ids);
 		}
 	}
-?>

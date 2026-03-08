@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -15,7 +16,7 @@
 	final class StreamLogger extends BaseLogger
 	{
 		private $stream = null;
-		
+
 		public function __destruct()
 		{
 			try {
@@ -24,15 +25,15 @@
 				// boo.
 			}
 		}
-		
+
 		/**
 		 * @return StreamLogger
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return OutputStream
 		**/
@@ -40,55 +41,55 @@
 		{
 			return $this->stream;
 		}
-		
+
 		/**
 		 * @return StreamLogger
 		**/
 		public function setOutputStream(OutputStream $stream)
 		{
 			$this->stream = $stream;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return StreamLogger
 		**/
 		public function flush()
 		{
-			if ($this->stream)
+			if ($this->stream) {
 				$this->stream->flush();
-			
+            }
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return StreamLogger
 		**/
 		public function close()
 		{
 			if ($this->stream) {
-				
 				$this->flush();
 				$this->stream->close();
-			
+
 				$this->stream = null;
 			}
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return StreamLogger
 		**/
 		protected function publish(LogRecord $record)
 		{
-			if (!$this->stream)
+			if (!$this->stream) {
 				return $this;
-			
-			$this->stream->write($record->toString()."\n");
-			
+            }
+
+			$this->stream->write($record->toString() . "\n");
+
 			return $this;
 		}
 	}
-?>

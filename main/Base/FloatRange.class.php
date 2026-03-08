@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -13,15 +14,17 @@
 	{
 		public function __construct($min = null, $max = null)
 		{
-			if ($min !== null)
+			if ($min !== null) {
 				Assert::isFloat($min);
-			
-			if ($max !== null)
+            }
+
+			if ($max !== null) {
 				Assert::isFloat($max);
-			
+            }
+
 			parent::__construct($min, $max);
 		}
-		
+
 		/**
 		 * @return FloatRange
 		**/
@@ -29,33 +32,34 @@
 		{
 			return new self($min, $max);
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return FloatRange
 		**/
 		public function setMin($min = null)
 		{
-			if ($min !== null)
+			if ($min !== null) {
 				Assert::isFloat($min);
-			else
-				return $this;
-			
+			} else {
+return $this;
+            }
+
 			return parent::setMin($min);
 		}
-		
+
 		/**
 		 * @throws WrongArgumentException
 		 * @return FloatRange
 		**/
 		public function setMax($max = null)
 		{
-			if ($max !== null)
+			if ($max !== null) {
 				Assert::isFloat($max);
-			else
-				return $this;
-			
+			} else {
+return $this;
+            }
+
 			return parent::setMax($max);
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -17,12 +18,11 @@
 		protected static function getHead()
 		{
 			$head = self::startCap();
-			
+
 			$head .=
 				' *   This file will never be generated again -'
-				.' feel free to edit.            *';
+				. ' feel free to edit.            *';
 
-			return $head."\n".self::endCap();
+			return $head . "\n" . self::endCap();
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2008 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,10 +19,9 @@
 		{
 			return 8;
 		}
-		
+
 		public function toColumnType()
 		{
 			return 'DataType::create(DataType::BIGINT)';
 		}
 	}
-?>

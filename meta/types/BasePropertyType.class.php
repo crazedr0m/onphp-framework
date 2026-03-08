@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -18,55 +19,54 @@
 		abstract public function isMeasurable();
 		abstract public function toColumnType();
 		abstract public function getPrimitiveName();
-		
+
 		protected $default = null;
-		
+
 		public function isGeneric()
 		{
 			return true;
 		}
-		
+
 		public function toMethods(
 			MetaClass $class,
 			MetaClassProperty $property,
 			MetaClassProperty $holder = null
-		)
-		{
+		) {
 			return
 				$this->toGetter($class, $property, $holder)
-				.$this->toSetter($class, $property, $holder);
+				. $this->toSetter($class, $property, $holder);
 		}
-		
+
 		public function hasDefault()
 		{
 			return ($this->default !== null);
 		}
-		
+
 		public function getDefault()
 		{
 			return $this->default;
 		}
-		
+
 		public function setDefault($default)
 		{
 			throw new UnsupportedMethodException(
 				'only generic non-object types can have default values atm'
 			);
 		}
-		
+
 		public function toGetter(
 			MetaClass $class,
 			MetaClassProperty $property,
 			MetaClassProperty $holder = null
-		)
-		{
-			if ($holder)
-				$name = $holder->getName().'->get'.ucfirst($property->getName()).'()';
-			else
-				$name = $property->getName();
-			
-			$methodName = 'get'.ucfirst($property->getName());
-			
+		) {
+			if ($holder) {
+				$name = $holder->getName() . '->get' . ucfirst($property->getName()) . '()';
+			} else {
+$name = $property->getName();
+            }
+
+			$methodName = 'get' . ucfirst($property->getName());
+
 			return <<<EOT
 
 public function {$methodName}()
@@ -76,16 +76,15 @@ public function {$methodName}()
 
 EOT;
 		}
-		
+
 		public function toSetter(
 			MetaClass $class,
 			MetaClassProperty $property,
 			MetaClassProperty $holder = null
-		)
-		{
+		) {
 			$name = $property->getName();
-			$methodName = 'set'.ucfirst($name);
-			
+			$methodName = 'set' . ucfirst($name);
+
 			if ($holder) {
 				return <<<EOT
 
@@ -118,10 +117,9 @@ EOT;
 
 			Assert::isUnreachable();
 		}
-		
+
 		public function getHint()
 		{
 			return null;
 		}
 	}
-?>

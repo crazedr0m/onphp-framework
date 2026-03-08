@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2012 by Timofey A. Anisimov                             *
  *                                                                         *
@@ -22,5 +23,4 @@
 		{
 			return parent::baseToString($dialect, 'FULL OUTER ');
 		}
-
-	}
+    }

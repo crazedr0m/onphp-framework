@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                               *
  *                                                                           *
@@ -16,21 +17,22 @@
 	{
 		public function import($scope)
 		{
-			if (!$this->className)
+			if (!$this->className) {
 				throw new WrongStateException(
 					"no class defined for PrimitiveEnumeration '{$this->name}'"
 				);
-			
+            }
+
 			if (isset($scope[$this->name])) {
 				$scopedValue = urldecode($scope[$this->name]);
-				
+
 				$anyId =
-					ClassUtils::callStaticMethod($this->className.'::getAnyId');
-				
+					ClassUtils::callStaticMethod($this->className . '::getAnyId');
+
 				$object = new $this->className($anyId);
-				
+
 				$names = $object->getNameList();
-				
+
 				foreach ($names as $key => $value) {
 					if ($value == $scopedValue) {
 						try {
@@ -39,15 +41,14 @@
 							$this->value = null;
 							return false;
 						}
-						
+
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
-			
+
 			return null;
 		}
 	}
-?>

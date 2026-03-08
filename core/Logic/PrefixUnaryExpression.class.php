@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2004-2007 by Konstantin V. Arkhipov, Anton E. Lebedevich *
  *                                                                          *
@@ -20,7 +21,7 @@
 		private $subject	= null;
 		private $logic		= null;
 		private $brackets   = true;
-		
+
 		/**
 		 * @return PrefixUnaryExpression
 		 */
@@ -28,13 +29,13 @@
 		{
 			return new self($subject, $logic);
 		}
-		
+
 		public function __construct($logic, $subject)
 		{
 			$this->subject	= $subject;
 			$this->logic	= $logic;
 		}
-		
+
 		/**
 		 * @param boolean $noBrackets
 		 * @return PrefixUnaryExpression
@@ -44,15 +45,15 @@
 			$this->brackets = !$noBrackets;
 			return $this;
 		}
-		
+
 		public function toDialectString(Dialect $dialect)
 		{
 			$sql = $dialect->logicToString($this->logic)
-				.' '.$dialect->toFieldString($this->subject);
-			
+				. ' ' . $dialect->toFieldString($this->subject);
+
 			return $this->brackets ? "({$sql})" : $sql;
 		}
-		
+
 		/**
 		 * @return PrefixUnaryExpression
 		**/
@@ -64,22 +65,20 @@
 			);
 			return $expression->noBrackets($this->brackets);
 		}
-		
+
 		public function toBoolean(Form $form)
 		{
 			Assert::isTrue($this->brackets, 'brackets must be enabled');
 			$subject = $form->toFormValue($this->subject);
-				
+
 			switch ($this->logic) {
-				case self::NOT :
+				case self::NOT:
 					return false === $subject;
 
 				default:
-					
 					throw new UnsupportedMethodException(
 						"'{$this->logic}' doesn't supported yet"
 					);
 			}
 		}
 	}
-?>

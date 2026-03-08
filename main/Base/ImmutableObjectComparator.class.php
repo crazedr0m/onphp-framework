@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2009 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -9,8 +10,7 @@
  *                                                                         *
  ***************************************************************************/
 
-	final class ImmutableObjectComparator extends Singleton
-		implements Comparator, Instantiatable
+	final class ImmutableObjectComparator extends Singleton implements Comparator, Instantiatable
 	{
 		public static function me()
 		{
@@ -25,10 +25,10 @@
 			$oneId = $one->getId();
 			$twoId = $two->getId();
 
-			if ($oneId === $twoId)
+			if ($oneId === $twoId) {
 				return 0;
+            }
 
 			return ($oneId < $twoId) ? -1 : 1;
 		}
 	}
-?>

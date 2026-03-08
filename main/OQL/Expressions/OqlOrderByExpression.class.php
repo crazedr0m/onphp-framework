@@ -1,4 +1,5 @@
 <?php
+
 /****************************************************************************
  *   Copyright (C) 2008 by Vladlen Y. Koshelev                              *
  *                                                                          *
@@ -15,18 +16,18 @@
 	final class OqlOrderByExpression extends OqlQueryExpression
 	{
 		const CLASS_NAME = 'OrderBy';
-		
+
 		private $direction = null;
-		
+
 		public function __construct(OqlQueryParameter $parameter, $direction)
 		{
 			$this->
 				setClassName(self::CLASS_NAME)->
 				addParameter($parameter);
-			
+
 			$this->direction = $direction;
 		}
-		
+
 		/**
 		 * @return OrderBy
 		**/
@@ -36,4 +37,3 @@
 				setDirection($this->direction);
 		}
 	}
-?>

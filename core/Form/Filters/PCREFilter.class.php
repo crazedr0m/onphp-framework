@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Sveta A. Smirnova                          *
  *                                                                         *
@@ -17,15 +18,15 @@
 		private $search 	= null;
 		private $replace	= null;
 		private $limit		= -1;
-		
+
 		/**
 		 * @return PCREFilter
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return PCREFilter
 		**/
@@ -33,10 +34,10 @@
 		{
 			$this->search 	= $search;
 			$this->replace 	= $replace;
-			
+
 			return $this;
 		}
-		
+
 		public function apply($value)
 		{
 			return
@@ -47,15 +48,14 @@
 					$this->limit
 				);
 		}
-		
+
 		/**
 		 * @return PCREFilter
 		**/
 		public function setLimit($limit)
 		{
 			$this->limit = $limit;
-			
+
 			return $this;
 		}
 	}
-?>

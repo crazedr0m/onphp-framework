@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -12,29 +13,26 @@
 	/**
 	 * @ingroup GoogleChart
 	**/
-	final class GoogleChartDataTextEncoding
-		extends BaseGoogleChartDataEncoding
-		implements GoogleChartDataEncoding
+	final class GoogleChartDataTextEncoding extends BaseGoogleChartDataEncoding implements GoogleChartDataEncoding
 	{
 		protected $name = 't:';
 		protected $delimiter = ',';
-		
+
 		/**
 		 * @return GoogleChartDataTextEncoding
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function encode(GoogleChartDataSet $set)
 		{
 			return implode($this->delimiter, $set->getData());
 		}
-		
+
 		public function toString()
 		{
 			return $this->name;
 		}
 	}
-?>

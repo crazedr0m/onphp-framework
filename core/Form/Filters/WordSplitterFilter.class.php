@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Evgeniy N. Sokolov	                           *
  *                                                                         *
@@ -16,15 +17,15 @@
 	{
 		private $maxWordLength 	= 25;
 		private $delimer 		= '&#x200B;';
-		
+
 		/**
 		 * @return WordSplitterFilter
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return WordSplitterFilter
 		**/
@@ -33,12 +34,12 @@
 			$this->maxWordLength = $length;
 			return $this;
 		}
-		
+
 		public function getMaxWordLength()
 		{
 			return $this->maxWordLength;
 		}
-		
+
 		/**
 		 * @return WordSplitterFilter
 		**/
@@ -47,21 +48,20 @@
 			$this->delimer = $delimer;
 			return $this;
 		}
-		
+
 		public function getDelimer()
 		{
 			return $this->delimer;
 		}
-		
+
 		public function apply($value)
 		{
 			return
 				preg_replace(
-					'/([^\s]{'.$this->getMaxWordLength().','
-						.$this->getMaxWordLength().'})([^\s])/u',
-					'$1'.$this->getDelimer().'$2',
+					'/([^\s]{' . $this->getMaxWordLength() . ','
+						. $this->getMaxWordLength() . '})([^\s])/u',
+					'$1' . $this->getDelimer() . '$2',
 					$value
 				);
 		}
 	}
-?>

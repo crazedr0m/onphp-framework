@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -11,13 +12,15 @@
 
 	/**
 	 * Example:
-	 * 
+	 *
 	 *	$form->import($request->getGet());
-	 * 
+	 *
 	 *	if ($form->getErrors())
 	 *		throw new BadRequestException('wrong arguments passed');
-	 * 
+	 *
 	 * Use this exception instead of View('error')
 	**/
-	class BadRequestException extends BaseException {/* nop */}
-?>
+	class BadRequestException extends BaseException
+    {
+/* nop */
+    }

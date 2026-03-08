@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Anton E. Lebedevich                             *
  *                                                                         *
@@ -30,8 +31,8 @@
 		const LOCK		= 14;
 		const UNLOCK	= 15;
 		const PATCH		= 16;
-		
-		protected $names = array(
+
+		protected $names = [
 			self::OPTIONS 	=> 'OPTIONS',
 			self::GET		=> 'GET',
 			self::HEAD		=> 'HEAD',
@@ -48,18 +49,18 @@
 			self::LOCK		=> 'LOCK',
 			self::UNLOCK 	=> 'UNLOCK',
 			self::PATCH 	=> 'PATCH',
-		);
-		
+		];
+
 		public static function get()
 		{
 			return new self(self::GET);
 		}
-		
+
 		public static function post()
 		{
 			return new self(self::POST);
 		}
-		
+
 		/**
 		 * @return HttpMethod
 		 */
@@ -67,15 +68,15 @@
 		{
 			return self::get();
 		}
-		
+
 		public static function createByName($name)
 		{
 			$key = array_search($name, self::any()->getNameList());
-			
-			if ($key === false)
+
+			if ($key === false) {
 				throw new WrongArgumentException();
-			
+            }
+
 			return new self($key);
 		}
 	}
-?>

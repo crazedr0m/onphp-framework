@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see http://eaccelerator.net/
-	 * 
+	 *
 	 * @ingroup Lockers
 	**/
 	final class eAcceleratorLocker extends BaseLocker
@@ -20,21 +21,20 @@
 		{
 			return eaccelerator_lock($key);
 		}
-		
+
 		public function free($key)
 		{
 			return eaccelerator_unlock($key);
 		}
-		
+
 		public function drop($key)
 		{
 			return $this->free($key);
 		}
-		
+
 		public function clean()
 		{
 			// will be cleaned out upon script's shutdown
 			return true;
 		}
 	}
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -11,12 +12,12 @@
 
 	/**
 	 * Try to identify mobile device by http headers
-	 * 
+	 *
 	 * @ingroup Utils
 	**/
 	final class MobileRequestDetector
 	{
-		static private $headers = array(
+		private static $headers = [
 			'HTTP_X_WAP_PROFILE',
 			'HTTP_PROFILE',
 			// has additional info
@@ -56,40 +57,45 @@
 			'HTTP_X_ZTGO_BEARERINFO',
 			// lg specific ?
 			'HTTP_BEARER_INDICATION'
-		);
-		
+		];
+
 		/**
 		 * @return MobileRequestDetector
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		public function isOperaMini(array $source)
 		{
 			// mandatory opera mini header
 			return isset($source['HTTP_X_OPERAMINI_FEATURES']);
 		}
-		
+
 		public function isMobile(array $source, $checkAccept = false)
 		{
-			if ($this->isOperaMini($source))
+			if ($this->isOperaMini($source)) {
 				return true;
-			
-			foreach (self::$headers as $header)
-				if (isset($source[$header]))
+            }
+
+			foreach (self::$headers as $header) {
+				if (isset($source[$header])) {
 					return true;
-			
-			if ($this->isIphone($source))
+                }
+            }
+
+			if ($this->isIphone($source)) {
 				return true;
-			
-			if ($checkAccept)
+            }
+
+			if ($checkAccept) {
 				return $this->isMobileByHttpAccept($source);
-			
+            }
+
 			return false;
 		}
-		
+
 		public function isIphone(array $source)
 		{
 			return (
@@ -101,7 +107,7 @@
 					) !== false
 			);
 		}
-		
+
 		public function isMobileByHttpAccept(array $source)
 		{
 			return (
@@ -114,4 +120,3 @@
 			);
 		}
 	}
-?>

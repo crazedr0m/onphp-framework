@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008-2009 by Denis M. Gabaidulin                        *
  *                                                                         *
@@ -16,15 +17,15 @@
 	{
 		private $style 		= null;
 		private $labelStyle = null;
-		
+
 		/**
 		 * @return GoogleChartLine
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return GoogleChartLine
 		**/
@@ -32,17 +33,17 @@
 		{
 			return parent::setValue($value);
 		}
-		
+
 		/**
 		 * @return GoogleChartLine
 		**/
 		public function setStyle(ChartLineStyle $style)
 		{
 			$this->style = $style;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return ChartLineStyle
 		**/
@@ -50,17 +51,17 @@
 		{
 			return $this->style;
 		}
-		
+
 		/**
 		 * @return GoogleChartLine
 		**/
 		public function setLabelStyle(ChartLabelStyle $style)
 		{
 			$this->labelStyle = $style;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return GoogleChartLabelStyle
 		**/
@@ -69,4 +70,3 @@
 			return $this->labelStyle;
 		}
 	}
-?>

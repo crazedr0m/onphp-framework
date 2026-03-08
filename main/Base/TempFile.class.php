@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007 by Ivan Y. Khvostishkov                            *
  *                                                                         *
@@ -12,14 +13,14 @@
 	final class TempFile
 	{
 		private $path = null;
-		
+
 		public function __construct(
-			$directory = 'temp-garbage/', $prefix = 'TmpFile'
-		)
-		{
+			$directory = 'temp-garbage/',
+            $prefix = 'TmpFile'
+		) {
 			$this->path = FileUtils::makeTempFile($directory, $prefix);
 		}
-		
+
 		public function __destruct()
 		{
 			try {
@@ -28,10 +29,9 @@
 				// boo! deal with garbage yourself.
 			}
 		}
-		
+
 		public function getPath()
 		{
 			return $this->path;
 		}
 	}
-?>

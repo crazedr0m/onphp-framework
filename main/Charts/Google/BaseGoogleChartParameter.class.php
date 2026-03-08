@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2008 by Denis M. Gabaidulin                             *
  *                                                                         *
@@ -15,20 +16,19 @@
 	abstract class BaseGoogleChartParameter implements Stringable
 	{
 		protected $name = null;
-		
+
 		/**
 		 * @return BaseGoogleChartParameter
 		**/
 		public function setName($name)
 		{
 			$this->name = $name;
-			
+
 			return $this;
 		}
-		
+
 		public function getName()
 		{
 			return $this->name;
 		}
 	}
-?>

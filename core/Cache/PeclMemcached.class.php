@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2006-2012 by Konstantin V. Arkhipov                     *
  *                                                                         *
@@ -22,7 +23,7 @@
 		const DEFAULT_PORT		= 11211;
 		const DEFAULT_HOST		= '127.0.0.1';
 		const DEFAULT_TIMEOUT	= 1;
-		
+
 		protected $host			= null;
 		protected $port			= null;
 
@@ -34,7 +35,7 @@
 		private $connectTimeout = null;
 		private $triedConnect	= false;
 		private $persistentId   = 'persist';
-		
+
 		/**
 		 * @return PeclMemcached
 		**/
@@ -42,22 +43,20 @@
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT,
 			$connectTimeout = self::DEFAULT_TIMEOUT
-		)
-		{
+		) {
 			return new self($host, $port, $connectTimeout);
 		}
-		
+
 		public function __construct(
 			$host = self::DEFAULT_HOST,
 			$port = self::DEFAULT_PORT,
 			$connectTimeout = self::DEFAULT_TIMEOUT
-		)
-		{
+		) {
 			$this->host = $host;
 			$this->port = $port;
 			$this->connectTimeout = $connectTimeout;
 		}
-		
+
 		public function __destruct()
 		{
 			if (!$this->alive) {
@@ -79,41 +78,41 @@
 		public function isAlive()
 		{
 			$this->ensureTriedToConnect();
-			
+
 			return parent::isAlive();
 		}
-		
+
 		/**
 		 * @return PeclMemcached
 		**/
 		public function clean()
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				$this->instance->flush();
 			} catch (Exception $e) {
 				$this->alive = false;
 			}
-			
+
 			return parent::clean();
 		}
-		
+
 		public function increment($key, $value)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->instance->increment($key, $value);
 			} catch (Exception $e) {
 				return null;
 			}
 		}
-		
+
 		public function decrement($key, $value)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->instance->decrement($key, $value);
 			} catch (Exception $e) {
@@ -133,29 +132,30 @@
 			$result = $this->instance->getMulti($indexes);
 			return $result;
 		}
-		
+
 		public function get($index)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->instance->get($index);
 			} catch (Exception $e) {
-				if(strpos($e->getMessage(), 'Invalid key') !== false)
+				if (strpos($e->getMessage(), 'Invalid key') !== false) {
 					return null;
-				
+                }
+
 				$this->alive = false;
-				
+
 				return null;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function delete($index)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				// second parameter required, wrt new memcached protocol:
 				// delete key 0 (see process_delete_command in the memcached.c)
@@ -164,23 +164,23 @@
 			} catch (Exception $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		public function append($key, $data)
 		{
 			$this->ensureTriedToConnect();
-			
+
 			try {
 				return $this->instance->append($key, $data);
 			} catch (Exception $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		/**
 		 * @param float $requestTimeout time in seconds
 		 * @return PeclMemcached
@@ -191,9 +191,9 @@
 
 			return $this;
 		}
-		
+
 		/**
-		 * @return float 
+		 * @return float
 		 */
 		public function getTimeout()
 		{
@@ -210,20 +210,23 @@
 
 		protected function ensureTriedToConnect()
 		{
-			if ($this->triedConnect) 
+			if ($this->triedConnect) {
 				return $this;
-			
+            }
+
 			$this->triedConnect = true;
-			
+
 			$this->connect();
-			
+
 			return $this;
 		}
-		
+
 		protected function store(
-			$action, $key, $value, $expires = Cache::EXPIRES_MEDIUM
-		)
-		{
+			$action,
+            $key,
+            $value,
+            $expires = Cache::EXPIRES_MEDIUM
+		) {
 			$this->ensureTriedToConnect();
 			try {
 				return
@@ -231,10 +234,10 @@
 			} catch (BaseException $e) {
 				return $this->alive = false;
 			}
-			
+
 			Assert::isUnreachable();
 		}
-		
+
 		protected function connect()
 		{
 			try {
@@ -255,7 +258,7 @@
 
 				$this->instance->addServer($this->host, $this->port);
 				$this->alive = true;
-			} catch (Exception $e) {}
+			} catch (Exception $e) {
+            }
 		}
 	}
-?>

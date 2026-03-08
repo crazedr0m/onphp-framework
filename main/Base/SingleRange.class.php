@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Vladimir A. Altuchov                       *
  *                                                                         *
@@ -16,7 +17,6 @@
 	{
 		public function getStart();
 		public function getEnd();
-		
+
 		public function contains($probe);
 	}
-?>

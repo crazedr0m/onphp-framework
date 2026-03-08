@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************************
  *   Copyright (C) 2005-2007 by Garmonbozia Research Group                 *
  *                                                                         *
@@ -11,7 +12,7 @@
 
 	/**
 	 * @see Identifiable
-	 * 
+	 *
 	 * @ingroup Base
 	 * @ingroup Module
 	**/
@@ -19,15 +20,15 @@
 	{
 		private $id		= null;
 		private $final	= false;
-		
+
 		/**
 		 * @return Identifier
 		**/
 		public static function create()
 		{
-			return new self;
+			return new self();
 		}
-		
+
 		/**
 		 * @return Identifier
 		**/
@@ -35,32 +36,32 @@
 		{
 			return self::create()->setId($id);
 		}
-		
+
 		public function getId()
 		{
 			return $this->id;
 		}
-		
+
 		/**
 		 * @return Identifier
 		**/
 		public function setId($id)
 		{
 			$this->id = $id;
-			
+
 			return $this;
 		}
-		
+
 		/**
 		 * @return Identifier
 		**/
 		public function finalize()
 		{
 			$this->final = true;
-			
+
 			return $this;
 		}
-		
+
 		public function isFinalized()
 		{
 			return $this->final;
@@ -71,4 +72,3 @@
 			return (string)$this->id;
 		}
 	}
-?>
