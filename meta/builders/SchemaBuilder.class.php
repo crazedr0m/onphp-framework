@@ -23,7 +23,7 @@
 
 EOT;
 
-			$columns = array();
+			$columns = [];
 			
 			foreach ($propertyList as $property) {
 				if (
@@ -50,7 +50,7 @@ EOT;
 		{
 			$out = null;
 			
-			$knownJunctions = array();
+			$knownJunctions = [];
 			
 			foreach ($class->getAllProperties() as $property) {
 				if ($relation = $property->getRelation()) {

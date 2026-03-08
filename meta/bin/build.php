@@ -258,13 +258,7 @@ Possible options:
 	if (!$pathMeta) {
 		$out->warning('Trying to guess path to MetaConfiguration file: ');
 		
-		foreach (
-			array(
-				'config.xml',
-				'meta/config.xml'
-			)
-			as $path
-		) {
+		foreach (['config.xml', 'meta/config.xml'] as $path) {
 			if (file_exists($path)) {
 				$pathMeta = $path;
 				

@@ -16,11 +16,11 @@
 	{
 		private $out = null;
 		
-		private $classes = array();
-		private $sources = array();
+		private $classes = [];
+		private $sources = [];
 		
-		private $liaisons = array();
-		private $references = array();
+		private $liaisons = [];
+		private $references = [];
 		
 		private $defaultSource = null;
 		
@@ -220,8 +220,7 @@
 		{
 			$out = $this->getOutput();
 			
-			$out->
-				infoLine('Building classes:');
+			$out->infoLine('Building classes:');
 			
 			foreach ($this->classes as $name => $class) {
 				if (

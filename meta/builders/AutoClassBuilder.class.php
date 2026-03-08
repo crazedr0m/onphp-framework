@@ -17,9 +17,9 @@
 
 		public static function build(MetaClass $class)
 		{
-			$unsetInSleep = array();
-			$cloneNull = array();
-			$cloneValueObject = array();
+			$unsetInSleep = [];
+			$cloneNull = [];
+			$cloneValueObject = [];
 
 			$ns = $class->getNameSpace();
 			$out = self::getHead();
@@ -100,7 +100,7 @@ EOT;
 
 			}
 			
-			$valueObjects = array();
+			$valueObjects = [];
 			
 			foreach ($class->getProperties() as $property) {
 				if (

@@ -24,9 +24,9 @@
 		/**
 		 * MetaClassProperty[] $properties
 		**/
-		private $properties	= array();
-		private $interfaces	= array();
-		private $references	= array();
+		private $properties	= [];
+		private $interfaces	= [];
+		private $references	= [];
 		
 		private $pattern	= null;
 		private $identifier	= null;
