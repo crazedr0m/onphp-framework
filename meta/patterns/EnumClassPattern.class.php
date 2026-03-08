@@ -31,7 +31,7 @@
 		public function build(MetaClass $class)
 		{
 			$ns = $class->getNameSpace();
-			$userFile = $ns ? $ns->buildFilePath('business') : ONPHP_META_BUSINESS_DIR
+			$userFile = $ns ? $ns->buildFilePath('business') : MetaConfiguration::me()->getPathBuilder()->getBusinessPath()
 				. $class->getName() . EXT_CLASS;
 
 			if (

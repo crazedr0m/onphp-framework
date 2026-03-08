@@ -53,7 +53,7 @@
 
 				if (!MetaConfiguration::me()->isDryRun()) {
 					$fp = fopen($path, 'wb');
-					fwrite($fp, $content.PHP_EOL);
+					fwrite($fp, $content.PHP_EOL.PHP_EOL);
 					fclose($fp);
 				}
 
@@ -95,8 +95,8 @@
 				$autoFile = $ns->buildFilePath('proto', true) . $class->getName() . EXT_CLASS;
 				$userFile = $ns->buildFilePath('proto') . $class->getName() . EXT_CLASS;
 			} else {
-				$autoFile = ONPHP_META_AUTO_PROTO_DIR . 'AutoProto' . $class->getName() . EXT_CLASS;
-				$userFile = ONPHP_META_PROTO_DIR . 'Proto' . $class->getName() . EXT_CLASS;
+				$autoFile = MetaConfiguration::me()->getPathBuilder()->getAutoProtoPath() . 'AutoProto' . $class->getName() . EXT_CLASS;
+				$userFile = MetaConfiguration::me()->getPathBuilder()->getProtoPath() . 'Proto' . $class->getName() . EXT_CLASS;
 			}
 
 			$this->dumpFile(
@@ -127,8 +127,8 @@
 				$autoFile = $ns->buildFilePath('business', true) . $class->getName() . EXT_CLASS;
 				$userFile = $ns->buildFilePath('business') . $class->getName() . EXT_CLASS;
 			} else {
-				$autoFile = ONPHP_META_AUTO_BUSINESS_DIR . 'Auto' . $class->getName() . EXT_CLASS;
-				$userFile = ONPHP_META_BUSINESS_DIR . $class->getName() . EXT_CLASS;
+				$autoFile = MetaConfiguration::me()->getPathBuilder()->getAutoBusinessPath() . 'Auto' . $class->getName() . EXT_CLASS;
+				$userFile = MetaConfiguration::me()->getPathBuilder()->getBusinessPath() . $class->getName() . EXT_CLASS;
 			}
 
 			$this->dumpFile(
@@ -159,8 +159,8 @@
 				$autoFile = $ns->buildFilePath('dao', true) . $class->getName() . 'DAO' . EXT_CLASS;
 				$userFile = $ns->buildFilePath('dao') . $class->getName() . 'DAO' . EXT_CLASS;
 			} else {
-				$autoFile = ONPHP_META_AUTO_DAO_DIR . 'Auto' . $class->getName() . 'DAO' . EXT_CLASS;
-				$userFile = ONPHP_META_DAO_DIR . $class->getName() . 'DAO' . EXT_CLASS;
+				$autoFile = MetaConfiguration::me()->getPathBuilder()->getAutoDaoPath() . 'Auto' . $class->getName() . 'DAO' . EXT_CLASS;
+				$userFile = MetaConfiguration::me()->getPathBuilder()->getDaoPath() . $class->getName() . 'DAO' . EXT_CLASS;
 			}
 
 			$this->dumpFile(

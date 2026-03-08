@@ -29,12 +29,37 @@
 		
 		private $checkEnumerationRefIntegrity = false;
 		
+		private $pathConfiguration = null;
+		private $pathBuilder = null;
+		
 		/**
 		 * @return MetaConfiguration
 		**/
 		public static function me()
 		{
 			return Singleton::getInstance('MetaConfiguration');
+		}
+		
+		/**
+		 * @return MetaPathConfigurationInterface
+		**/
+		private function getPathConfiguration()
+		{
+			if (!$this->pathConfiguration) {
+				$this->pathConfiguration = DefaultMetaPathConfiguration::create();
+			}
+			return $this->pathConfiguration;
+		}
+		
+		/**
+		 * @return PathBuilder
+		**/
+		public function getPathBuilder()
+		{
+			if (!$this->pathBuilder) {
+				$this->pathBuilder = PathBuilder::create($this->getPathConfiguration());
+			}
+			return $this->pathBuilder;
 		}
 		
 		/**
@@ -286,7 +311,7 @@
 			$schema .= '?>';
 			
 			BasePattern::dumpFile(
-				ONPHP_META_AUTO_DIR.'schema.php',
+				$this->getPathBuilder()->getSchemaPath(),
 				Format::indentize($schema)
 			);
 
@@ -303,7 +328,7 @@
 				newLine()->
 				infoLine('Suggested DB-schema changes: ');
 			
-			require ONPHP_META_AUTO_DIR.'schema.php';
+			require $this->getPathBuilder()->getSchemaPath();
 			
 			foreach ($this->classes as $class) {
 				if (
@@ -402,7 +427,7 @@
 						
 						// check for old-style naming
 						$oldStlye =
-							ONPHP_META_DAO_DIR
+							$this->getPathBuilder()->getDaoPath()
 							.$class->getName()
 							.'To'
 							.$property->getType()->getClassName()
@@ -429,7 +454,7 @@
 			$class = $property->getClass();
 			$ns = $class->getNameSpace();
 			$userFile =
-				($ns ? $ns->buildFilePath('dao') : ONPHP_META_DAO_DIR)
+				($ns ? $ns->buildFilePath('dao') : $this->getPathBuilder()->getDaoPath())
 				.$property->getClass()->getName().ucfirst($property->getName())
 				.'DAO'
 				.EXT_CLASS;
@@ -448,12 +473,12 @@
 			
 			AutoloaderPool::get('onPHP')->
 				addPaths([
-					ONPHP_META_BUSINESS_DIR,
-					ONPHP_META_DAO_DIR,
-					ONPHP_META_PROTO_DIR,
-					ONPHP_META_AUTO_BUSINESS_DIR,
-					ONPHP_META_AUTO_DAO_DIR,
-					ONPHP_META_AUTO_PROTO_DIR,
+					$this->getPathBuilder()->getBusinessPath(),
+					$this->getPathBuilder()->getDaoPath(),
+					$this->getPathBuilder()->getProtoPath(),
+					$this->getPathBuilder()->getAutoBusinessPath(),
+					$this->getPathBuilder()->getAutoDaoPath(),
+					$this->getPathBuilder()->getAutoProtoPath(),
 				]);
 			
 			$out->info("\t");
@@ -674,9 +699,9 @@
 				infoLine('Checking for stale files: ');
 			
 			return $this->
-				checkDirectory(ONPHP_META_AUTO_BUSINESS_DIR, 'Auto', null, $drop)->
-				checkDirectory(ONPHP_META_AUTO_DAO_DIR, 'Auto', 'DAO', $drop)->
-				checkDirectory(ONPHP_META_AUTO_PROTO_DIR, 'AutoProto', null, $drop);
+				checkDirectory($this->getPathBuilder()->getAutoBusinessPath(), 'Auto', null, $drop)->
+				checkDirectory($this->getPathBuilder()->getAutoDaoPath(), 'Auto', 'DAO', $drop)->
+				checkDirectory($this->getPathBuilder()->getAutoProtoPath(), 'AutoProto', null, $drop);
 		}
 		
 		/**
