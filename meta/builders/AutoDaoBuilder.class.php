@@ -21,19 +21,33 @@
 			else
 				$parent = $class->getParent();
 			
+			$ns = $class->getNameSpace();
+			$out = self::getHead();
+
+			if ($ns) {
+				$out .= <<<EOT
+namespace {$ns->buildFullName('dao', true)};
+
+EOT;
+			}
+
+			$className = $ns ? $class->getName().'DAO' : 'Auto'.$class->getName().'DAO';
+			
 			if (
 				$class->getParent()->getPattern()
 					instanceof InternalClassPattern
 			) {
-				$parentName = 'StorableDAO';
+				$parentName = ($ns ? '\\': '').'StorableDAO';
 			} else {
-				$parentName = $parent->getName().'DAO';
+				if ($parent->getNameSpace()) {
+					$parentName = $parent->getNameSpace()->buildFullName('dao', true).'\\'.$parent->getName().'DAO';
+				} else {
+					$parentName = ($ns ? '\\': '').$parent->getName().'DAO';
+				}
 			}
 			
-			$out = self::getHead();
-			
 			$out .= <<<EOT
-abstract class Auto{$class->getName()}DAO extends {$parentName}
+abstract class {$className} extends {$parentName}
 {
 
 EOT;

@@ -14,6 +14,7 @@
 	**/
 	class MetaClass
 	{
+		private $nameSpace	= null;
 		private $name		= null;
 		private $tableName	= null;
 		private $type		= null;
@@ -59,7 +60,18 @@
 		{
 			return $this->tableName;
 		}
-		
+
+		public function getNameSpace() :?MetaNamespace
+		{
+			return $this->nameSpace;
+		}
+
+		public function setNameSpace(?MetaNamespace $nameSpace = null)
+		{
+			$this->nameSpace = $nameSpace;
+			return $this;
+		}
+
 		/**
 		 * @return MetaClass
 		**/

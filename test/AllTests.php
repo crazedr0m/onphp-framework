@@ -1,13 +1,4 @@
 <?php
-	if (!extension_loaded('onphp')) {
-		echo 'Trying to load onPHP extension.. ';
-		
-		if (!@dl('onphp.so')) {
-			echo "failed.\n";
-		} else {
-			echo "done.\n";
-		}
-	}
 	
 	date_default_timezone_set('Europe/Moscow');
 	define('ONPHP_TEST_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);

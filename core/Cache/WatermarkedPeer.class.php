@@ -128,7 +128,6 @@
 
 			$peerIndexes = array_keys($peerIndexMap);
 			$peerResult = $this->peer->getList($peerIndexes);
-
 			$result = array();
 			if (!empty($peerResult)) {
 				foreach ($peerResult as $key => $value) {

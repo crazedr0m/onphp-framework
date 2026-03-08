@@ -16,15 +16,25 @@
 	{
 		public static function build(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
 			$out = self::getHead();
+
+			if ($ns) {
+				$out .= <<<EOT
+namespace {$ns->buildFullName('business', false)};
+
+EOT;
+			}
 			
 			if ($type = $class->getType())
 				$type = "{$type->getName()} ";
 			else
 				$type = null;
-			
+
+			$parent = ($ns ? '\\' : '').'Enumeration';
+
 			$out .= <<<EOT
-{$type}class {$class->getName()} extends Enumeration
+{$type}class {$class->getName()} extends ${parent}
 {
 	// implement me!
 }

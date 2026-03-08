@@ -21,22 +21,45 @@
 			$cloneNull = array();
 			$cloneValueObject = array();
 
+			$ns = $class->getNameSpace();
 			$out = self::getHead();
-			
-			$out .= "abstract class Auto{$class->getName()}";
+
+			if ($ns) {
+				$out .= <<<EOT
+namespace {$ns->buildFullName('business', true)};
+
+EOT;
+			}
+
+			$className = $ns ? $class->getName() : "Auto{$class->getName()}";
+			$out .= "abstract class {$className}";
 			
 			$isNamed = false;
 			
-			if ($parent = $class->getParent())
-				$out .= " extends {$parent->getName()}";
-			elseif (
+			if ($parent = $class->getParent()) {
+				if ($parent->getNameSpace()) {
+					$parentName = $parent->getNameSpace()->buildFullName('business', true).'\\'.$parent->getName();
+				} else {
+					$parentName = $parent->getName();
+				}
+				$out .= " extends {$parentName}";
+			} elseif (
 				$class->getPattern() instanceof DictionaryClassPattern
 				&& $class->hasProperty('name')
 			) {
-				$out .= " extends NamedObject";
+				if ($ns) {
+					$out .= " extends \\NamedObject";
+				} else {
+					$out .= " extends NamedObject";
+				}
 				$isNamed = true;
-			} elseif (!$class->getPattern() instanceof ValueObjectPattern)
-				$out .= " extends IdentifiableObject";
+			} elseif (!$class->getPattern() instanceof ValueObjectPattern) {
+				if ($ns) {
+					$out .= " extends \\IdentifiableObject";
+				} else {
+					$out .= " extends IdentifiableObject";
+				}
+			}
 			
 			if ($interfaces = $class->getInterfaces())
 				$out .= ' implements '.implode(', ', $interfaces);

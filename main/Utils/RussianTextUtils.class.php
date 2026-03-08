@@ -80,7 +80,7 @@
 		 * 	2 результата
 		 * 	5 результатов
 		 * @param $number integer
-		 * @param $cases words to select from array('результат', 'результата', 'результатов')
+		 * @param $cases string[] to select from array('результат', 'результата', 'результатов')
 		**/
 		public static function selectCaseForNumber($number, $cases)
 		{

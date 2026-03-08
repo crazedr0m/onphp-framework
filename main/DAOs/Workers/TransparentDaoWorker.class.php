@@ -118,7 +118,7 @@
 		public function getListByQuery(SelectQuery $query, $expires = null)
 		{
 			$list = $this->getCachedList($query);
-			
+
 			if ($list) {
 				if ($list === Cache::NOT_FOUND)
 					throw new ObjectNotFoundException();
@@ -126,8 +126,9 @@
 					return $list;
 			} else {
 
-				if ($list = $this->fetchList($query))
+				if ($list = $this->fetchList($query)) {
 					return $this->cacheListByQuery($query, $list);
+				}
 				else {
 					$this->cacheListByQuery($query, Cache::NOT_FOUND);
 					throw new ObjectNotFoundException();

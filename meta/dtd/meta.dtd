@@ -3,6 +3,11 @@
 <!ELEMENT metaconfiguration (include*, classes*, sources*)>
 
 <!ELEMENT classes (class*)>
+<!ATTLIST classes
+		namespace	CDATA #IMPLIED
+		base-space	CDATA #IMPLIED
+		base-dir	CDATA #IMPLIED
+>
 
 <!ELEMENT class (implement*, properties*, pattern)>
 <!ATTLIST class

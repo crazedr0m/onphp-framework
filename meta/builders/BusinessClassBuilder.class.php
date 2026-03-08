@@ -16,37 +16,53 @@
 	{
 		public static function build(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
 			$out = self::getHead();
+
+			if ($ns) {
+				$out .= <<<EOT
+namespace {$ns->buildFullName('business', false)};
+
+EOT;
+			}
 			
 			if ($type = $class->getType())
 				$typeName = $type->toString().' ';
 			else
 				$typeName = null;
 			
-			$interfaces = ' implements Prototyped';
+			$interfaces = ' implements \\Prototyped';
 			
 			if (
 				$class->getPattern()->daoExists()
 				&& (!$class->getPattern() instanceof AbstractClassPattern)
 			) {
-				$interfaces .= ', DAOConnected';
+				$interfaces .= ', \\DAOConnected';
 				
-				$daoName = $class->getName().'DAO';
+				if ($ns) {
+					$daoFullName = $ns->buildFullName('dao', false).'\\'.$class->getName().'DAO';
+				} else {
+					$daoFullName = $class->getName().'DAO';
+				}
 				$dao = <<<EOT
 	/**
-	 * @return {$daoName}
+		* @return {$daoFullName}
 	**/
 	public static function dao()
 	{
-		return Singleton::getInstance('{$daoName}');
+		return Singleton::getInstance('{$daoFullName}');
 	}
 
 EOT;
 			} else
 				$dao = null;
+
+			$parentName = $ns
+				? $ns->buildFullName('business', true).'\\'.$class->getName()
+				: 'Auto'.$class->getName();
 			
 			$out .= <<<EOT
-{$typeName}class {$class->getName()} extends Auto{$class->getName()}{$interfaces}
+{$typeName}class {$class->getName()} extends {$parentName}{$interfaces}
 {
 EOT;
 
@@ -116,17 +132,21 @@ EOT;
 EOT;
 				}
 				
-				$protoName = 'Proto'.$class->getName();
+				if ($ns) {
+					$protoFullName = $ns->buildFullName('proto', false).'\\'.$class->getName();
+				} else {
+					$protoFullName = 'Proto'.$class->getName();
+				}
 			
 				$out .= <<<EOT
 
 {$dao}
 	/**
-	 * @return {$protoName}
+		* @return {$protoFullName}
 	**/
 	public static function proto()
 	{
-		return Singleton::getInstance('{$protoName}');
+		return Singleton::getInstance('{$protoFullName}');
 	}
 
 EOT;

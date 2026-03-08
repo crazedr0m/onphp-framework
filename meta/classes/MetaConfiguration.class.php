@@ -387,12 +387,8 @@
 						$property->getRelation()
 						&& ($property->getRelationId() != MetaRelation::ONE_TO_ONE)
 					) {
-						$userFile =
-							ONPHP_META_DAO_DIR
-							.$class->getName().ucfirst($property->getName())
-							.'DAO'
-							.EXT_CLASS;
-						
+						$userFile = $this->getUserFile($property);
+
 						if ($force || !file_exists($userFile)) {
 							BasePattern::dumpFile(
 								$userFile,
@@ -427,7 +423,20 @@
 			
 			return $this;
 		}
-		
+
+		public function getUserFile(MetaClassProperty $property)
+		{
+			// выбирать путь в неймспейсе
+			$class = $property->getClass();
+			$ns = $class->getNameSpace();
+			$userFile =
+				($ns ? $ns->buildFilePath('dao') : ONPHP_META_DAO_DIR)
+				.$property->getClass()->getName().ucfirst($property->getName())
+				.'DAO'
+				.EXT_CLASS;
+			return $userFile;
+		}
+
 		/**
 		 * @return MetaConfiguration
 		**/
@@ -1012,19 +1021,31 @@
 		**/
 		private function processClasses(SimpleXMLElement $xml, $metafile, $generate)
 		{
-			foreach ($xml->classes[0] as $xmlClass) {
+			$nameSpace = null;
+			$classesElement = $xml->classes[0];
+			if (isset($classesElement['namespace'])) {
+				$attributes = [];
+				foreach ($classesElement->attributes() as $key => $value) {
+					$attributes[$key] = (string) $value;
+				}
+				$nameSpace = MetaNamespace::fromXmlArray($attributes);
+			}
+	
+			foreach ($classesElement as $xmlClass) {
 				$name = (string) $xmlClass['name'];
-				
+	
 				Assert::isFalse(
 					isset($this->classes[$name]),
 					'class name collision found for '.$name
 				);
-				
+	
 				$class = new MetaClass($name);
-				
+	
+				$class->setNameSpace($nameSpace);
+
 				if (isset($xmlClass['source']))
 					$class->setSourceLink((string) $xmlClass['source']);
-				
+
 				if (isset($xmlClass['table']))
 					$class->setTableName((string) $xmlClass['table']);
 				

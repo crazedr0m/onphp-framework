@@ -16,10 +16,20 @@
 	{
 		public static function build(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
 			$out = self::getHead();
+
+			if ($ns) {
+				$out .= <<<EOT
+namespace {$ns->buildFullName('dao', true)};
+
+EOT;
+			}
+
+			$className = $ns ? $class->getName().'DAO' : 'Auto'.$class->getName().'DAO';
 			
 			$out .= <<<EOT
-abstract class Auto{$class->getName()}DAO extends StorableDAO
+abstract class {$className} extends \\StorableDAO
 {
 
 EOT;

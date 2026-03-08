@@ -52,10 +52,15 @@
 			
 			return self::$peer;
 		}
-		
+
+		public static function getPeer()
+		{
+			return self::$peer;
+		}
+
 		/* void */ public static function setPeer(CachePeer $peer)
 		{
-			self::$peer = $peer;
+			static::$peer = $peer;
 		}
 		
 		/* void */ public static function setDefaultWorker($worker)

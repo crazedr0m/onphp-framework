@@ -29,8 +29,10 @@
 		**/
 		public function build(MetaClass $class)
 		{
-			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().EXT_CLASS;
-			
+			$ns = $class->getNameSpace();
+			$userFile = $ns ? $ns->buildFilePath('business') : ONPHP_META_BUSINESS_DIR
+				.$class->getName().EXT_CLASS;
+
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
 				|| !file_exists($userFile)

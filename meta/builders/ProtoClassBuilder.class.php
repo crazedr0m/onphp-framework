@@ -16,15 +16,29 @@
 	{
 		public static function build(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
+
 			$out = self::getHead();
-			
+
+			$className = "Proto{$class->getName()}";
+			$parentName = "AutoProto{$class->getName()}";
+			if ($ns) {
+				$className = $class->getName();
+				$parentName = $ns->buildFullName('proto', true).'\\'.$className;
+				$out .= <<<EOT
+namespace {$ns->buildFullName('proto', false)};
+
+EOT;
+			}
+
 			if ($type = $class->getType())
 				$typeName = $type->toString().' ';
 			else
 				$typeName = null;
-			
+
+
 			$out .= <<<EOT
-{$typeName}class Proto{$class->getName()} extends AutoProto{$class->getName()} {/*_*/}
+{$typeName}class {$className} extends {$parentName} {/*_*/}
 
 EOT;
 			

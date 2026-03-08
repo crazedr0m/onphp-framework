@@ -247,6 +247,7 @@
 				'tinyint'		=> DataType::SMALLINT,
 				'smallint'		=> DataType::SMALLINT,
 				'int'			=> DataType::INTEGER,
+				'integer'		=> DataType::INTEGER,
 				'mediumint'		=> DataType::INTEGER,
 
 				'bigint'		=> DataType::BIGINT,
@@ -284,13 +285,16 @@
 			$table = new DBTable($table);
 			
 			while ($row = mysqli_fetch_array($result)) {
-				$name = strtolower($row['Field']);
+				$name = strtolower(
+					$this->getTableInfoFieldValue('Field', $row)
+				);
 				$matches = array();
 				$info = array('type' => null, 'extra' => null);
+				$type = strtolower($this->getTableInfoFieldValue('Type', $row));
 				if (
 					preg_match(
 						'~(\w+)(\((\d+?)\)){0,1}\s*(\w*)~',
-						strtolower($row['Type']),
+						$type,
 						$matches
 					)
 				) {
@@ -303,7 +307,7 @@
 					array_key_exists($info['type'], $types),
 					
 					'unknown type "'
-					.$types[$info['type']]
+					.$info['type']
 					.'" found in column "'.$name.'"'
 				);
 				
@@ -315,22 +319,49 @@
 						setUnsigned(
 							strtolower($info['extra']) == 'unsigned'
 						)->
-						setNull(strtolower($row['Null']) == 'yes'),
+						setNull(
+							strtolower(
+								$this->getTableInfoFieldValue('Null', $row)
+							) == 'yes'
+						),
 					
 					$name
 				)->
-				setAutoincrement(strtolower($row['Extra']) == 'auto_increment')->
-				setPrimaryKey(strtolower($row['Key']) == 'pri');
-				
-				if ($row['Default'])
-					$column->setDefault($row['Default']);
-				
+				setAutoincrement(
+					strtolower(
+						$this->getTableInfoFieldValue('Extra', $row)
+					) == 'auto_increment'
+				)->
+				setPrimaryKey(
+					strtolower(
+						$this->getTableInfoFieldValue('Key', $row)
+					) == 'pri'
+				);
+
+				$default = $this->getTableInfoFieldValue('Default', $row);
+				if ($default) {
+					$column->setDefault($default);
+				}
+
 				$table->addColumn($column);
 			}
 			
 			return $table;
 		}
-		
+
+		private function getTableInfoFieldValue($key, $row)
+		{
+			if (array_key_exists($key, $row)) {
+				return $row[$key];
+			}
+			$key = strtolower($key);
+			if (array_key_exists($key, $row)) {
+				return $row[$key];
+			}
+
+			return null;
+		}
+
 		public function hasQueue()
 		{
 			return false;

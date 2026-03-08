@@ -88,13 +88,20 @@
 		**/
 		protected function buildProto(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
+			if ($ns) {
+				$autoFile = $ns->buildFilePath('proto', true) . $class->getName() . EXT_CLASS;
+				$userFile = $ns->buildFilePath('proto') . $class->getName() . EXT_CLASS;
+			} else {
+				$autoFile = ONPHP_META_AUTO_PROTO_DIR.'AutoProto' . $class->getName() . EXT_CLASS;
+				$userFile = ONPHP_META_PROTO_DIR.'Proto' . $class->getName() . EXT_CLASS;
+			}
+
 			$this->dumpFile(
-				ONPHP_META_AUTO_PROTO_DIR.'AutoProto'.$class->getName().EXT_CLASS,
+				$autoFile,
 				Format::indentize(AutoProtoClassBuilder::build($class))
 			);
-			
-			$userFile = ONPHP_META_PROTO_DIR.'Proto'.$class->getName().EXT_CLASS;
-			
+
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
 				|| !file_exists($userFile)
@@ -112,12 +119,19 @@
 		**/
 		protected function buildBusiness(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
+			if ($ns) {
+				$autoFile = $ns->buildFilePath('business', true) . $class->getName() . EXT_CLASS;
+				$userFile = $ns->buildFilePath('business') . $class->getName() . EXT_CLASS;
+			} else {
+				$autoFile = ONPHP_META_AUTO_BUSINESS_DIR.'Auto'.$class->getName().EXT_CLASS;
+				$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().EXT_CLASS;
+			}
+
 			$this->dumpFile(
-				ONPHP_META_AUTO_BUSINESS_DIR.'Auto'.$class->getName().EXT_CLASS,
+				$autoFile,
 				Format::indentize(AutoClassBuilder::build($class))
 			);
-			
-			$userFile = ONPHP_META_BUSINESS_DIR.$class->getName().EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
@@ -136,12 +150,19 @@
 		**/
 		protected function buildDao(MetaClass $class)
 		{
+			$ns = $class->getNameSpace();
+			if ($ns) {
+				$autoFile = $ns->buildFilePath('dao', true) . $class->getName() . 'DAO' . EXT_CLASS;
+				$userFile = $ns->buildFilePath('dao') . $class->getName() . 'DAO' . EXT_CLASS;
+			} else {
+				$autoFile = ONPHP_META_AUTO_DAO_DIR.'Auto'.$class->getName().'DAO'.EXT_CLASS;
+				$userFile = ONPHP_META_DAO_DIR.$class->getName().'DAO'.EXT_CLASS;
+			}
+
 			$this->dumpFile(
-				ONPHP_META_AUTO_DAO_DIR.'Auto'.$class->getName().'DAO'.EXT_CLASS,
+				$autoFile,
 				Format::indentize(AutoDaoBuilder::build($class))
 			);
-			
-			$userFile = ONPHP_META_DAO_DIR.$class->getName().'DAO'.EXT_CLASS;
 			
 			if (
 				MetaConfiguration::me()->isForcedGeneration()
